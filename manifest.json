@@ -1,0 +1,41 @@
+{
+    "name": "Tivan",
+    "version": "1.0",
+    "description": "Chrome Extension for displaying your media library stats",
+    "manifest_version": 2,
+    "background": {
+        "scripts": [
+            "background.js"
+        ],
+        "persistent": true
+    },
+    "browser_action": {
+        "default_title": "Tivan",
+        "default_popup": "popup.html",
+        "default_icon": {
+            "128": "logo.png"
+        }
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "https://app.plex.tv/*"
+            ],
+            "css": [],
+            "js": [
+                "content.js"
+            ]
+        }
+    ],
+    "options_ui": {
+        "page": "options.html",
+        "open_in_tab": true
+    },
+    "web_accessible_resources": [
+        "*.png",
+        "*.svg"
+    ],
+    "icons": {
+        "128": "logo.png"
+    }
+}

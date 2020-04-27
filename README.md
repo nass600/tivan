@@ -1,29 +1,28 @@
-# README #
+![](docs/img/tivan-banner.png)
 
-This README would normally document whatever steps are necessary to get your application up and running.
+# Tivan
 
-### What is this repository for? ###
+This browser extension displays stats of your Plex Media Server (PMS) media library.
 
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+## Installation from the Web Store
 
-### How do I get set up? ###
+<a href="#"><img alt="Available in the Chrome Web Store" src="docs/img/chrome-store-badge.png" /></a>
 
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
 
-### Contribution guidelines ###
+## Contributing
 
-* Writing tests
-* Code review
-* Other guidelines
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
-### Who do I talk to? ###
+Please make sure to update tests as appropriate.
 
-* Repo owner or admin
-* Other community or team contact
+## Versioning
+
+We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/nass600/tivan/tags).
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+
+## Authors
+
+- [Ignacio Velazquez](https://ignaciovelazquez.es)
