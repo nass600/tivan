@@ -19,13 +19,20 @@ app.id = 'app'
 const button = document.createElement('div')
 button.id = 'button'
 
-waitForElement(CONTAINER_SELECTOR).then(element => {
-    document.querySelector(NAVBAR_MENU_SELECTOR).prepend(button)
-    document.querySelector(CONTAINER_SELECTOR).prepend(app)
+waitForElement(CONTAINER_SELECTOR).then((element: Node): void => {
+    let navbarMenu = document.querySelector(NAVBAR_MENU_SELECTOR);
+    let container = document.querySelector(CONTAINER_SELECTOR);
+
+    if (!navbarMenu || !container) {
+        return
+    }
+
+    navbarMenu.prepend(button)
+    container.prepend(app)
 
     render(
         <Provider store={store}>
-            <Button/>
+            <Button />
         </Provider>,
         document.getElementById('button')
     )
@@ -33,7 +40,7 @@ waitForElement(CONTAINER_SELECTOR).then(element => {
     store.ready().then(() => {
         render(
             <Provider store={store}>
-                <App/>
+                <App />
             </Provider>,
             document.getElementById('app'))
     })

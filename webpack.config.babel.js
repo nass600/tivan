@@ -7,10 +7,10 @@ import webpack from 'webpack'
 export default {
     devtool: 'inline-source-map',
     entry: {
-        background: path.resolve(__dirname, 'src/background/index.js'),
-        content: path.resolve(__dirname, 'src/content/index.js'),
-        popup: path.resolve(__dirname, 'src/popup/index.js'),
-        options: path.resolve(__dirname, 'src/options/index.js')
+        background: path.resolve(__dirname, 'src/background/index.ts'),
+        content: path.resolve(__dirname, 'src/content/index.tsx'),
+        popup: path.resolve(__dirname, 'src/popup/index.tsx'),
+        options: path.resolve(__dirname, 'src/options/index.tsx')
     },
     output: {
         path: path.join(__dirname, 'dist'),
@@ -34,6 +34,11 @@ export default {
                 exclude: /node_modules/
             },
             {
+                test: /\.(ts|tsx)?$/,
+                use: 'ts-loader',
+                exclude: /node_modules/
+            },
+            {
                 test: /\.(js|jsx)$/,
                 loader: 'babel-loader',
                 exclude: /node_modules/
@@ -45,9 +50,9 @@ export default {
         ]
     },
     resolve: {
-        extensions: ['.js', '.json', '.jsx'],
+        extensions: ['.js', '.json', '.jsx', '.tsx', '.ts'],
         alias: {
-            '@store': path.resolve(__dirname, 'src/background/store'),
+            '@actions': path.resolve(__dirname, 'src/background/store/actions'),
             // '@api': path.resolve(__dirname, 'src/background/api'),
             '@content': path.resolve(__dirname, 'src/content'),
             '@popup': path.resolve(__dirname, 'src/popup')

@@ -1,8 +1,13 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { IAppState } from '@reducers'
 
-class App extends Component {
-    render () {
+interface IAppStateProps {
+    display: boolean;
+}
+
+class App extends Component<IAppStateProps> {
+    render() {
         return (
             <>
                 <h1>popup</h1>
@@ -12,10 +17,10 @@ class App extends Component {
     }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: IAppState): IAppStateProps => {
     return {
         display: state.status.display
     }
 }
 
-export default connect(mapStateToProps)(App)
+export default connect<IAppStateProps>(mapStateToProps)(App)

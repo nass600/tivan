@@ -1,10 +1,13 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { IAppState } from '@reducers'
 
-console.log('testing yeah')
+interface IAppStateProps {
+    display: boolean;
+}
 
-class App extends Component {
-    render () {
+class App extends Component<IAppStateProps> {
+    render() {
         if (!this.props.display) {
             return null
         }
@@ -15,15 +18,10 @@ class App extends Component {
     }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: IAppState): IAppStateProps => {
     return {
         display: state.status.display
     }
 }
 
-// const mapDispatchToProps = {
-//     parsePage,
-//     clearErrors
-// }
-
-export default connect(mapStateToProps, null)(App)
+export default connect<IAppStateProps>(mapStateToProps)(App)

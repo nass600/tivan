@@ -1,4 +1,4 @@
-function waitForElement (selector) {
+let waitForElement = (selector: string): Promise<Node> => {
     return new Promise((resolve, reject) => {
         var element = document.querySelector(selector)
 
@@ -7,11 +7,11 @@ function waitForElement (selector) {
             return
         }
 
-        var observer = new MutationObserver(mutations => {
-            mutations.forEach(mutation => {
+        var observer = new MutationObserver((mutations: MutationRecord[]) => {
+            mutations.forEach((mutation: MutationRecord) => {
                 var nodes = Array.from(mutation.addedNodes)
                 for (var node of nodes) {
-                    if (node.matches && (node.matches(selector) || node.contains(document.querySelector(selector)))) {
+                    if (node.isEqualNode(element) || node.contains(document.querySelector(selector))) {
                         observer.disconnect()
                         resolve(node)
                         return

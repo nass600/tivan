@@ -1,10 +1,14 @@
-import { TOGGLE_DISPLAY } from '../actions/action-types'
+import { TOGGLE_DISPLAY, StatusAction } from '@actions'
+
+export interface IStatusState {
+    display: boolean;
+}
 
 const initialState = {
     display: false
 }
 
-export default (state = initialState, action) => {
+export const statusReducer = (state: IStatusState = initialState, action: StatusAction): IStatusState => {
     switch (action.type) {
     case TOGGLE_DISPLAY:
         return {
