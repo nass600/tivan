@@ -1,26 +1,26 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
 import { IAppState } from '@reducers'
 
-interface IAppStateProps {
+interface IOptionsStateProps {
     display: boolean;
 }
 
-class App extends Component<IAppStateProps> {
+class Options extends React.Component<IOptionsStateProps, {}> {
     render() {
         return (
             <>
-                <h1>popup</h1>
+                <h1>options</h1>
                 <p>{this.props.display ? 'activated' : 'disabled'}</p>
             </>
         )
     }
 }
 
-const mapStateToProps = (state: IAppState): IAppStateProps => {
+const mapStateToProps = (state: IAppState): IOptionsStateProps => {
     return {
         display: state.status.display
     }
 }
 
-export default connect<IAppStateProps>(mapStateToProps)(App)
+export default connect<IOptionsStateProps>(mapStateToProps)(Options)

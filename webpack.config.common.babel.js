@@ -1,16 +1,14 @@
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import CopyWebpackPlugin from 'copy-webpack-plugin'
-import WriteFilePlugin from 'write-file-webpack-plugin'
 import path from 'path'
 import webpack from 'webpack'
 
 export default {
-    devtool: 'inline-source-map',
     entry: {
-        background: path.resolve(__dirname, 'src/background/index.ts'),
-        content: path.resolve(__dirname, 'src/content/index.tsx'),
-        popup: path.resolve(__dirname, 'src/popup/index.tsx'),
-        options: path.resolve(__dirname, 'src/options/index.tsx')
+        background: path.resolve(__dirname, 'src/chrome/background/index.ts'),
+        content: path.resolve(__dirname, 'src/chrome/content/index.tsx'),
+        popup: path.resolve(__dirname, 'src/chrome/popup/index.tsx'),
+        options: path.resolve(__dirname, 'src/chrome/options/index.tsx')
     },
     output: {
         path: path.join(__dirname, 'dist'),
@@ -18,11 +16,6 @@ export default {
     },
     module: {
         rules: [
-            {
-                test: /\.scss$/,
-                loader: 'style-loader!css-loader!sass-loader',
-                exclude: /node_modules/
-            },
             {
                 test: /\.png$/,
                 loader: 'file-loader?name=[name].[ext]',
@@ -52,23 +45,23 @@ export default {
     resolve: {
         extensions: ['.js', '.json', '.jsx', '.tsx', '.ts'],
         alias: {
-            '@actions': path.resolve(__dirname, 'src/background/store/actions'),
-            // '@api': path.resolve(__dirname, 'src/background/api'),
-            '@content': path.resolve(__dirname, 'src/content'),
-            '@popup': path.resolve(__dirname, 'src/popup')
-            // '@constants': path.resolve(__dirname, 'src/constants'),
-            // '@components': path.resolve(__dirname, 'src/components')
+            '@store': path.resolve(__dirname, 'src/store'),
+            '@actions': path.resolve(__dirname, 'src/store/actions'),
+            '@reducers': path.resolve(__dirname, 'src/store/reducers/actions'),
+            '@components': path.resolve(__dirname, 'src/components'),
+            '@containers': path.resolve(__dirname, 'src/containers'),
+            '@utils': path.resolve(__dirname, 'src/utils')
         }
     },
     plugins: [
         new webpack.ProgressPlugin(),
         new HtmlWebpackPlugin({
-            template: path.resolve(__dirname, 'src/popup/index.html'),
+            template: path.resolve(__dirname, 'src/chrome/popup/index.html'),
             filename: 'popup.html',
             chunks: ['popup']
         }),
         new HtmlWebpackPlugin({
-            template: path.resolve(__dirname, 'src/options/index.html'),
+            template: path.resolve(__dirname, 'src/chrome/options/index.html'),
             filename: 'options.html',
             chunks: ['options']
         }),
@@ -86,15 +79,16 @@ export default {
                 }
             },
             {
-                from: path.resolve(__dirname, 'src/content/img')
+                from: path.resolve(__dirname, 'src/assets/img')
             }
-        ]),
-        new WriteFilePlugin({
-            test: /^(?!.*(hot)).*/
-        })
+        ])
     ],
+    performance: {
+        maxAssetSize: 1000000
+    },
     stats: {
         children: false,
+        modules: false,
         colors: true
     }
 }

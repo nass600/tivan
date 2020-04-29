@@ -1,5 +1,5 @@
 import { wrapStore } from 'webext-redux'
-import configureStore from './store'
+import configureStore from '@store'
 
 const { store } = configureStore()
 

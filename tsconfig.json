@@ -62,9 +62,13 @@
     /* Advanced Options */
     "forceConsistentCasingInFileNames": true, /* Disallow inconsistently-cased references to the same file. */
     "paths": {
-      "@actions": ["src/background/store/actions"],
-      "@actions/*": ["src/background/store/actions/*"],
-      "@reducers": ["src/background/store/reducers"],
+      "@store": ["src/store"],
+      "@actions": ["src/store/actions"],
+      "@actions/*": ["src/store/actions/*"],
+      "@reducers": ["src/store/reducers"],
+      "@components": ["src/components"],
+      "@containers": ["src/containers"],
+      "@utils/*": ["src/utils/*"]
     }
   },
   "include": ["src/**/*", "tests/**/*"],

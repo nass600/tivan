@@ -2,11 +2,11 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { toggleDisplay } from '@actions'
 
-interface IAppDispatchProps {
+interface INavbarItemDispatchProps {
     toggleDisplay(): void;
 }
 
-class Button extends Component<IAppDispatchProps> {
+class NavbarItem extends Component<INavbarItemDispatchProps> {
     handleClick = (event: React.MouseEvent<HTMLAnchorElement>): void => {
         event.preventDefault()
         this.props.toggleDisplay()
@@ -15,14 +15,14 @@ class Button extends Component<IAppDispatchProps> {
     render() {
         return (
             <a href="#" onClick={this.handleClick}>
-                button
+                NavbarItem
             </a>
         )
     }
 }
 
-const mapDispatchToProps: IAppDispatchProps = {
+const mapDispatchToProps: INavbarItemDispatchProps = {
     toggleDisplay
 }
 
-export default connect<{}, IAppDispatchProps>(null, mapDispatchToProps)(Button)
+export default connect<{}, INavbarItemDispatchProps>(null, mapDispatchToProps)(NavbarItem)
