@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/nass600/tivan/compare/1.0.0...1.0.1) (2020-04-30)
+
+
+### Bug Fixes
+
+* fixing npm version ([0b1a732](https://github.com/nass600/tivan/commit/0b1a7327411312154644cc9e40ad151732269c6e))
+
 # 1.0.0 (2020-04-30)
 
 

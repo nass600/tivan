@@ -1,6 +1,6 @@
 {
     "name": "tivan",
-    "version": "0.1.0",
+    "version": "1.0.1",
     "description": "Chrome Extension for displaying your media library stats",
     "main": "index.js",
     "repository": "git@github.com:nass600/tivan",
