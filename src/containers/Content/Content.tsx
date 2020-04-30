@@ -1,30 +1,30 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { IAppState } from '@reducers'
+import { AppState } from '@reducers'
 import { Root, Page } from '@components'
 
-interface IContentStateProps {
+interface ContentStateProps {
     display: boolean;
 }
 
-class Content extends React.Component<IContentStateProps, {}> {
-    componentDidMount() {
-        this.toggleOriginalPage(this.props.display);
+class Content extends React.Component<ContentStateProps, {}> {
+    componentDidMount (): void {
+        this.toggleOriginalPage(this.props.display)
     }
 
-    componentDidUpdate() {
-        this.toggleOriginalPage(this.props.display);
+    componentDidUpdate (): void {
+        this.toggleOriginalPage(this.props.display)
     }
 
     toggleOriginalPage = (display: boolean): void => {
-        let originalPage = document.querySelector('#tivan')?.nextElementSibling;
+        const originalPage = document.querySelector('#tivan')?.nextElementSibling
 
         if (originalPage) {
             originalPage.classList.toggle('hidden', display)
         }
     }
 
-    render() {
+    render (): React.ReactNode {
         if (!this.props.display) {
             return null
         }
@@ -38,10 +38,10 @@ class Content extends React.Component<IContentStateProps, {}> {
     }
 }
 
-const mapStateToProps = (state: IAppState): IContentStateProps => {
+const mapStateToProps = (state: AppState): ContentStateProps => {
     return {
         display: state.status.display
     }
 }
 
-export default connect<IContentStateProps>(mapStateToProps)(Content)
+export default connect<ContentStateProps>(mapStateToProps)(Content)

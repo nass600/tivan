@@ -1,12 +1,12 @@
 import { TOGGLE_DISPLAY } from '@actions'
 
-export interface IToggleDisplayAction {
+export interface ToggleDisplayAction {
     type: 'TOGGLE_DISPLAY';
     payload: null;
 }
 
-export type StatusAction = IToggleDisplayAction;
+export type StatusAction = ToggleDisplayAction;
 
-export const toggleDisplay = (): IToggleDisplayAction => (
-    { type: TOGGLE_DISPLAY, payload: null}
+export const toggleDisplay = (): ToggleDisplayAction => (
+    { type: TOGGLE_DISPLAY, payload: null }
 )

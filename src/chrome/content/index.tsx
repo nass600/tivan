@@ -18,9 +18,9 @@ app.id = 'tivan'
 const button = document.createElement('div')
 button.id = 'button'
 
-waitForElement(CONTAINER_SELECTOR).then((element: Node): void => {
-    let navbarMenu = document.querySelector(NAVBAR_MENU_SELECTOR);
-    let container = document.querySelector(CONTAINER_SELECTOR);
+waitForElement(CONTAINER_SELECTOR).then((): void => {
+    const navbarMenu = document.querySelector(NAVBAR_MENU_SELECTOR)
+    const container = document.querySelector(CONTAINER_SELECTOR)
 
     if (!navbarMenu || !container) {
         return

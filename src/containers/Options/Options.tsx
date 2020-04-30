@@ -1,13 +1,13 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { IAppState } from '@reducers'
+import { AppState } from '@reducers'
 
-interface IOptionsStateProps {
+interface OptionsStateProps {
     display: boolean;
 }
 
-class Options extends React.Component<IOptionsStateProps, {}> {
-    render() {
+class Options extends React.Component<OptionsStateProps, {}> {
+    render (): React.ReactNode {
         return (
             <>
                 <h1>options</h1>
@@ -17,10 +17,10 @@ class Options extends React.Component<IOptionsStateProps, {}> {
     }
 }
 
-const mapStateToProps = (state: IAppState): IOptionsStateProps => {
+const mapStateToProps = (state: AppState): OptionsStateProps => {
     return {
         display: state.status.display
     }
 }
 
-export default connect<IOptionsStateProps>(mapStateToProps)(Options)
+export default connect<OptionsStateProps>(mapStateToProps)(Options)

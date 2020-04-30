@@ -12,7 +12,7 @@ const PORT = 3000
 // change port to change redux remote dev tools port
 remotedev({ hostname: 'localhost', port: REDUX_REMOTE_TOOLS_PORT })
 
-for (var entryName in config.entry) {
+for (const entryName in config.entry) {
     config.entry[entryName] = [
         'webpack-dev-server/client?http://localhost:' + PORT,
         'webpack/hot/dev-server'

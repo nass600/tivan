@@ -1,2 +1,2 @@
-export { default as Options } from './Options';
-export * from './Options';
+export { default as Options } from './Options'
+export * from './Options'

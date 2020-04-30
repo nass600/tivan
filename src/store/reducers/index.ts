@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux'
-import { statusReducer, IStatusState } from './status'
+import { statusReducer, StatusState } from './status'
 
-export interface IAppState {
-    status: IStatusState;
+export interface AppState {
+    status: StatusState;
 }
 
-export default combineReducers<IAppState>({
+export default combineReducers<AppState>({
     status: statusReducer
 })

@@ -1,13 +1,13 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { IAppState } from '@reducers'
+import { AppState } from '@reducers'
 
-interface IPopupStateProps {
+interface PopupStateProps {
     display: boolean;
 }
 
-class Popup extends React.Component<IPopupStateProps, {}> {
-    render() {
+class Popup extends React.Component<PopupStateProps, {}> {
+    render (): React.ReactNode {
         return (
             <>
                 <h1>popup</h1>
@@ -17,10 +17,10 @@ class Popup extends React.Component<IPopupStateProps, {}> {
     }
 }
 
-const mapStateToProps = (state: IAppState): IPopupStateProps => {
+const mapStateToProps = (state: AppState): PopupStateProps => {
     return {
         display: state.status.display
     }
 }
 
-export default connect<IPopupStateProps>(mapStateToProps)(Popup)
+export default connect<PopupStateProps>(mapStateToProps)(Popup)

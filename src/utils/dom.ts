@@ -1,16 +1,16 @@
-let waitForElement = (selector: string): Promise<Node> => {
-    return new Promise((resolve, reject) => {
-        var element = document.querySelector(selector)
+const waitForElement = (selector: string): Promise<Node> => {
+    return new Promise((resolve) => {
+        const element = document.querySelector(selector)
 
         if (element) {
             resolve(element)
             return
         }
 
-        var observer = new MutationObserver((mutations: MutationRecord[]) => {
+        const observer = new MutationObserver((mutations: MutationRecord[]) => {
             mutations.forEach((mutation: MutationRecord) => {
-                var nodes = Array.from(mutation.addedNodes)
-                for (var node of nodes) {
+                const nodes = Array.from(mutation.addedNodes)
+                for (const node of nodes) {
                     if (node.isEqualNode(element) || node.contains(document.querySelector(selector))) {
                         observer.disconnect()
                         resolve(node)
