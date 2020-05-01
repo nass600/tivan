@@ -50,7 +50,8 @@ export default {
             '@reducers': path.resolve(__dirname, 'src/store/reducers/actions'),
             '@components': path.resolve(__dirname, 'src/components'),
             '@containers': path.resolve(__dirname, 'src/containers'),
-            '@utils': path.resolve(__dirname, 'src/utils')
+            '@utils': path.resolve(__dirname, 'src/utils'),
+            '@api': path.resolve(__dirname, 'src/api')
         }
     },
     plugins: [

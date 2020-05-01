@@ -68,7 +68,8 @@
       "@reducers": ["src/store/reducers"],
       "@components": ["src/components"],
       "@containers": ["src/containers"],
-      "@utils/*": ["src/utils/*"]
+      "@utils/*": ["src/utils/*"],
+      "@api": ["src/api"]
     }
   },
   "include": ["src/**/*", "tests/**/*"],
