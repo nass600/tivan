@@ -1,3 +1,5 @@
+// const app = require('./package.json')
+
 module.exports = {
     plugins: [
         ['@semantic-release/commit-analyzer', {
@@ -24,4 +26,19 @@ module.exports = {
     ],
     // eslint-disable-next-line no-template-curly-in-string
     tagFormat: '${version}'
+    // verifyConditions: ['semantic-release-chrome', '@semantic-release/github'],
+    // prepare: [
+    //     {
+    //         path: 'semantic-release-chrome',
+    //         asset: `build/${app.name}.zip`,
+    //         manifestPath: 'src/chrome/manifest.json'
+    //     }
+    // ]
+    // publish: [
+    //     {
+    //         path: 'semantic-release-chrome',
+    //         asset: 'my-extension.zip',
+    //         extensionId: 'mppjhhbajcciljocgbadbhbgphjfdmhj'
+    //     }
+    // ]
 }

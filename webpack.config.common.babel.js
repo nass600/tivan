@@ -67,7 +67,7 @@ export default {
         }),
         new CopyWebpackPlugin([
             {
-                from: 'manifest.json',
+                from: path.resolve(__dirname, 'src/chrome/manifest.json'),
                 transform: function (content) {
                     return Buffer.from(
                         JSON.stringify({
@@ -83,9 +83,6 @@ export default {
             }
         ])
     ],
-    performance: {
-        maxAssetSize: 1000000
-    },
     stats: {
         children: false,
         modules: false,
