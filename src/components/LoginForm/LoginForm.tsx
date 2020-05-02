@@ -15,8 +15,6 @@ class LoginForm extends React.Component<LoginFormProps, {}> {
     initialValues: Login = { username: '', password: '' }
 
     onSubmit = (values: FormikValues): void => {
-        console.log(values)
-        console.log(values, this.props.onSubmit)
         this.props.onSubmit(values.username, values.password)
     }
 
@@ -36,10 +34,7 @@ class LoginForm extends React.Component<LoginFormProps, {}> {
                     validationSchema={this.validationSchema}
                     onSubmit={this.onSubmit}
                 >
-                    {({
-                        errors,
-                        touched
-                    }): React.ReactNode => (
+                    {({ errors, touched }): React.ReactNode => (
                         <Form>
                             <div className="form-group col-5">
                                 <label htmlFor="username">Username or Password</label>

@@ -47,7 +47,7 @@ export default {
         alias: {
             '@store': path.resolve(__dirname, 'src/store'),
             '@actions': path.resolve(__dirname, 'src/store/actions'),
-            '@reducers': path.resolve(__dirname, 'src/store/reducers/actions'),
+            '@reducers': path.resolve(__dirname, 'src/store/reducers'),
             '@components': path.resolve(__dirname, 'src/components'),
             '@containers': path.resolve(__dirname, 'src/containers'),
             '@utils': path.resolve(__dirname, 'src/utils'),
