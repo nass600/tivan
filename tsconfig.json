@@ -71,7 +71,8 @@
       "@components": ["src/components"],
       "@containers": ["src/containers"],
       "@utils/*": ["src/utils/*"],
-      "@api": ["src/api"]
+      "@api": ["src/api"],
+      "@assets/*": ["src/assets/*"]
     }
   },
   "include": ["src/**/*", "tests/**/*"],

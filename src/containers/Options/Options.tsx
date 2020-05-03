@@ -2,8 +2,11 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { AppState } from '@reducers'
 import { AuthConnectionState } from '@reducers/auth'
-import { LoginForm, OptionsForm } from '@components'
+import { LoginForm, OptionsForm, OptionsGlobalStyles } from '@components'
 import { authenticateAction, removeAvailableConnectionsAction, setConnectionAction } from '@actions'
+import { Normalize } from 'styled-normalize'
+import { AnyAction } from 'redux'
+import { ThunkDispatch } from 'redux-thunk'
 
 interface OptionsStateProps {
     display: boolean;
@@ -12,7 +15,7 @@ interface OptionsStateProps {
 }
 
 interface OptionsDispatchProps {
-    authenticateAction: (username: string, password: string) => void;
+    authenticate: (username: string, password: string) => Promise<void>;
     setConnectionAction: (connection: AuthConnectionState) => void;
     removeAvailableConnectionsAction: () => void;
 }
@@ -20,9 +23,8 @@ interface OptionsDispatchProps {
 type OptionsProps = OptionsStateProps & OptionsDispatchProps
 
 class Options extends React.Component<OptionsProps, {}> {
-    onSubmit = (username: string, password: string): void => {
-        console.log('submitting in container', username, password)
-        this.props.authenticateAction(username, password)
+    onSubmit = (username: string, password: string): Promise<void> => {
+        return this.props.authenticate(username, password)
     }
 
     onSelectConnection = (connection: AuthConnectionState): void => {
@@ -35,7 +37,10 @@ class Options extends React.Component<OptionsProps, {}> {
 
     renderLogin (): React.ReactNode {
         return (
-            <LoginForm onSubmit={this.onSubmit}/>
+            <>
+                <div className="title"><h1>Sign in to Plex</h1></div>
+                <LoginForm onSubmit={this.onSubmit}/>
+            </>
         )
     }
 
@@ -43,6 +48,7 @@ class Options extends React.Component<OptionsProps, {}> {
         const { availableConnections, connection } = this.props
         return (
             <>
+                <div className="title"><h1>Options</h1></div>
                 {connection && (
                     <OptionsForm
                         selectedConnection={connection}
@@ -50,7 +56,7 @@ class Options extends React.Component<OptionsProps, {}> {
                         onChange={this.onSelectConnection}
                     />
                 )}
-                <button type="button" onClick={this.logout}>Logout</button>
+                <button type="button" onClick={this.logout}>Sign Out</button>
             </>
         )
     }
@@ -60,9 +66,12 @@ class Options extends React.Component<OptionsProps, {}> {
 
         return (
             <>
-                <h1>options</h1>
-                {!connection && this.renderLogin()}
-                {connection && this.renderLogout()}
+                <Normalize/>
+                <OptionsGlobalStyles/>
+                <div className="box">
+                    {!connection && this.renderLogin()}
+                    {connection && this.renderLogout()}
+                </div>
             </>
         )
     }
@@ -76,10 +85,18 @@ const mapStateToProps = (state: AppState): OptionsStateProps => {
     }
 }
 
-const mapDispatchToProps: OptionsDispatchProps = {
-    authenticateAction,
+// const mapDispatchToProps: OptionsDispatchProps = {
+//     authenticateAction,
+//     setConnectionAction,
+//     removeAvailableConnectionsAction
+// }
+
+const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, AnyAction>): OptionsDispatchProps => ({
+    authenticate: async (username: string, password: string): Promise<void> => (
+        await dispatch(authenticateAction(username, password))
+    ),
     setConnectionAction,
     removeAvailableConnectionsAction
-}
+})
 
 export default connect<OptionsStateProps, OptionsDispatchProps>(mapStateToProps, mapDispatchToProps)(Options)

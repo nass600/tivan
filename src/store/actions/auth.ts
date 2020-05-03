@@ -76,8 +76,5 @@ export const authenticateAction = (
                 type: SET_AVAILABLE_CONNECTIONS,
                 payload: buildConnections(data)
             })
-        }).catch((e: Error) => {
-            console.log('error', e)
-            // dispatch(setErrors(['Unable to connect with Plex Server. Invalid Plex credentials.']))
         })
     }

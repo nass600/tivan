@@ -22,6 +22,18 @@ export default {
                 exclude: /node_modules/
             },
             {
+                test: /\.(woff(2)?|ttf|eot)(\?v=\d+\.\d+\.\d+)?$/,
+                use: [
+                    {
+                        loader: 'file-loader',
+                        options: {
+                            name: '[name].[ext]',
+                            outputPath: 'fonts/'
+                        }
+                    }
+                ]
+            },
+            {
                 test: /\.html$/,
                 loader: 'html-loader',
                 exclude: /node_modules/
@@ -51,7 +63,8 @@ export default {
             '@components': path.resolve(__dirname, 'src/components'),
             '@containers': path.resolve(__dirname, 'src/containers'),
             '@utils': path.resolve(__dirname, 'src/utils'),
-            '@api': path.resolve(__dirname, 'src/api')
+            '@api': path.resolve(__dirname, 'src/api'),
+            '@assets': path.resolve(__dirname, 'src/assets')
         }
     },
     plugins: [
