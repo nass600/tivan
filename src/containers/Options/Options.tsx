@@ -2,11 +2,12 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { AppState } from '@reducers'
 import { AuthConnectionState } from '@reducers/auth'
-import { LoginForm, OptionsForm, OptionsGlobalStyles } from '@components'
+import { LoginForm, OptionsForm } from '@components'
 import { authenticateAction, removeAvailableConnectionsAction, setConnectionAction } from '@actions'
 import { Normalize } from 'styled-normalize'
 import { AnyAction } from 'redux'
 import { ThunkDispatch } from 'redux-thunk'
+import { Box, Title, OptionsGlobalStyles } from '@styles'
 
 interface OptionsStateProps {
     display: boolean;
@@ -38,7 +39,7 @@ class Options extends React.Component<OptionsProps, {}> {
     renderLogin (): React.ReactNode {
         return (
             <>
-                <div className="title"><h1>Sign in to Plex</h1></div>
+                <Title>Sign in to Plex</Title>
                 <LoginForm onSubmit={this.onSubmit}/>
             </>
         )
@@ -48,7 +49,7 @@ class Options extends React.Component<OptionsProps, {}> {
         const { availableConnections, connection } = this.props
         return (
             <>
-                <div className="title"><h1>Options</h1></div>
+                <Title>Options</Title>
                 {connection && (
                     <OptionsForm
                         selectedConnection={connection}
@@ -68,10 +69,10 @@ class Options extends React.Component<OptionsProps, {}> {
             <>
                 <Normalize/>
                 <OptionsGlobalStyles/>
-                <div className="box">
+                <Box>
                     {!connection && this.renderLogin()}
                     {connection && this.renderLogout()}
-                </div>
+                </Box>
             </>
         )
     }

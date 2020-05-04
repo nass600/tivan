@@ -1,8 +1,8 @@
 import React from 'react'
-import { Formik, Field, Form, ErrorMessage, FormikValues } from 'formik'
+import { Formik, Form, ErrorMessage, FormikValues } from 'formik'
 import * as Yup from 'yup'
-import classNames from 'classnames'
 import { AxiosError } from 'axios'
+import { Button, Label, Input, FormGroup, Hint, FormError, FieldError } from '@styles'
 
 export interface Login {
     username: string;
@@ -48,15 +48,6 @@ class LoginForm extends React.Component<LoginFormProps, {}> {
                     onSubmit={this.onSubmit}
                 >
                     {({ errors, touched }): React.ReactNode => {
-                        const usernameGroupClass = classNames(
-                            'form-group',
-                            { invalid: errors.username && touched.username }
-                        )
-                        const passwordGroupClass = classNames(
-                            'form-group',
-                            { invalid: errors.password && touched.password }
-                        )
-
                         return (
                             <Form>
                                 <div className="alert alert-info">
@@ -64,45 +55,53 @@ class LoginForm extends React.Component<LoginFormProps, {}> {
                                     so we can display the needed information from your Plex Media Server.
                                 </div>
                                 {this.state.error && (
-                                    <p>{this.state.error}</p>
+                                    <FormError>{this.state.error}</FormError>
                                 )}
-                                <div className={usernameGroupClass}>
-                                    <label htmlFor="username">
+                                <FormGroup>
+                                    <Label htmlFor="username">
                                         Email or Username {errors.username && touched.username && (
-                                            <>
+                                            <FieldError>
                                                 <span> — </span>
                                                 <ErrorMessage
                                                     name="username"
                                                     component="span"
                                                     className="invalid-feedback"
                                                 />
-                                            </>
+                                            </FieldError>
                                         )}
-                                    </label>
-                                    <Field name="username" type="text"/>
-                                </div>
-                                <div className={passwordGroupClass}>
-                                    <label htmlFor="password">
+                                    </Label>
+                                    <Input
+                                        name="username"
+                                        type="text"
+                                        invalid={(errors.username && touched.username) as boolean}
+                                    />
+                                </FormGroup>
+                                <FormGroup>
+                                    <Label htmlFor="password">
                                         Password {errors.password && touched.password && (
-                                            <>
+                                            <FieldError>
                                                 <span> — </span>
                                                 <ErrorMessage
                                                     name="password"
                                                     component="span"
                                                     className="invalid-feedback"
                                                 />
-                                            </>
+                                            </FieldError>
                                         )}
-                                    </label>
-                                    <Field name="password" type="password"/>
-                                </div>
-                                <div className="form-group">
-                                    <button type="submit">Submit</button>
-                                </div>
-                                <div className="hint">
+                                    </Label>
+                                    <Input
+                                        name="password"
+                                        type="password"
+                                        invalid={(errors.password && touched.password) as boolean}
+                                    />
+                                </FormGroup>
+                                <FormGroup>
+                                    <Button type="submit">Submit</Button>
+                                </FormGroup>
+                                <Hint>
                                     Need an account? Click on this <a href="https://plex.tv">link</a> to
                                     create an account in the Plex site.
-                                </div>
+                                </Hint>
                             </Form>
                         )
                     }}
