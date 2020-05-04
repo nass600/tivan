@@ -24,6 +24,10 @@ export const OptionsGlobalStyles = createGlobalStyle`
         font-style: normal;
     }
 
+    & * {
+        box-sizing: border-box;
+    }
+
     html,
     body {
         height: 100%;

@@ -1,6 +1,7 @@
 import styled, { css, FlattenSimpleInterpolation } from 'styled-components'
 import { Field, FieldConfig } from 'formik'
 import React from 'react'
+import ReactSelect from 'react-select'
 
 interface InputProps extends FieldConfig<string> {
     invalid: boolean;
@@ -18,6 +19,26 @@ export const Box = styled.div`
     border-radius: 6px;
     padding: 40px 90px;
     color: #51595e;
+    position: relative;
+`
+
+const avatarSize = 140
+
+export const Avatar = styled.div`
+    background-color: #27292b;
+    border-radius: 50%;
+    width: ${avatarSize}px;
+    height: ${avatarSize}px;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    margin-top: -${avatarSize * 2 / 3}px;
+    margin-left: -${avatarSize / 2}px;
+    padding: 1.5rem;
+
+    img {
+        max-width: 100%;
+    }
 `
 
 export const FormGroup = styled.div`
@@ -40,6 +61,11 @@ export const FormError = styled(FieldError)`
 export const Label = styled.label`
     order: 1;
     margin-bottom: 5px;
+`
+
+export const Select = styled(ReactSelect)`
+    order: 3;
+    width: 100%;
 `
 
 export const Input = styled(FilteredPropsInputField)<InputProps>`
@@ -73,6 +99,10 @@ export const Button = styled.button`
     &:hover {
         opacity: 0.9;
     }
+`
+
+export const CancelButton = styled(Button)`
+    background-color: #dd4b39;
 `
 
 export const Title = styled.h1`

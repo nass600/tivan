@@ -7,7 +7,8 @@ import { authenticateAction, removeAvailableConnectionsAction, setConnectionActi
 import { Normalize } from 'styled-normalize'
 import { AnyAction } from 'redux'
 import { ThunkDispatch } from 'redux-thunk'
-import { Box, Title, OptionsGlobalStyles } from '@styles'
+import { Avatar, Box, Title, OptionsGlobalStyles, CancelButton, FormGroup } from '@styles'
+import logo from '@assets/img/logo.png'
 
 interface OptionsStateProps {
     display: boolean;
@@ -17,8 +18,8 @@ interface OptionsStateProps {
 
 interface OptionsDispatchProps {
     authenticate: (username: string, password: string) => Promise<void>;
-    setConnectionAction: (connection: AuthConnectionState) => void;
-    removeAvailableConnectionsAction: () => void;
+    setConnection: (connection: AuthConnectionState) => void;
+    removeAvailableConnections: () => void;
 }
 
 type OptionsProps = OptionsStateProps & OptionsDispatchProps
@@ -29,11 +30,12 @@ class Options extends React.Component<OptionsProps, {}> {
     }
 
     onSelectConnection = (connection: AuthConnectionState): void => {
-        this.props.setConnectionAction(connection)
+        console.log('about to dispatch', connection)
+        this.props.setConnection(connection)
     }
 
     logout = (): void => {
-        this.props.removeAvailableConnectionsAction()
+        this.props.removeAvailableConnections()
     }
 
     renderLogin (): React.ReactNode {
@@ -49,7 +51,7 @@ class Options extends React.Component<OptionsProps, {}> {
         const { availableConnections, connection } = this.props
         return (
             <>
-                <Title>Options</Title>
+                <Title>Tivan Options</Title>
                 {connection && (
                     <OptionsForm
                         selectedConnection={connection}
@@ -57,7 +59,9 @@ class Options extends React.Component<OptionsProps, {}> {
                         onChange={this.onSelectConnection}
                     />
                 )}
-                <button type="button" onClick={this.logout}>Sign Out</button>
+                <FormGroup>
+                    <CancelButton type="button" onClick={this.logout}>Sign Out</CancelButton>
+                </FormGroup>
             </>
         )
     }
@@ -70,6 +74,9 @@ class Options extends React.Component<OptionsProps, {}> {
                 <Normalize/>
                 <OptionsGlobalStyles/>
                 <Box>
+                    <Avatar>
+                        <img src={logo} alt="Tivan"/>
+                    </Avatar>
                     {!connection && this.renderLogin()}
                     {connection && this.renderLogout()}
                 </Box>
@@ -86,18 +93,16 @@ const mapStateToProps = (state: AppState): OptionsStateProps => {
     }
 }
 
-// const mapDispatchToProps: OptionsDispatchProps = {
-//     authenticateAction,
-//     setConnectionAction,
-//     removeAvailableConnectionsAction
-// }
-
 const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, AnyAction>): OptionsDispatchProps => ({
     authenticate: async (username: string, password: string): Promise<void> => (
         await dispatch(authenticateAction(username, password))
     ),
-    setConnectionAction,
-    removeAvailableConnectionsAction
+    setConnection: (connection: AuthConnectionState): void => {
+        dispatch(setConnectionAction(connection))
+    },
+    removeAvailableConnections: (): void => {
+        dispatch(removeAvailableConnectionsAction())
+    }
 })
 
 export default connect<OptionsStateProps, OptionsDispatchProps>(mapStateToProps, mapDispatchToProps)(Options)

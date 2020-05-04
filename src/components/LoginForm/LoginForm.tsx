@@ -62,11 +62,7 @@ class LoginForm extends React.Component<LoginFormProps, {}> {
                                         Email or Username {errors.username && touched.username && (
                                             <FieldError>
                                                 <span> — </span>
-                                                <ErrorMessage
-                                                    name="username"
-                                                    component="span"
-                                                    className="invalid-feedback"
-                                                />
+                                                <ErrorMessage name="username" component="span"/>
                                             </FieldError>
                                         )}
                                     </Label>
@@ -81,11 +77,7 @@ class LoginForm extends React.Component<LoginFormProps, {}> {
                                         Password {errors.password && touched.password && (
                                             <FieldError>
                                                 <span> — </span>
-                                                <ErrorMessage
-                                                    name="password"
-                                                    component="span"
-                                                    className="invalid-feedback"
-                                                />
+                                                <ErrorMessage name="password" component="span"/>
                                             </FieldError>
                                         )}
                                     </Label>

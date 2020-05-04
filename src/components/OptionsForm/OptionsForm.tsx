@@ -2,7 +2,8 @@ import React from 'react'
 import { Formik, Form, ErrorMessage, FormikValues } from 'formik'
 import * as Yup from 'yup'
 import { AuthConnectionState } from '@reducers/auth'
-import Select from 'react-select'
+import { Theme } from 'react-select'
+import { FormGroup, Label, FieldError, Select } from '@styles'
 
 export interface Connection {
     connection: SelectOption;
@@ -34,6 +35,7 @@ class OptionsForm extends React.Component<ConnectionSelectorProps, State> {
     }
 
     onSubmit = (values: FormikValues): void => {
+        console.log('onsubmit', values.connection.data)
         this.props.onChange(values.connection.data)
     }
 
@@ -58,21 +60,42 @@ class OptionsForm extends React.Component<ConnectionSelectorProps, State> {
                 onSubmit={this.onSubmit}
                 enableReinitialize={true}
             >
-                {({ values, submitForm, setFieldValue }): React.ReactNode => (
+                {({ values, errors, touched, submitForm, setFieldValue }): React.ReactNode => (
                     <Form>
-                        <div className="form-group col-5">
-                            <label htmlFor="connection">Choose a connection</label>
+                        <FormGroup>
+                            <Label htmlFor="connection">
+                                Choose a connection {errors.connection && touched.connection && (
+                                    <FieldError>
+                                        <span> — </span>
+                                        <ErrorMessage name="connection" component="span"/>
+                                    </FieldError>
+                                )}
+                            </Label>
                             <Select
                                 name="connection"
                                 value={values.connection}
                                 options={connections.map(this.transformOption)}
                                 onChange={(value: SelectOption): void => {
+                                    console.log('onchange 1')
                                     setFieldValue('connection', value)
                                     submitForm()
                                 }}
+                                theme={(theme: Theme): Theme => ({
+                                    ...theme,
+                                    borderRadius: 0,
+                                    colors: {
+                                        ...theme.colors,
+                                        primary50: '#e5a00d',
+                                        primary25: '#fef8ec',
+                                        primary: '#e5a00d'
+                                    },
+                                    spacing: {
+                                        ...theme.spacing,
+                                        controlHeight: 50
+                                    }
+                                })}
                             />
-                            <ErrorMessage name="connection" component="div" className="invalid-feedback" />
-                        </div>
+                        </FormGroup>
                     </Form>
                 )}
             </Formik>
