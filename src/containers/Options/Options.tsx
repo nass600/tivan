@@ -60,7 +60,7 @@ class Options extends React.Component<OptionsProps, {}> {
                     />
                 )}
                 <FormGroup>
-                    <CancelButton type="button" onClick={this.logout}>Sign Out</CancelButton>
+                    <CancelButton type="button" onClick={this.logout}>Sign Out of Plex</CancelButton>
                 </FormGroup>
             </>
         )

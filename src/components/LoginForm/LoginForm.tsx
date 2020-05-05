@@ -2,7 +2,7 @@ import React from 'react'
 import { Formik, Form, ErrorMessage, FormikValues } from 'formik'
 import * as Yup from 'yup'
 import { AxiosError } from 'axios'
-import { Button, Label, Input, FormGroup, Hint, FormError, FieldError } from '@styles'
+import { Button, Label, Input, FormGroup, Hint, FormError, FieldError, AlertInfo } from '@styles'
 
 export interface Login {
     username: string;
@@ -50,10 +50,10 @@ class LoginForm extends React.Component<LoginFormProps, {}> {
                     {({ errors, touched }): React.ReactNode => {
                         return (
                             <Form>
-                                <div className="alert alert-info">
+                                <AlertInfo>
                                     We do not store your credentials, they are only used to issue an access token
                                     so we can display the needed information from your Plex Media Server.
-                                </div>
+                                </AlertInfo>
                                 {this.state.error && (
                                     <FormError>{this.state.error}</FormError>
                                 )}

@@ -3,7 +3,7 @@ import { Formik, Form, ErrorMessage, FormikValues } from 'formik'
 import * as Yup from 'yup'
 import { AuthConnectionState } from '@reducers/auth'
 import { Theme } from 'react-select'
-import { FormGroup, Label, FieldError, Select } from '@styles'
+import { FormGroup, Label, FieldError, Select, variables } from '@styles'
 
 export interface Connection {
     connection: SelectOption;
@@ -85,9 +85,9 @@ class OptionsForm extends React.Component<ConnectionSelectorProps, State> {
                                     borderRadius: 0,
                                     colors: {
                                         ...theme.colors,
-                                        primary50: '#e5a00d',
-                                        primary25: '#fef8ec',
-                                        primary: '#e5a00d'
+                                        primary50: variables.colors.orange60,
+                                        primary25: variables.colors.orange20,
+                                        primary: variables.colors.orange60
                                     },
                                     spacing: {
                                         ...theme.spacing,
