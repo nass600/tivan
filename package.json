@@ -16,13 +16,18 @@
         "lint:ts": "eslint . --ext ts,tsx,js"
     },
     "dependencies": {
+        "axios": "^0.19.2",
+        "formik": "^2.1.4",
         "react": "^16.13.1",
         "react-dom": "^16.13.1",
         "react-redux": "^7.2.0",
+        "react-select": "^3.1.0",
         "redux": "^4.0.5",
         "redux-thunk": "^2.3.0",
         "styled-components": "^5.1.0",
-        "webext-redux": "^2.1.6"
+        "styled-normalize": "^8.0.7",
+        "webext-redux": "^2.1.6",
+        "yup": "^0.28.5"
     },
     "devDependencies": {
         "@babel/core": "^7.9.0",
@@ -39,8 +44,11 @@
         "@types/react": "^16.9.34",
         "@types/react-dom": "^16.9.6",
         "@types/react-redux": "^7.1.7",
+        "@types/react-select": "^3.0.12",
         "@types/remote-redux-devtools": "^0.5.4",
         "@types/styled-components": "^5.1.0",
+        "@types/uuid": "^7.0.3",
+        "@types/yup": "^0.28.0",
         "@typescript-eslint/eslint-plugin": "^2.30.0",
         "@typescript-eslint/parser": "^2.30.0",
         "babel-loader": "^8.1.0",

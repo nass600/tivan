@@ -8,7 +8,8 @@
     ],
     "rules": {
         "indentation": 4,
-        "declaration-empty-line-before": "never"
+        "declaration-empty-line-before": "never",
+        "no-missing-end-of-source-newline": null
     },
     "syntax": "scss"
 }

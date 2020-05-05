@@ -1,9 +1,8 @@
 ## [1.0.2](https://github.com/nass600/tivan/compare/1.0.1...1.0.2) (2020-05-01)
 
-
 ### Bug Fixes
 
-* adding chrome release automation ([945012c](https://github.com/nass600/tivan/commit/945012c938af7cd302e13ed682842d77d6b0aa40))
+-   adding chrome release automation ([945012c](https://github.com/nass600/tivan/commit/945012c938af7cd302e13ed682842d77d6b0aa40))
 
 ## [1.0.1](https://github.com/nass600/tivan/compare/1.0.0...1.0.1) (2020-04-30)
 

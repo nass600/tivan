@@ -14,6 +14,6 @@ store.ready().then(() => {
         <Provider store={store}>
             <Options />
         </Provider>,
-        document.getElementById('app')
+        document.getElementById('tivan')
     )
 })
