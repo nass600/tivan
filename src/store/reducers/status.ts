@@ -13,7 +13,7 @@ export const statusReducer = (state: StatusState = initialState, action: StatusA
         case TOGGLE_DISPLAY:
             return {
                 ...state,
-                display: !state.display
+                display: action.payload !== undefined ? action.payload : !state.display
             }
         default:
             return state

@@ -2,11 +2,11 @@ import { TOGGLE_DISPLAY } from '@actions'
 
 export interface ToggleDisplayAction {
     type: 'TOGGLE_DISPLAY';
-    payload: null;
+    payload?: boolean;
 }
 
 export type StatusAction = ToggleDisplayAction;
 
-export const toggleDisplay = (): ToggleDisplayAction => (
-    { type: TOGGLE_DISPLAY, payload: null }
+export const toggleDisplay = (display?: boolean): ToggleDisplayAction => (
+    { type: TOGGLE_DISPLAY, payload: display }
 )
