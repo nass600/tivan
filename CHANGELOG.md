@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/nass600/tivan/compare/1.0.2...1.1.0) (2020-05-05)
+
+
+### Features
+
+* implemented plex login and connection thorough options page ([fd76806](https://github.com/nass600/tivan/commit/fd768062e94e283d6662d2ee01af54730dc45d5d))
+
 ## [1.0.2](https://github.com/nass600/tivan/compare/1.0.1...1.0.2) (2020-05-01)
 
 ### Bug Fixes
