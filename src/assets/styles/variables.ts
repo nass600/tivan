@@ -50,6 +50,7 @@ export const variables = {
     },
     colors: {
         white: '#fff',
+        gray20: '#bcbdbe',
         gray40: '#51595e',
         gray60: '#3f4245',
         gray80: '#282a2d',

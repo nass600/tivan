@@ -9,7 +9,7 @@ const CONTAINER_SELECTOR = '[class^="Page-page"]'
 const NAVBAR_MENU_SELECTOR = '[class^="NavBar-right"]'
 
 const button = document.createElement('div')
-button.id = 'button'
+button.id = 'tivan-button'
 
 waitForElement(CONTAINER_SELECTOR).then((): void => {
     const navbarMenu = document.querySelector(NAVBAR_MENU_SELECTOR)
@@ -25,7 +25,7 @@ waitForElement(CONTAINER_SELECTOR).then((): void => {
             <Provider store={store}>
                 <NavbarItem />
             </Provider>,
-            document.getElementById('button')
+            document.getElementById('tivan-button')
         )
     })
 })

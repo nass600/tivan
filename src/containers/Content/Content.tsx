@@ -1,7 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { AppState } from '@reducers'
-import { Root, Page } from '@components'
+import { Page } from '@components'
+import { GlobalStyles } from '@styles'
 
 interface ContentStateProps {
     display: boolean;
@@ -32,7 +33,7 @@ class Content extends React.Component<ContentStateProps, {}> {
         return (
             <Page>
                 <h1>Content</h1>
-                <Root />
+                <GlobalStyles />
             </Page>
         )
     }

@@ -3,15 +3,25 @@ import { connect, Provider } from 'react-redux'
 import { toggleDisplay } from '@actions'
 import { render } from 'react-dom'
 import store from '@store/createStore'
+import { NavbarButton, NavbarGlobalStyles } from '@styles'
 import { Content } from '@containers'
+import { IconContext } from 'react-icons'
+import { BsPieChart, BsPieChartFill } from 'react-icons/bs'
+import { AppState } from '@reducers'
 
 interface NavbarItemDispatchProps {
     toggleDisplay(display?: boolean): void;
 }
 
+interface NavbarItemStateProps {
+    display: boolean;
+}
+
 const CONTAINER_SELECTOR = '[class^="Page-page"]'
 
-class NavbarItem extends Component<NavbarItemDispatchProps> {
+type NavbarItemProps = NavbarItemDispatchProps & NavbarItemStateProps
+
+class NavbarItem extends Component<NavbarItemProps> {
     createContentContainer = (): void => {
         const app = document.createElement('div')
         app.id = 'tivan'
@@ -25,6 +35,7 @@ class NavbarItem extends Component<NavbarItemDispatchProps> {
 
         render(
             <Provider store={store}>
+                <IconContext.Provider value={{ style: { verticalAlign: 'middle' } }}/>
                 <Content />
             </Provider>,
             document.getElementById('tivan')
@@ -41,11 +52,24 @@ class NavbarItem extends Component<NavbarItemDispatchProps> {
     }
 
     render (): React.ReactNode {
+        const { display } = this.props
+
         return (
-            <a href="#" onClick={this.handleClick}>
-                NavbarItem
-            </a>
+            <>
+                <NavbarGlobalStyles/>
+                <NavbarButton onClick={this.handleClick}>
+                    <IconContext.Provider value={{ style: { width: '1em', height: '1em' } }}>
+                        {display ? <BsPieChartFill /> : <BsPieChart />}
+                    </IconContext.Provider>
+                </NavbarButton>
+            </>
         )
+    }
+}
+
+const mapStateToProps = (state: AppState): NavbarItemStateProps => {
+    return {
+        display: state.status.display
     }
 }
 
@@ -53,4 +77,4 @@ const mapDispatchToProps: NavbarItemDispatchProps = {
     toggleDisplay
 }
 
-export default connect<{}, NavbarItemDispatchProps>(null, mapDispatchToProps)(NavbarItem)
+export default connect<NavbarItemStateProps, NavbarItemDispatchProps>(mapStateToProps, mapDispatchToProps)(NavbarItem)
