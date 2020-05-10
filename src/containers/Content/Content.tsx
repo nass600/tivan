@@ -2,11 +2,25 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { AppState } from '@reducers'
 import { Page, Menu } from '@components'
-import { Stats } from '@containers'
+import { Stats, Normalization, Forecast } from '@containers'
 import { GlobalStyles } from '@styles'
+import { Tabs } from '@reducers/status'
 
 interface ContentStateProps {
     display: boolean;
+    currentTab: Tabs;
+}
+
+const getSiblings = (elem: Element): Element[] => {
+    const siblings = []
+    let sibling = elem.parentNode?.firstChild
+    const skipMe = elem
+
+    for (; sibling; sibling = sibling.nextSibling) {
+        if (sibling.nodeType === 1 && sibling !== skipMe) { siblings.push(sibling as Element) }
+    }
+
+    return siblings
 }
 
 class Content extends React.Component<ContentStateProps, {}> {
@@ -19,15 +33,25 @@ class Content extends React.Component<ContentStateProps, {}> {
     }
 
     toggleOriginalPage = (display: boolean): void => {
-        const originalPage = document.querySelector('#tivan')?.nextElementSibling
+        const rootElement = document.querySelector('#tivan')
 
-        if (originalPage) {
-            originalPage.classList.toggle('hidden', display)
+        if (!rootElement) {
+            return
+        }
+
+        const siblings = getSiblings(rootElement)
+
+        if (siblings.length > 0) {
+            siblings.forEach((item: Element): void => {
+                item.classList.toggle('hidden', display)
+            })
         }
     }
 
     render (): React.ReactNode {
-        if (!this.props.display) {
+        const { display, currentTab } = this.props
+
+        if (!display) {
             return null
         }
 
@@ -35,7 +59,9 @@ class Content extends React.Component<ContentStateProps, {}> {
             <>
                 <Menu/>
                 <Page>
-                    <Stats/>
+                    {currentTab === Tabs.STATS && <Stats/>}
+                    {currentTab === Tabs.NORMALIZATION && <Normalization/>}
+                    {currentTab === Tabs.FORECAST && <Forecast/>}
                 </Page>
                 <GlobalStyles />
             </>
@@ -45,7 +71,8 @@ class Content extends React.Component<ContentStateProps, {}> {
 
 const mapStateToProps = (state: AppState): ContentStateProps => {
     return {
-        display: state.status.display
+        display: state.status.display,
+        currentTab: state.status.currentTab
     }
 }
 

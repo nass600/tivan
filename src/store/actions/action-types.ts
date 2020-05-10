@@ -1,4 +1,5 @@
 export const TOGGLE_DISPLAY = 'TOGGLE_DISPLAY'
+export const TOGGLE_TAB = 'TOGGLE_TAB'
 export const SAVE_TOKEN = 'SAVE_TOKEN'
 export const REMOVE_TOKEN = 'REMOVE_TOKEN'
 export const SET_CONNECTION = 'SET_CONNECTION'

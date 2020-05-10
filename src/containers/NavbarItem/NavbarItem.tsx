@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect, Provider } from 'react-redux'
-import { toggleDisplay } from '@actions'
+import { toggleDisplayAction } from '@actions'
 import { render } from 'react-dom'
 import store from '@store/createStore'
 import { NavbarButton, NavbarGlobalStyles } from '@styles'
@@ -10,7 +10,7 @@ import { BsPieChart, BsPieChartFill } from 'react-icons/bs'
 import { AppState } from '@reducers'
 
 interface NavbarItemDispatchProps {
-    toggleDisplay(display?: boolean): void;
+    toggleDisplayAction(display?: boolean): void;
 }
 
 interface NavbarItemStateProps {
@@ -44,7 +44,7 @@ class NavbarItem extends Component<NavbarItemProps> {
 
     handleClick = (event: React.MouseEvent<HTMLAnchorElement>): void => {
         event.preventDefault()
-        this.props.toggleDisplay()
+        this.props.toggleDisplayAction()
 
         if (!document.querySelector('#tivan')) {
             this.createContentContainer()
@@ -74,7 +74,7 @@ const mapStateToProps = (state: AppState): NavbarItemStateProps => {
 }
 
 const mapDispatchToProps: NavbarItemDispatchProps = {
-    toggleDisplay
+    toggleDisplayAction
 }
 
 export default connect<NavbarItemStateProps, NavbarItemDispatchProps>(mapStateToProps, mapDispatchToProps)(NavbarItem)

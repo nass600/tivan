@@ -1,6 +1,10 @@
 import React from 'react'
 import { variables } from '@styles'
 import styled, { css, FlattenSimpleInterpolation } from 'styled-components'
+import { Tabs } from '@reducers/status'
+import { connect } from 'react-redux'
+import { AppState } from '@reducers'
+import { toggleTabAction } from '@actions'
 
 export const Navbar = styled.div`
     z-index: 1;
@@ -40,16 +44,56 @@ export const Tab = styled.a<{active?: boolean}>`
     `}
 `
 
-class Menu extends React.Component<{}> {
+interface MenuStateProps {
+    currentTab: Tabs;
+}
+
+interface MenuDispatchProps {
+    toggleTabAction(tab: Tabs): void;
+}
+
+type MenuProps = MenuDispatchProps & MenuStateProps
+
+class Menu extends React.Component<MenuProps> {
+    changeTab = (event: React.MouseEvent<HTMLAnchorElement>): void => {
+        event.preventDefault()
+        const tab = (event.target as HTMLAnchorElement).dataset.value as Tabs
+
+        if (!tab) {
+            return
+        }
+
+        this.props.toggleTabAction(tab)
+    }
+
     render (): React.ReactNode {
+        const { currentTab } = this.props
+
         return (
             <Navbar>
-                <Tab active>Stats</Tab>
-                <Tab>Normalization</Tab>
-                <Tab>Forecast</Tab>
+                {Object.keys(Tabs).map((key: Tabs): React.ReactNode => (
+                    <Tab
+                        key={Tabs[key]}
+                        active={currentTab === Tabs[key]}
+                        onClick={this.changeTab}
+                        data-value={Tabs[key]}
+                    >
+                        {Tabs[key]}
+                    </Tab>
+                ))}
             </Navbar>
         )
     }
 }
 
-export default Menu
+const mapStateToProps = (state: AppState): MenuStateProps => {
+    return {
+        currentTab: state.status.currentTab
+    }
+}
+
+const mapDispatchToProps: MenuDispatchProps = {
+    toggleTabAction
+}
+
+export default connect<MenuStateProps, MenuDispatchProps>(mapStateToProps, mapDispatchToProps)(Menu)
