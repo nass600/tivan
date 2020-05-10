@@ -14,28 +14,28 @@ const FilteredPropsInputField: React.FC<InputProps> = ({ invalid, ...props }): J
 }
 
 export const Box = styled.div`
-    background-color: ${variables.colors.white};
-    max-width: 650px;
+    position: relative;
     width: 100%;
-    border-radius: ${variables.borderRadius.m};
+    max-width: 650px;
     padding: ${variables.spacing.xl};
     color: ${variables.colors.gray40};
-    position: relative;
+    background-color: ${variables.colors.white};
+    border-radius: ${variables.borderRadius.m};
 `
 
 const avatarSize = 140
 
 export const Avatar = styled.div`
-    background-color: ${variables.colors.gray80};
-    border-radius: 50%;
-    width: ${avatarSize}px;
-    height: ${avatarSize}px;
     position: absolute;
     top: 0;
     left: 50%;
+    width: ${avatarSize}px;
+    height: ${avatarSize}px;
     margin-top: -${avatarSize * 2 / 3}px;
     margin-left: -${avatarSize / 2}px;
     padding: ${variables.spacing.m};
+    background-color: ${variables.colors.gray80};
+    border-radius: 50%;
 
     img {
         max-width: 100%;
@@ -56,8 +56,8 @@ export const FieldError = styled.div`
 
 export const FormError = styled(FieldError)`
     width: 100%;
-    text-align: center;
     margin-top: ${variables.spacing.l};
+    text-align: center;
 `
 
 export const Label = styled.label`
@@ -79,8 +79,8 @@ export const Select = styled(ReactSelect)`
 export const Input = styled(FilteredPropsInputField)<InputProps>`
     order: 3;
     width: 100%;
-    padding: ${variables.spacing.s};
     height: 36px;
+    padding: ${variables.spacing.s};
     border: 0;
     border-bottom: 1px solid ${variables.colors.gray40};
     outline: none;
@@ -96,15 +96,15 @@ export const Input = styled(FilteredPropsInputField)<InputProps>`
 `
 
 export const Button = styled.button`
-    cursor: pointer;
     width: 100%;
-    border: 0;
-    border-radius: ${variables.borderRadius.s};
-    padding: ${variables.spacing.s};
     height: 50px;
-    background-color: ${variables.colors.orange60};
+    padding: ${variables.spacing.s};
     color: ${variables.colors.white};
     text-transform: none;
+    background-color: ${variables.colors.orange60};
+    border: 0;
+    border-radius: ${variables.borderRadius.s};
+    cursor: pointer;
     transition: opacity 0.2s ease-in-out;
 
     &:hover {
@@ -118,16 +118,16 @@ export const CancelButton = styled(Button)`
 
 export const Title = styled.h1`
     ${variables.font.h1}
-    line-height: 1.2em;
-    padding-bottom: ${variables.spacing.m};
     margin-top: ${variables.spacing.m};
-    text-align: center;
+    padding-bottom: ${variables.spacing.m};
     color: ${variables.colors.gray80};
+    line-height: 1.2em;
+    text-align: center;
 `
 
 export const Hint = styled.div`
-    text-align: center;
     margin-top: ${variables.spacing.l};
+    text-align: center;
     ${variables.font.small}
 `
 

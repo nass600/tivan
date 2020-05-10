@@ -25,7 +25,8 @@ module.exports = {
     ],
     rules: {
         indent: 'off',
-        'max-len': ['error', { 'code': 120 }]
+        'max-len': ['error', { code: 120 }],
+        'react/jsx-max-props-per-line': ['error', { maximum: 1, when: 'multiline' }]
     },
     settings: {
         react: {

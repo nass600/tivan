@@ -6,23 +6,23 @@ import { variables } from '@styles'
 
 export const OptionsGlobalStyles = createGlobalStyle`
     @font-face {
-        font-family: ${variables.fontName.bold};
-        src: url(${OpenSansBold}) format('ttf');
         font-weight: 500;
+        font-family: ${variables.fontName.bold};
         font-style: normal;
+        src: url(${OpenSansBold}) format('ttf');
     }
 
     @font-face {
-        font-family: ${variables.fontName.semiBold};
-        src: url(${OpenSansSemibold}) format('ttf');
         font-weight: 300;
+        font-family: ${variables.fontName.semiBold};
         font-style: normal;
+        src: url(${OpenSansSemibold}) format('ttf');
     }
 
     @font-face {
         font-family: ${variables.font.base};
-        src: url(${OpenSansRegular}) format('ttf');
         font-style: normal;
+        src: url(${OpenSansRegular}) format('ttf');
     }
 
     & * {
@@ -36,25 +36,25 @@ export const OptionsGlobalStyles = createGlobalStyle`
 
     body {
         margin: 0;
-        background-color: ${variables.colors.gray60};
         color: ${variables.colors.white};
-        font-family: ${variables.fontFamily.regular}, Helvetica, sans-serif;
         font-size: 16px;
+        font-family: ${variables.fontFamily.regular}, Helvetica, sans-serif;
         line-height: 1.5;
+        background-color: ${variables.colors.gray60};
     }
 
     #tivan {
-        height: 100%;
         display: flex;
-        justify-content: center;
         align-items: center;
+        justify-content: center;
+        height: 100%;
     }
 
     a {
-        font-family: Open Sans Bold, Helvetica, sans-serif;
         color: ${variables.colors.gray40};
-        text-decoration: none;
         font-weight: bold;
+        font-family: Open Sans Bold, Helvetica, sans-serif;
+        text-decoration: none;
         transition: color 0.2s ease-in-out;
 
         &:hover {

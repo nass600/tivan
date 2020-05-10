@@ -11,20 +11,20 @@ export const NavbarButton = styled.a<AnchorHTMLAttributes<HTMLAnchorElement>>`
     position: relative;
     display: inline-flex;
     align-items: center;
-    padding: 0 15px;
     height: 100%;
-    font-size: 20px;
     margin: 0;
-    outline: none;
-    border: 0;
-    background: none;
+    padding: 0 15px;
+    color: ${variables.colors.gray20};
+    font-size: 20px;
     text-align: inherit;
     text-decoration: none;
+    background: none;
+    border: 0;
+    outline: none;
     cursor: pointer;
-    transition: color 0.2s ease-in-out;
+    transition: color 0.2s ease-in;
     user-select: none;
     touch-action: manipulation;
-    color: ${variables.colors.gray20};
 
     &:hover {
         color: ${variables.colors.white};

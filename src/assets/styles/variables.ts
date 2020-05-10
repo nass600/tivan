@@ -41,15 +41,33 @@ const fontH1 = css`
     line-height: 1.2em;
 `
 
+const fontH2 = css`
+    ${fontFamily.bold}
+    font-size: ${fontSize.xl};
+    line-height: 1em;
+`
+
+const fontH3 = css`
+    ${fontFamily.bold}
+    font-size: ${fontSize.l};
+    line-height: 1em;
+`
+
 export const variables = {
     spacing: {
         s: `${spacerBase / 2}rem`,
         m: `${spacerBase}rem`,
         l: `${spacerBase * 2}rem`,
-        xl: `${spacerBase * 3}rem`
+        xl: `${spacerBase * 3}rem`,
+        xxl: `${spacerBase * 4}rem`
     },
     colors: {
         white: '#fff',
+        whiteA20: 'hsla(0, 0%, 100%, 0.2)',
+        whiteA45: 'hsla(0, 0%, 100%, 0.45)',
+        whiteA75: 'hsla(0, 0%, 100%, 0.75)',
+        blackA15: 'rgba(0, 0, 0, 0.15)',
+        blackA30: 'rgba(0, 0, 0, 0.3)',
         gray20: '#bcbdbe',
         gray40: '#51595e',
         gray60: '#3f4245',
@@ -66,7 +84,9 @@ export const variables = {
     font: {
         small: fontSmall,
         base: fontBase,
-        h1: fontH1
+        h1: fontH1,
+        h2: fontH2,
+        h3: fontH3
     },
     fontName,
     fontFamily

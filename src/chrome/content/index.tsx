@@ -15,6 +15,7 @@ waitForElement(CONTAINER_SELECTOR).then((): void => {
     const navbarMenu = document.querySelector(NAVBAR_MENU_SELECTOR)
 
     if (!navbarMenu) {
+        throw new Error('Navbar menu not found')
         return
     }
 
