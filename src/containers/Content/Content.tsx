@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { AppState } from '@reducers'
-import { Page, Menu } from '@components'
+import { Page, Menu, Unauthorized } from '@components'
 import { Stats, Normalization, Forecast } from '@containers'
 import { GlobalStyles } from '@styles'
 import { Tabs } from '@reducers/status'
@@ -9,6 +9,7 @@ import { Tabs } from '@reducers/status'
 interface ContentStateProps {
     display: boolean;
     currentTab: Tabs;
+    signedIn: boolean;
 }
 
 const getSiblings = (elem: Element): Element[] => {
@@ -49,7 +50,7 @@ class Content extends React.Component<ContentStateProps, {}> {
     }
 
     render (): React.ReactNode {
-        const { display, currentTab } = this.props
+        const { display, currentTab, signedIn } = this.props
 
         if (!display) {
             return null
@@ -57,12 +58,17 @@ class Content extends React.Component<ContentStateProps, {}> {
 
         return (
             <>
-                <Menu/>
-                <Page>
-                    {currentTab === Tabs.STATS && <Stats/>}
-                    {currentTab === Tabs.NORMALIZATION && <Normalization/>}
-                    {currentTab === Tabs.FORECAST && <Forecast/>}
-                </Page>
+                {signedIn && (
+                    <>
+                        <Menu/>
+                        <Page>
+                            {currentTab === Tabs.STATS && <Stats/>}
+                            {currentTab === Tabs.NORMALIZATION && <Normalization/>}
+                            {currentTab === Tabs.FORECAST && <Forecast/>}
+                        </Page>
+                    </>
+                )}
+                {!signedIn && <Unauthorized loginUrl={chrome.extension.getURL('options.html')}/>}
                 <GlobalStyles />
             </>
         )
@@ -72,7 +78,8 @@ class Content extends React.Component<ContentStateProps, {}> {
 const mapStateToProps = (state: AppState): ContentStateProps => {
     return {
         display: state.status.display,
-        currentTab: state.status.currentTab
+        currentTab: state.status.currentTab,
+        signedIn: !!state.auth.connection
     }
 }
 

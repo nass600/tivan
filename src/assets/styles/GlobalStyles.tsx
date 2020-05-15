@@ -52,4 +52,8 @@ export const GlobalStyles = createGlobalStyle`
         padding-right: 0;
         overflow-y: hidden;
     }
+
+    strong {
+        ${variables.fontFamily.bold}
+    }
 `
