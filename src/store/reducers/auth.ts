@@ -9,13 +9,11 @@ export interface AuthConnectionState {
 }
 
 export interface AuthState {
-    clientId: string;
     connection: AuthConnectionState | null;
     availableConnections: AuthConnectionState[];
 }
 
 const initialState = {
-    clientId: 'c2877b28-1806-41c1-9eea-bc4bc2b9a93d',
     connection: null,
     availableConnections: []
 }

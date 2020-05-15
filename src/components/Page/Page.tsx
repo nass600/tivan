@@ -4,6 +4,7 @@ import { variables } from '@styles'
 const Page = styled.div`
     width: 100%;
     padding: 0 ${variables.spacing.l};
+    overflow-x: hidden;
     overflow-y: auto;
 
     &::-webkit-scrollbar {

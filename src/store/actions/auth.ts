@@ -1,9 +1,10 @@
 import { SET_CONNECTION, SET_AVAILABLE_CONNECTIONS, REMOVE_AVAILABLE_CONNECTIONS } from '@actions'
-import { login, LoginResponse, getResources, Resource, Connection } from '@api'
+import { Resource, Connection, User } from '@api'
 import { ThunkDispatch, ThunkAction } from 'redux-thunk'
 import { AnyAction } from 'redux'
 import { AppState } from '@reducers'
 import { AuthConnectionState } from '@reducers/auth'
+import { plex } from '@sdk'
 
 export interface SetConnectionAction {
     type: 'SET_CONNECTION';
@@ -65,12 +66,14 @@ export const authenticateAction = (
             return Promise.resolve()
         }
 
-        return login(username, password, state.auth.clientId).then((token: LoginResponse) => {
-            if (!token) {
+        return plex.tv.users.signIn(username, password).then(({ user }: { user: User }) => {
+            if (!user.authToken) {
                 return Promise.reject(new Error('Login request didn\'t carry a valid token'))
             }
 
-            return getResources(token, state.auth.clientId)
+            plex.setAuthorization(user.authToken)
+
+            return plex.tv.resources.all()
         }).then((data: Resource[]) => {
             dispatch({
                 type: SET_AVAILABLE_CONNECTIONS,

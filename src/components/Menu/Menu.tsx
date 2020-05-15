@@ -4,7 +4,9 @@ import styled, { css, FlattenSimpleInterpolation } from 'styled-components'
 import { Tabs } from '@reducers/status'
 import { connect } from 'react-redux'
 import { AppState } from '@reducers'
-import { toggleTabAction } from '@actions'
+import { toggleTabAction, parseLibraryAction } from '@actions'
+import { ThunkDispatch } from 'redux-thunk'
+import { AnyAction } from 'redux'
 
 export const Navbar = styled.div`
     z-index: 1;
@@ -49,7 +51,8 @@ interface MenuStateProps {
 }
 
 interface MenuDispatchProps {
-    toggleTabAction(tab: Tabs): void;
+    toggleTab(tab: Tabs): void;
+    parseLibrary(): void;
 }
 
 type MenuProps = MenuDispatchProps & MenuStateProps
@@ -63,7 +66,12 @@ class Menu extends React.Component<MenuProps> {
             return
         }
 
-        this.props.toggleTabAction(tab)
+        this.props.toggleTab(tab)
+    }
+
+    reloadLibrary = (event: React.MouseEvent<HTMLAnchorElement>): void => {
+        event.preventDefault()
+        this.props.parseLibrary()
     }
 
     render (): React.ReactNode {
@@ -71,6 +79,7 @@ class Menu extends React.Component<MenuProps> {
 
         return (
             <Navbar>
+                <a href="#" onClick={this.reloadLibrary}>Reload Library</a>
                 {Object.keys(Tabs).map((key: Tabs): React.ReactNode => (
                     <Tab
                         key={Tabs[key]}
@@ -92,8 +101,13 @@ const mapStateToProps = (state: AppState): MenuStateProps => {
     }
 }
 
-const mapDispatchToProps: MenuDispatchProps = {
-    toggleTabAction
-}
+const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, AnyAction>): MenuDispatchProps => ({
+    toggleTab: (tab: Tabs): void => {
+        dispatch(toggleTabAction(tab))
+    },
+    parseLibrary: async (): Promise<void> => (
+        await dispatch(parseLibraryAction())
+    )
+})
 
 export default connect<MenuStateProps, MenuDispatchProps>(mapStateToProps, mapDispatchToProps)(Menu)

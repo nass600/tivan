@@ -64,6 +64,7 @@ export default {
             '@containers': path.resolve(__dirname, 'src/containers'),
             '@utils': path.resolve(__dirname, 'src/utils'),
             '@api': path.resolve(__dirname, 'src/api'),
+            '@sdk': path.resolve(__dirname, 'src/sdk'),
             '@assets': path.resolve(__dirname, 'src/assets'),
             '@styles': path.resolve(__dirname, 'src/assets/styles')
         }
