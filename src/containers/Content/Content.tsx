@@ -5,12 +5,21 @@ import { Page, Menu, Unauthorized } from '@components'
 import { Stats, Normalization, Forecast } from '@containers'
 import { GlobalStyles } from '@styles'
 import { Tabs } from '@reducers/status'
+import { ThunkDispatch } from 'redux-thunk'
+import { AnyAction } from 'redux'
+import { parseLibraryAction } from '@actions'
 
 interface ContentStateProps {
     display: boolean;
     currentTab: Tabs;
     signedIn: boolean;
 }
+
+interface ContentDispatchProps {
+    parseLibrary(): void;
+}
+
+type ContentProps = ContentDispatchProps & ContentStateProps
 
 const getSiblings = (elem: Element): Element[] => {
     const siblings = []
@@ -24,13 +33,20 @@ const getSiblings = (elem: Element): Element[] => {
     return siblings
 }
 
-class Content extends React.Component<ContentStateProps, {}> {
+class Content extends React.Component<ContentProps, {}> {
     componentDidMount (): void {
         this.toggleOriginalPage(this.props.display)
+        if (this.props.display && this.props.signedIn) {
+            this.props.parseLibrary()
+        }
     }
 
-    componentDidUpdate (): void {
+    componentDidUpdate (prevProps: ContentProps): void {
         this.toggleOriginalPage(this.props.display)
+
+        if ((!prevProps.display && this.props.display) || (!prevProps.signedIn && this.props.signedIn)) {
+            this.props.parseLibrary()
+        }
     }
 
     toggleOriginalPage = (display: boolean): void => {
@@ -83,4 +99,10 @@ const mapStateToProps = (state: AppState): ContentStateProps => {
     }
 }
 
-export default connect<ContentStateProps>(mapStateToProps)(Content)
+const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, AnyAction>): ContentDispatchProps => ({
+    parseLibrary: async (): Promise<void> => (
+        await dispatch(parseLibraryAction())
+    )
+})
+
+export default connect<ContentStateProps, ContentDispatchProps>(mapStateToProps, mapDispatchToProps)(Content)

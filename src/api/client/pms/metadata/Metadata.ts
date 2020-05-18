@@ -1,4 +1,8 @@
-import { ApiClient, AllMediaResponse } from '../..'
+import { ApiClient, MetadataMediaContainer } from '../../..'
+
+export interface GetMetadataResponse {
+    MediaContainer: MetadataMediaContainer;
+}
 
 export class Metadata {
     private apiClient: ApiClient
@@ -7,7 +11,7 @@ export class Metadata {
         this.apiClient = client
     }
 
-    get (ids: string | string[]): Promise<AllMediaResponse> {
+    get (ids: string | string[]): Promise<GetMetadataResponse> {
         if (!Array.isArray(ids)) {
             ids = [ids]
         }

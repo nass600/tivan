@@ -29,6 +29,7 @@
         "recharts": "^1.8.5",
         "redux": "^4.0.5",
         "redux-thunk": "^2.3.0",
+        "reselect": "^4.0.0",
         "styled-components": "^5.1.0",
         "styled-normalize": "^8.0.7",
         "webext-redux": "^2.1.6",

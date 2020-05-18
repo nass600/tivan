@@ -60,11 +60,13 @@ export default {
             '@store': path.resolve(__dirname, 'src/store'),
             '@actions': path.resolve(__dirname, 'src/store/actions'),
             '@reducers': path.resolve(__dirname, 'src/store/reducers'),
+            '@selectors': path.resolve(__dirname, 'src/store/selectors'),
             '@components': path.resolve(__dirname, 'src/components'),
             '@containers': path.resolve(__dirname, 'src/containers'),
             '@utils': path.resolve(__dirname, 'src/utils'),
             '@api': path.resolve(__dirname, 'src/api'),
             '@sdk': path.resolve(__dirname, 'src/sdk'),
+            '@types': path.resolve(__dirname, 'src/types'),
             '@assets': path.resolve(__dirname, 'src/assets'),
             '@styles': path.resolve(__dirname, 'src/assets/styles')
         }

@@ -1,7 +1,8 @@
 import React from 'react'
 import { variables } from '@styles'
-import styled from 'styled-components'
+import styled, { css, FlattenSimpleInterpolation } from 'styled-components'
 import { darken } from 'polished'
+import { StatsTableInfo, StatsDataItem } from '@types'
 
 const StyledTable = styled.table`
     width: 100%;
@@ -40,39 +41,27 @@ const FixedHeading = styled(Heading)`
     text-align: center;
 `
 
-const Legend = styled.div<{color: string}>`
+const Legend = styled.div<{color?: string}>`
     display: flex;
     align-items: center;
     justify-content: center;
     width: ${variables.spacing.l};
     height: ${variables.spacing.l};
     border-radius: 50%;
-    ${({ color }): string => `
-        background-color: ${color};
+    ${({ color }): FlattenSimpleInterpolation | '' | undefined => color && css`
         color: ${darken(0.5, color)};
+        background-color: ${color};
     `}
 `
 
-export interface TableDataItem {
-    color: string;
-    name: string;
-    value: number;
-    proportion: number;
-}
-
-export interface TableInfo {
-    headings: string[];
-    items: TableDataItem[];
-}
-
 interface TableProps {
-    data: TableInfo;
+    data: StatsTableInfo;
+    nameFormatter (name: string): string;
 }
 
 class Table extends React.Component<TableProps> {
     render (): React.ReactNode {
-        const { data } = this.props
-        const items = data.items.sort((a, b) => (a.value < b.value) ? 1 : -1)
+        const { data, nameFormatter } = this.props
 
         return (
             <StyledTable>
@@ -88,9 +77,9 @@ class Table extends React.Component<TableProps> {
                             return <Heading key={index}>{item}</Heading>
                         })}
                     </Row>
-                    {items.map((item, index: number): React.ReactNode => (
+                    {data.items.map((item: StatsDataItem, index: number): React.ReactNode => (
                         <Row key={index}>
-                            {Object.keys(item).map((key: keyof TableDataItem, i: number): React.ReactNode => {
+                            {Object.keys(item).map((key: keyof StatsDataItem, i: number): React.ReactNode => {
                                 if (i === 0) {
                                     return (
                                         <FixedCell key={i}>
@@ -103,7 +92,7 @@ class Table extends React.Component<TableProps> {
                                     )
                                 }
 
-                                return <Cell key={i}>{item[key]}</Cell>
+                                return <Cell key={i}>{nameFormatter(item[key] as string)}</Cell>
                             })}
                         </Row>
                     ))}

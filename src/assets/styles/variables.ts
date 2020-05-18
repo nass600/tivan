@@ -77,6 +77,11 @@ export const variables = {
         red40: '#f5ccc6',
         red60: '#dd4b39'
     },
+    palettes: {
+        blue: ['#8893c7', '#f5cf73', '#5a67a7', '#d3aa47', '#3c4b90', '#ffe4a3', '#26357b', '#b58b26'],
+        red: ['#f57373', '#5cc45c', '#d34747', '#39a939', '#b52626', '#1f911f', '#ffa3a3', '#8cdc8c'],
+        turquoise: ['#d38247', '#2c8371', '#ffcaa3', '#78bcb5', '#f5aa73', '#489890', '#b56326', '#187067']
+    },
     borderRadius: {
         s: '4px',
         m: '6px'
