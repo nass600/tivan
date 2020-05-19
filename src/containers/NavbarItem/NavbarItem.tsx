@@ -1,28 +1,80 @@
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import { toggleDisplay } from '@actions'
+import { connect, Provider } from 'react-redux'
+import { toggleDisplayAction } from '@actions'
+import { render } from 'react-dom'
+import store from '@store/createStore'
+import { NavbarButton, NavbarGlobalStyles } from '@styles'
+import { Content } from '@containers'
+import { IconContext } from 'react-icons'
+import { BsPieChart, BsPieChartFill } from 'react-icons/bs'
+import { AppState } from '@reducers'
 
 interface NavbarItemDispatchProps {
-    toggleDisplay(): void;
+    toggleDisplayAction(display?: boolean): void;
 }
 
-class NavbarItem extends Component<NavbarItemDispatchProps> {
+interface NavbarItemStateProps {
+    display: boolean;
+}
+
+const CONTAINER_SELECTOR = '[class^="Page-page"]'
+
+type NavbarItemProps = NavbarItemDispatchProps & NavbarItemStateProps
+
+class NavbarItem extends Component<NavbarItemProps> {
+    createContentContainer = (): void => {
+        const app = document.createElement('div')
+        app.id = 'tivan'
+        const container = document.querySelector(CONTAINER_SELECTOR)
+
+        if (!container) {
+            return
+        }
+
+        container.prepend(app)
+
+        render(
+            <Provider store={store}>
+                <IconContext.Provider value={{ style: { verticalAlign: 'middle' } }}/>
+                <Content />
+            </Provider>,
+            document.getElementById('tivan')
+        )
+    }
+
     handleClick = (event: React.MouseEvent<HTMLAnchorElement>): void => {
         event.preventDefault()
-        this.props.toggleDisplay()
+        this.props.toggleDisplayAction()
+
+        if (!document.querySelector('#tivan')) {
+            this.createContentContainer()
+        }
     }
 
     render (): React.ReactNode {
+        const { display } = this.props
+
         return (
-            <a href="#" onClick={this.handleClick}>
-                NavbarItem
-            </a>
+            <>
+                <NavbarGlobalStyles/>
+                <NavbarButton onClick={this.handleClick}>
+                    <IconContext.Provider value={{ style: { width: '1em', height: '1em' } }}>
+                        {display ? <BsPieChartFill /> : <BsPieChart />}
+                    </IconContext.Provider>
+                </NavbarButton>
+            </>
         )
     }
 }
 
-const mapDispatchToProps: NavbarItemDispatchProps = {
-    toggleDisplay
+const mapStateToProps = (state: AppState): NavbarItemStateProps => {
+    return {
+        display: state.status.display
+    }
 }
 
-export default connect<{}, NavbarItemDispatchProps>(null, mapDispatchToProps)(NavbarItem)
+const mapDispatchToProps: NavbarItemDispatchProps = {
+    toggleDisplayAction
+}
+
+export default connect<NavbarItemStateProps, NavbarItemDispatchProps>(mapStateToProps, mapDispatchToProps)(NavbarItem)

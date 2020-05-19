@@ -9,7 +9,15 @@
     "rules": {
         "indentation": 4,
         "declaration-empty-line-before": "never",
-        "no-missing-end-of-source-newline": null
+        "no-missing-end-of-source-newline": null,
+        "order/properties-order": [],
+        "plugin/rational-order": [
+            true,
+            {
+                "border-in-box-model": false,
+                "empty-line-between-groups": false
+            }
+        ]
     },
     "syntax": "scss"
 }

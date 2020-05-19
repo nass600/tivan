@@ -33,9 +33,13 @@
     },
     "web_accessible_resources": [
         "*.png",
-        "*.svg"
+        "*.svg",
+        "options.html"
     ],
     "icons": {
         "128": "logo.png"
-    }
+    },
+    "permissions": [
+        "tabs"
+    ]
 }

@@ -30,7 +30,6 @@ class Options extends React.Component<OptionsProps, {}> {
     }
 
     onSelectConnection = (connection: AuthConnectionState): void => {
-        console.log('about to dispatch', connection)
         this.props.setConnection(connection)
     }
 
