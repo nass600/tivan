@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/nass600/tivan/compare/1.1.0...1.2.0) (2020-05-19)
+
+
+### Features
+
+* added basic media stats ([4290ac4](https://github.com/nass600/tivan/commit/4290ac42225d0ee380e854283224a4d734792383))
+
 # [1.1.0](https://github.com/nass600/tivan/compare/1.0.2...1.1.0) (2020-05-05)
 
 ### Features
