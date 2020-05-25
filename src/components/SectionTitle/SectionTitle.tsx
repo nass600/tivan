@@ -5,6 +5,7 @@ export const SectionTitle = styled.h2`
     ${variables.font.h2}
     margin-top: 0;
     margin-bottom: ${variables.spacing.l};
+    color: ${variables.colors.white};
     text-transform: uppercase;
 `
 

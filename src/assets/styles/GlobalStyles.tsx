@@ -31,7 +31,6 @@ export const GlobalStyles = createGlobalStyle`
 
     body {
         margin: 0;
-        color: ${variables.colors.white};
         font-size: 16px;
         font-family: ${variables.fontFamily.regular}, Helvetica, sans-serif;
         line-height: 1.5;
@@ -42,6 +41,7 @@ export const GlobalStyles = createGlobalStyle`
         display: flex;
         flex-direction: column;
         height: 100%;
+        color: ${variables.colors.whiteA75};
     }
 
     #tivan-button {
@@ -55,5 +55,6 @@ export const GlobalStyles = createGlobalStyle`
 
     strong {
         ${variables.fontFamily.bold}
+        color: ${variables.colors.white};
     }
 `

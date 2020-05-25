@@ -1,17 +1,21 @@
 import { createSelector } from 'reselect'
 import { AppState } from '@reducers'
-import { StatsDataState } from '@reducers/stats'
+import { StatsDataState } from '@reducers/library'
 import { variables } from '@styles'
-import { StatsTableInfo, StatsDataItem } from '@types'
+import { StatsDataItem } from '@types'
 
-const getVideoCodecStats = (state: AppState): StatsDataState => state.stats.video.codec
-const getVideoResolutionStats = (state: AppState): StatsDataState => state.stats.video.resolution
-const getAudioCodecStats = (state: AppState): StatsDataState => state.stats.audio.codec
-const getAudioLanguageStats = (state: AppState): StatsDataState => state.stats.audio.language
-const getSubtitleCodecStats = (state: AppState): StatsDataState => state.stats.subtitle.codec
-const getSubtitleLanguageStats = (state: AppState): StatsDataState => state.stats.subtitle.language
+const getVideoCodecStats = (state: AppState): StatsDataState => state.library[2]?.stats.videoCodec
+const getVideoResolutionStats = (state: AppState): StatsDataState => state.library[2]?.stats.videoResolution
+const getAudioCodecStats = (state: AppState): StatsDataState => state.library[2]?.stats.audioCodec
+const getAudioLanguageStats = (state: AppState): StatsDataState => state.library[2]?.stats.audioLanguage
+const getSubtitleCodecStats = (state: AppState): StatsDataState => state.library[2]?.stats.subtitleCodec
+const getSubtitleLanguageStats = (state: AppState): StatsDataState => state.library[2]?.stats.subtitleLanguage
 
-const getChartData = (stats: StatsDataState, headings: string[], palette: string[]): StatsTableInfo => {
+const getChartData = (stats: StatsDataState, palette: string[]): StatsDataItem[] => {
+    if (!stats) {
+        return []
+    }
+
     const items = Object.keys(stats.items).map((key): StatsDataItem => ({
         color: '',
         name: key,
@@ -19,19 +23,15 @@ const getChartData = (stats: StatsDataState, headings: string[], palette: string
         proportion: (stats.items[key] * 100 / stats.total).toFixed(2)
     })).sort((a: StatsDataItem, b: StatsDataItem) => (a.value < b.value) ? 1 : -1)
 
-    return {
-        headings,
-        items: items.map((item: StatsDataItem, index: number): StatsDataItem => ({
-            ...item,
-            color: palette[index % palette.length]
-        }))
-    }
+    return items.map((item: StatsDataItem, index: number): StatsDataItem => ({
+        ...item,
+        color: palette[index % palette.length]
+    }))
 }
 
 export const getVideoCodecChartData = createSelector(
     [
         getVideoCodecStats,
-        (): string[] => ['color', 'codec', 'movies', '%'],
         (): string[] => variables.palettes.blue
     ],
     getChartData
@@ -40,7 +40,6 @@ export const getVideoCodecChartData = createSelector(
 export const getVideoResolutionChartData = createSelector(
     [
         getVideoResolutionStats,
-        (): string[] => ['color', 'resolution', 'movies', '%'],
         (): string[] => variables.palettes.blue
     ],
     getChartData
@@ -49,7 +48,6 @@ export const getVideoResolutionChartData = createSelector(
 export const getAudioCodecChartData = createSelector(
     [
         getAudioCodecStats,
-        (): string[] => ['color', 'codec', 'movies', '%'],
         (): string[] => variables.palettes.red
     ],
     getChartData
@@ -58,7 +56,6 @@ export const getAudioCodecChartData = createSelector(
 export const getAudioLanguageChartData = createSelector(
     [
         getAudioLanguageStats,
-        (): string[] => ['color', 'language', 'movies', '%'],
         (): string[] => variables.palettes.red
     ],
     getChartData
@@ -67,7 +64,6 @@ export const getAudioLanguageChartData = createSelector(
 export const getSubtitleCodecChartData = createSelector(
     [
         getSubtitleCodecStats,
-        (): string[] => ['color', 'codec', 'movies', '%'],
         (): string[] => variables.palettes.turquoise
     ],
     getChartData
@@ -76,7 +72,6 @@ export const getSubtitleCodecChartData = createSelector(
 export const getSubtitleLanguageChartData = createSelector(
     [
         getSubtitleLanguageStats,
-        (): string[] => ['color', 'language', 'movies', '%'],
         (): string[] => variables.palettes.turquoise
     ],
     getChartData

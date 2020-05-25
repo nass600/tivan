@@ -43,3 +43,16 @@ export const formatLong = (item: string): string => {
 
     return item
 }
+
+const units = ['bytes', 'KB', 'MB', 'GB', 'TB', 'PB']
+
+export const formatSize = (x: number): string => {
+    let l = 0
+    let n = x || 0
+
+    while (n >= 1024 && ++l) {
+        n = n / 1024
+    }
+
+    return (n.toFixed(n < 10 && l > 0 ? 2 : 0) + ' ' + units[l])
+}

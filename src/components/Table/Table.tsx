@@ -1,13 +1,11 @@
 import React from 'react'
 import { variables } from '@styles'
-import styled, { css, FlattenSimpleInterpolation } from 'styled-components'
-import { darken } from 'polished'
-import { StatsTableInfo, StatsDataItem } from '@types'
+import styled, { FlattenSimpleInterpolation } from 'styled-components'
 
-const StyledTable = styled.table`
+const StyledTable = styled.table<{styles?: FlattenSimpleInterpolation}>`
     width: 100%;
-    max-width: 70%;
-    margin: 0 auto;
+
+    ${({ styles }): FlattenSimpleInterpolation | undefined => styles && styles}
 `
 
 const Row = styled.tr`
@@ -23,11 +21,6 @@ const Cell = styled.td`
     vertical-align: middle;
 `
 
-const FixedCell = styled(Cell)`
-    width: ${variables.spacing.xxl};
-    text-align: center;
-`
-
 const Heading = styled.th`
     ${variables.fontFamily.bold}
     padding: ${variables.spacing.m} ${variables.spacing.l};
@@ -36,64 +29,36 @@ const Heading = styled.th`
     vertical-align: middle;
 `
 
-const FixedHeading = styled(Heading)`
-    width: ${variables.spacing.xxl};
-    text-align: center;
-`
-
-const Legend = styled.div<{color?: string}>`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: ${variables.spacing.l};
-    height: ${variables.spacing.l};
-    border-radius: 50%;
-    ${({ color }): FlattenSimpleInterpolation | '' | undefined => color && css`
-        color: ${darken(0.5, color)};
-        background-color: ${color};
-    `}
-`
+export interface TableItem {
+    // eslint-disable-next-line
+    [x: string]: any;
+}
 
 interface TableProps {
-    data: StatsTableInfo;
-    nameFormatter (name: string): string;
+    styles?: FlattenSimpleInterpolation;
+    data: {
+        headings: string[];
+        items: TableItem[];
+    };
 }
 
 class Table extends React.Component<TableProps> {
     render (): React.ReactNode {
-        const { data, nameFormatter } = this.props
+        const { data, styles } = this.props
 
         return (
-            <StyledTable>
+            <StyledTable styles={styles}>
                 <tbody>
                     <Row>
-                        {data.headings.map((item: string, index: number): React.ReactNode => {
-                            if (index === 0) {
-                                return <FixedHeading key={index}>#</FixedHeading>
-                            } else if (index === data.headings.length - 1) {
-                                return <FixedHeading key={index}>{item}</FixedHeading>
-                            }
-
-                            return <Heading key={index}>{item}</Heading>
-                        })}
+                        {data.headings.map((item: string, index: number): React.ReactNode => (
+                            <Heading key={index}>{item}</Heading>
+                        ))}
                     </Row>
-                    {data.items.map((item: StatsDataItem, index: number): React.ReactNode => (
+                    {data.items.map((item: TableItem, index: number): React.ReactNode => (
                         <Row key={index}>
-                            {Object.keys(item).map((key: keyof StatsDataItem, i: number): React.ReactNode => {
-                                if (i === 0) {
-                                    return (
-                                        <FixedCell key={i}>
-                                            <Legend color={item[key] as string}>{index + 1}</Legend>
-                                        </FixedCell>
-                                    )
-                                } else if (i === Object.keys(item).length - 1) {
-                                    return (
-                                        <FixedCell key={i}>{item[key]}</FixedCell>
-                                    )
-                                }
-
-                                return <Cell key={i}>{nameFormatter(item[key] as string)}</Cell>
-                            })}
+                            {Object.keys(item).map((key: keyof TableItem, i: number): React.ReactNode => (
+                                <Cell key={i}>{item[key]}</Cell>
+                            ))}
                         </Row>
                     ))}
                 </tbody>

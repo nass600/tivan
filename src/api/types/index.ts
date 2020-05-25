@@ -110,6 +110,7 @@ export interface VideoStream {
 export interface AudioStream {
     id: number;
     streamType: StreamType;
+    forced: boolean;
     selected: boolean;
     default: boolean;
     codec: AudioCodec;
@@ -126,6 +127,7 @@ export interface AudioStream {
 export interface SubtitleStream {
     id: number;
     streamType: StreamType;
+    forced: boolean;
     codec: SubtitleCodec;
     index: number;
     bitrate: number;
