@@ -35,7 +35,7 @@ export interface MediaState {
     subtitleCodec: string[];
     subtitleLanguage: string[];
     tracks: Stream[];
-    normalizationErrors: string[];
+    errors: string[];
 }
 
 export interface StatsState {

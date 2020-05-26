@@ -126,7 +126,7 @@ const mapMedia = (item: MetadataInfo): MediaState => {
         subtitleCodec: [],
         subtitleLanguage: [],
         tracks: streams,
-        normalizationErrors: []
+        errors: []
     }
 
     streams.forEach((stream: Stream) => {
@@ -144,6 +144,44 @@ const mapMedia = (item: MetadataInfo): MediaState => {
     return data
 }
 
+const isNormalized = (item: MediaState): boolean => {
+    if (![VideoResolution.FHD_1080, VideoResolution.UHD_4K].includes(item.videoResolution)) {
+        item.errors.push(`Video resolution is ${formatShort(item.videoResolution)}`)
+    }
+
+    if (item.fileType !== FileContainer.MKV) {
+        item.errors.push(`File type is .${item.fileType}`)
+    }
+
+    if (item.size > 7516192768) {
+        item.errors.push(`File size is ${formatSize(item.size)}`)
+    }
+
+    item.tracks.forEach((stream: Stream) => {
+        if (stream.streamType === StreamType.AUDIO) {
+            if (stream.codec !== AudioCodec.AC3) {
+                item.errors.push(
+                    `Audio track [${stream.index}] is encoded in ${formatShort(stream.codec)}`
+                )
+            }
+        }
+
+        if (stream.streamType === StreamType.SUBTITLE) {
+            if (stream.codec !== SubtitleCodec.SRT) {
+                item.errors.push(
+                    `Subtitle track [${stream.index}] is encoded in ${formatShort(stream.codec)}`
+                )
+            }
+        }
+    })
+
+    return item.errors.length === 0
+}
+
+const extractNonNormalized = (items: MediaState[]): MediaState[] => {
+    return items.filter((item: MediaState) => !isNormalized(item))
+}
+
 const extractStats = (items: MediaState[]): StatsState => {
     const data: StatsState = {
         videoCodec: { total: 0, items: {} },
@@ -151,12 +189,18 @@ const extractStats = (items: MediaState[]): StatsState => {
         audioCodec: { total: 0, items: {} },
         audioLanguage: { total: 0, items: {} },
         subtitleCodec: { total: 0, items: {} },
-        subtitleLanguage: { total: 0, items: {} }
+        subtitleLanguage: { total: 0, items: {} },
+        normalization: { total: 0, items: {} }
     }
 
     items.forEach((item: MediaState) => {
-        const path = data.videoResolution
-        const key: string = item.videoResolution
+        let path = data.videoResolution
+        let key: string = item.videoResolution
+        path.items[key] ? path.items[key]++ : path.items[key] = 1
+        path.total++
+
+        path = data.normalization
+        key = item.errors && item.errors.length > 0 ? 'normalized' : 'non-normalized'
         path.items[key] ? path.items[key]++ : path.items[key] = 1
         path.total++
 
@@ -172,103 +216,6 @@ const extractStats = (items: MediaState[]): StatsState => {
     return data
 }
 
-const extractNormalized = (items: MediaState[]): MediaState[] => {
-    return items.filter((item: MediaState) => {
-        if (![VideoResolution.FHD_1080, VideoResolution.UHD_4K].includes(item.videoResolution)) {
-            item.normalizationErrors.push(`Video resolution is "${formatShort(item.videoResolution)}"`)
-        }
-
-        if (item.fileType !== FileContainer.MKV) {
-            item.normalizationErrors.push(`File type is ".${item.fileType}"`)
-        }
-
-        if (item.size > 7516192768) {
-            item.normalizationErrors.push(`File size is "${formatSize(item.size)}"`)
-        }
-
-        item.tracks.forEach((stream: Stream, index: number) => {
-            // if (stream.streamType === StreamType.VIDEO) {
-            //     if (stream.languageCode !== 'und') {
-            //         item.normalizationErrors.push('Video track has language assigned')
-            //     }
-            // }
-
-            if (stream.streamType === StreamType.AUDIO) {
-                if (stream.codec !== AudioCodec.AC3) {
-                    item.normalizationErrors.push(
-                        `Audio track [${stream.index}] is encoded in ${formatShort(stream.codec)}`
-                    )
-                }
-            }
-
-            if (stream.streamType === StreamType.SUBTITLE) {
-                if (stream.codec !== SubtitleCodec.SRT) {
-                    item.normalizationErrors.push(
-                        `Subtitle track [${stream.index}] is encoded in ${formatShort(stream.codec)}`
-                    )
-                }
-            }
-        })
-
-        if (item.normalizationErrors.length > 0) {
-            return true
-        }
-    })
-}
-
-// const extractStats = (items: MetadataInfo[]): StatsState => {
-//     const data: StatsState = _.cloneDeep(initialState)
-
-//     items.forEach((item: MetadataInfo) => {
-//         const streams = item.Media[0].Part[0].Stream
-
-//         const path = data.video.resolution
-//         const key: string = [
-//             VideoResolution.SD,
-//             VideoResolution.SD_576,
-//             VideoResolution.SD_480
-//         ].includes(item.Media[0].videoResolution) ? VideoResolution.SD : item.Media[0].videoResolution
-//         path.items[key] ? path.items[key]++ : path.items[key] = 1
-//         path.total++
-//         const summary: {[index: string]: string[]} = {
-//             'video.codec': [],
-//             'audio.codec': [],
-//             'audio.language': [],
-//             'subtitle.codec': [],
-//             'subtitle.language': []
-//         }
-
-//         streams.forEach((stream: Stream) => {
-//             let type = ''
-
-//             if (stream.streamType === StreamType.VIDEO) {
-//                 type = 'video'
-//             } else if (stream.streamType === StreamType.AUDIO) {
-//                 type = 'audio'
-//             } else if (stream.streamType === StreamType.SUBTITLE) {
-//                 type = 'subtitle'
-//             }
-
-//             summary[`${type}.codec`] = _.uniq(_.concat(summary[`${type}.codec`], stream.codec))
-
-//             if (summary[`${type}.language`]) {
-//                 summary[`${type}.language`] = _.uniq(_.concat(summary[`${type}.language`], stream.languageCode))
-//             }
-//         })
-
-//         Object.keys(summary).map((stream) => {
-//             const [streamType, prop] = stream.split('.')
-//             const path = data[streamType][prop]
-//             summary[stream].map((value: string) => {
-//                 path.items[value] ? path.items[value]++ : path.items[value] = 1
-//             })
-//             path.total = path.total + summary[stream].length
-//         })
-//     })
-
-//     return data
-// }
-
 export const parseLibraryAction = (): ThunkAction<Promise<void>, {}, {}, AnyAction> =>
     async (dispatch: ThunkDispatch<{}, {}, AnyAction>, getState: () => AppState): Promise<void> => {
         const state = getState()
@@ -281,10 +228,8 @@ export const parseLibraryAction = (): ThunkAction<Promise<void>, {}, {}, AnyActi
         plex.setAuthorization(state.auth.connection.token)
 
         plex.pms.sections.allSectionItems(2).then(async (data: AllSectionItemsResponse) => {
-            const ids = data.MediaContainer.Metadata.map(item => item.ratingKey).slice(0, 199)
+            const ids = data.MediaContainer.Metadata.map(item => item.ratingKey)
 
-            // dispatch(resetStatsAction(2))
-            // dispatch(resetNormaAction(2))
             dispatch(resetLibraryAction(2))
 
             const chunks = chunk(ids)
@@ -297,11 +242,10 @@ export const parseLibraryAction = (): ThunkAction<Promise<void>, {}, {}, AnyActi
                 ).then((result: GetMetadataResponse[]) => {
                     const items = result.reduce((acc: [], item: GetMetadataResponse) => {
                         return acc.concat(item.MediaContainer.Metadata as [])
-                    }, [])
+                    }, []).map(mapMedia)
 
-                    const mappedItems = items.map(mapMedia)
-                    dispatch(addStatsAction(2, extractStats(mappedItems)))
-                    dispatch(addNonNormalizedItemsAction(2, extractNormalized(mappedItems)))
+                    dispatch(addNonNormalizedItemsAction(2, extractNonNormalized(items)))
+                    dispatch(addStatsAction(2, extractStats(items)))
                 })
             }
         })

@@ -11,7 +11,7 @@ interface MediaListProps {
 class MediaList extends React.Component<MediaListProps> {
     render (): React.ReactNode {
         const { items } = this.props
-        console.log(items)
+
         const data = {
             headings: ['title', 'file', 'video', 'audio', 'subtitle', 'errors'],
             items: items.map((item: MediaState) => {
@@ -30,11 +30,10 @@ class MediaList extends React.Component<MediaListProps> {
                     }),
                     audio: item.tracks.map((track: AudioStream, index: number) => {
                         if (track.streamType === StreamType.AUDIO) {
-                            return (
-                                <li key={index}>
-                                    {`[${track.index}] ${track.displayTitle}${track.forced ? ' [forced]' : ''}`}
-                                </li>
-                            )
+                            return (<li key={index}>
+                                {track.forced && `[${track.index}] ${track.displayTitle.replace('(', 'Forced (')}`}
+                                {!track.forced && `[${track.index}] ${track.displayTitle}`}
+                            </li>)
                         }
                     }),
                     subtitle: item.tracks.map((track: SubtitleStream, index: number) => {
@@ -42,7 +41,7 @@ class MediaList extends React.Component<MediaListProps> {
                             return (<li key={index}>{`[${track.index}] ${track.displayTitle}`}</li>)
                         }
                     }),
-                    errors: item.normalizationErrors.map((error: string, index: number) => (
+                    errors: item.errors && item.errors.map((error: string, index: number) => (
                         <li key={index}>{error}</li>
                     ))
                 }
@@ -50,9 +49,7 @@ class MediaList extends React.Component<MediaListProps> {
         }
 
         return (
-            <>
-                <Table data={data}/>
-            </>
+            <Table data={data}/>
         )
     }
 }

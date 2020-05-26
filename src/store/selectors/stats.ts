@@ -10,6 +10,7 @@ const getAudioCodecStats = (state: AppState): StatsDataState => state.library[2]
 const getAudioLanguageStats = (state: AppState): StatsDataState => state.library[2]?.stats.audioLanguage
 const getSubtitleCodecStats = (state: AppState): StatsDataState => state.library[2]?.stats.subtitleCodec
 const getSubtitleLanguageStats = (state: AppState): StatsDataState => state.library[2]?.stats.subtitleLanguage
+const getNormalizationStats = (state: AppState): StatsDataState => state.library[2]?.stats.normalization
 
 const getChartData = (stats: StatsDataState, palette: string[]): StatsDataItem[] => {
     if (!stats) {
@@ -72,6 +73,14 @@ export const getSubtitleCodecChartData = createSelector(
 export const getSubtitleLanguageChartData = createSelector(
     [
         getSubtitleLanguageStats,
+        (): string[] => variables.palettes.turquoise
+    ],
+    getChartData
+)
+
+export const getNormalizationChartData = createSelector(
+    [
+        getNormalizationStats,
         (): string[] => variables.palettes.turquoise
     ],
     getChartData

@@ -2,48 +2,41 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { AppState } from '@reducers'
 import { MediaState } from '@reducers/library'
-import { Title, Section, SectionTitle, Row, Column, Table, MediaList } from '@components'
+import { Title, Section, SectionTitle, Row, Column, Table, PieChart, MediaList } from '@components'
+import { StatsDataItem } from '@types'
+import { getNormalizationChartData } from '@selectors'
 
 interface ContentStateProps {
     connection?: string;
     movies: MediaState[];
+    normalizationStats: StatsDataItem[];
 }
 
 class Normalization extends React.Component<ContentStateProps, {}> {
     render (): React.ReactNode {
-        const { connection, movies } = this.props
-        const data = {
-            headings: ['track', 'track type', 'criteria', 'language'],
+        const { connection, movies, normalizationStats } = this.props
+        const normalizationRules = {
+            headings: ['#', 'rule'],
             items: [
                 {
-                    track: 1,
-                    type: 'video',
-                    criteria: '1080p resolution',
-                    language: ''
+                    position: 1,
+                    rule: 'Video track must have a resolution equal or greater than 1080p'
                 },
                 {
-                    track: 2,
-                    type: 'audio',
-                    criteria: 'AC-3 codec',
-                    language: 'esp'
+                    position: 2,
+                    rule: 'All audio tracks must be encoded in AC-3'
                 },
                 {
-                    track: 3,
-                    type: 'audio',
-                    criteria: 'AC-3 codec',
-                    language: 'eng'
+                    position: 3,
+                    rule: 'All subtitle tracks must be encoded in SRT'
                 },
                 {
-                    track: 4,
-                    type: 'subtitle',
-                    criteria: 'SRT codec',
-                    language: 'esp'
+                    position: 4,
+                    rule: 'File size must not be greater than 7 GB'
                 },
                 {
-                    track: 5,
-                    type: 'subtitle',
-                    criteria: 'SRT codec',
-                    language: 'eng'
+                    position: 5,
+                    rule: 'File type must be Matroska (.mkv)'
                 }
             ]
         }
@@ -79,19 +72,35 @@ class Normalization extends React.Component<ContentStateProps, {}> {
                                 this section.
                             </p>
                         </Column>
-                        <Column>
-                            <Table data={data}/>
-                        </Column>
                     </Row>
-                    <ul>
-
-                    </ul>
                 </Section>
                 <Section>
-                    <SectionTitle>Non-normalized movies</SectionTitle>
+                    <SectionTitle>Status</SectionTitle>
                     <Row>
                         <Column>
-                            {movies.length > 0 && <MediaList items={movies}/>}
+                            <p>
+                                The below table depicts what a media file should contain in order to be considered
+                                normalized:
+                            </p>
+                            <Table data={normalizationRules}/>
+                        </Column>
+                        <Column>
+                            <PieChart data={normalizationStats}/>
+                        </Column>
+                    </Row>
+                </Section>
+                <Section>
+                    <SectionTitle>Non-normalized list</SectionTitle>
+                    <Row>
+                        <Column>
+                            {movies.length > 0 && (
+                                <>
+                                    <p>
+                                        Below you can find the list of non-normalized items we found in your library.
+                                    </p>
+                                    <MediaList items={movies}/>
+                                </>
+                            )}
                         </Column>
                     </Row>
                 </Section>
@@ -103,7 +112,8 @@ class Normalization extends React.Component<ContentStateProps, {}> {
 const mapStateToProps = (state: AppState): ContentStateProps => {
     return {
         connection: state.auth.connection?.name,
-        movies: state.library[2].normalization || []
+        movies: state.library[2].normalization || [],
+        normalizationStats: getNormalizationChartData(state)
     }
 }
 
