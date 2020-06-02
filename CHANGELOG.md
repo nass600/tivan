@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/nass600/tivan/compare/1.2.0...1.3.0) (2020-06-02)
+
+
+### Features
+
+* rendering normalization table and status chart ([4501c93](https://github.com/nass600/tivan/commit/4501c935e295829387f0efb84153b1ab5cfb03fa))
+
 # [1.2.0](https://github.com/nass600/tivan/compare/1.1.0...1.2.0) (2020-05-19)
 
 ### Features
