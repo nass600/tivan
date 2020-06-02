@@ -20,7 +20,7 @@ interface ActiveShapeProps {
 
 interface StatsVideoResolutionProps {
     data: StatsDataItem[];
-    nameFormatter: (name: string) => string;
+    nameFormatter?: (name: string) => string;
 }
 
 const initialState = {
@@ -38,9 +38,11 @@ class PieChart extends React.Component<StatsVideoResolutionProps> {
         })
     }
 
-    renderLegend = (value: string): React.ReactNode => {
-        return <small>{this.props.nameFormatter(value)}</small>
-    }
+    renderLegend = (value: string): React.ReactNode => (
+        <small>
+            {this.props.nameFormatter ? this.props.nameFormatter(value) : value}
+        </small>
+    )
 
     renderActiveShape = (props: ActiveShapeProps): React.ReactNode => {
         const RADIAN = Math.PI / 180
@@ -69,7 +71,7 @@ class PieChart extends React.Component<StatsVideoResolutionProps> {
         return (
             <g>
                 <text x={cx} y={cy} dy={8} textAnchor="middle" fill={payload.color}>
-                    {this.props.nameFormatter(payload.name)}
+                    {this.props.nameFormatter ? this.props.nameFormatter(payload.name) : payload.name}
                 </text>
                 <Sector
                     cx={cx}

@@ -1,5 +1,6 @@
+import { TableItem } from '@components'
 
-export interface StatsDataItem {
+export interface StatsDataItem extends TableItem {
     color: string;
     name: string;
     value: number;

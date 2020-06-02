@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { AppState } from '@reducers'
-import { Title } from '@components'
+import { Title, Section, Row, Column } from '@components'
 
 interface ContentStateProps {
     connection?: string;
@@ -14,7 +14,18 @@ class Forecast extends React.Component<ContentStateProps, {}> {
         return (
             <>
                 <Title>{connection} - Forecast</Title>
-                <p>Under construction</p>
+                <Section>
+                    <Row>
+                        <Column>
+                            <p>
+                                We are still working on this section. Hopefully we will bring
+                                forecast-related information about the usage of your library
+                                so you can plan out the amount of space you need in your Plex
+                                Media Server or how many HDD you should buy and when
+                            </p>
+                        </Column>
+                    </Row>
+                </Section>
             </>
         )
     }
