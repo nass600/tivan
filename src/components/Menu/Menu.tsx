@@ -18,8 +18,9 @@ export const Navbar = styled.div`
     height: 50px;
     padding: 0 ${variables.spacing.m};
     color: ${variables.colors.whiteA75};
-    background-color: ${variables.colors.blackA15};
-    box-shadow: none;
+
+    /* background-color: ${variables.colors.blackA15}; */
+    box-shadow: 0 3px 6px 0 ${variables.colors.blackA30};
 `
 
 export const Tab = styled.a<{active?: boolean}>`

@@ -17,7 +17,7 @@ interface NavbarItemStateProps {
     display: boolean;
 }
 
-const CONTAINER_SELECTOR = '[class^="Page-page"]'
+const CONTAINER_SELECTOR = '#content [class^="FullPage-container"]'
 
 type NavbarItemProps = NavbarItemDispatchProps & NavbarItemStateProps
 

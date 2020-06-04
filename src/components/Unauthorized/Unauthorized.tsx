@@ -1,7 +1,7 @@
 import React from 'react'
-import { Page, Well, Title } from '@components'
+import { Page, Title } from '@components'
 import { IconContext } from 'react-icons'
-import { GiStopSign } from 'react-icons/gi'
+import { MdFingerprint } from 'react-icons/md'
 import styled from 'styled-components'
 import { variables } from '@styles'
 
@@ -12,13 +12,24 @@ const ErrorPage = styled(Page)`
     height: 100vh;
 `
 
-const ErrorWell = styled(Well)`
+const ErrorContainer = styled.div`
     max-width: 600px;
     padding: ${variables.spacing.xxl};
     text-align: center;
 `
 
+const ErrorIcon = styled.div`
+    display: inline-flex;
+    padding: ${variables.spacing.l};
+    font-size: 60px;
+    line-height: 0;
+    text-align: center;
+    background-color: ${variables.colors.blackA30};
+    border-radius: 50%;
+`
+
 const ErrorTitle = styled(Title)`
+    margin-bottom: ${variables.spacing.xl};
     color: ${variables.colors.white};
 `
 
@@ -36,10 +47,12 @@ class Unauthorized extends React.Component<UnauthorizedProps> {
 
         return (
             <ErrorPage>
-                <ErrorWell>
-                    <IconContext.Provider value={{ style: { width: '5rem', height: '5rem' } }}>
-                        <GiStopSign/>
-                    </IconContext.Provider>
+                <ErrorContainer>
+                    <ErrorIcon>
+                        <IconContext.Provider value={{ style: { width: '5rem', height: '5rem' } }}>
+                            <MdFingerprint/>
+                        </IconContext.Provider>
+                    </ErrorIcon>
                     <ErrorTitle>Thanks for using Tivan</ErrorTitle>
                     <p>
                         To let Tivan display information about your library you need to log into Plex
@@ -51,7 +64,7 @@ class Unauthorized extends React.Component<UnauthorizedProps> {
                         need to get an <Strong>access token</Strong> to the Plex Media Server you will choose in the
                         Options page.
                     </p>
-                </ErrorWell>
+                </ErrorContainer>
             </ErrorPage>
         )
     }

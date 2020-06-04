@@ -2,12 +2,20 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { AppState } from '@reducers'
 import { Page, Menu, Unauthorized } from '@components'
-import { Stats, Normalization, Forecast } from '@containers'
+import { Stats, Normalization, Forecast, Sidebar } from '@containers'
 import { GlobalStyles } from '@styles'
 import { Tabs } from '@reducers/status'
 import { ThunkDispatch } from 'redux-thunk'
 import { AnyAction } from 'redux'
-import { parseLibraryAction } from '@actions'
+import { parseLibraryAction, getLibrariesAction } from '@actions'
+import styled from 'styled-components'
+
+const ContentWrapper = styled.div`
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    overflow: hidden;
+`
 
 interface ContentStateProps {
     display: boolean;
@@ -16,7 +24,8 @@ interface ContentStateProps {
 }
 
 interface ContentDispatchProps {
-    parseLibrary(): void;
+    getLibraries(): void;
+    parseLibrary(libraryId: number): void;
 }
 
 type ContentProps = ContentDispatchProps & ContentStateProps
@@ -37,7 +46,8 @@ class Content extends React.Component<ContentProps, {}> {
     componentDidMount (): void {
         this.toggleOriginalPage(this.props.display)
         if (this.props.display && this.props.signedIn) {
-            this.props.parseLibrary()
+            // this.props.parseLibrary()
+            this.props.getLibraries()
         }
     }
 
@@ -45,7 +55,8 @@ class Content extends React.Component<ContentProps, {}> {
         this.toggleOriginalPage(this.props.display)
 
         if ((!prevProps.display && this.props.display) || (!prevProps.signedIn && this.props.signedIn)) {
-            this.props.parseLibrary()
+            // this.props.parseLibrary()
+            this.props.getLibraries()
         }
     }
 
@@ -76,12 +87,15 @@ class Content extends React.Component<ContentProps, {}> {
             <>
                 {signedIn && (
                     <>
-                        <Menu/>
-                        <Page>
-                            {currentTab === Tabs.STATS && <Stats/>}
-                            {currentTab === Tabs.NORMALIZATION && <Normalization/>}
-                            {currentTab === Tabs.FORECAST && <Forecast/>}
-                        </Page>
+                        <Sidebar/>
+                        <ContentWrapper>
+                            <Menu/>
+                            <Page>
+                                {currentTab === Tabs.STATS && <Stats/>}
+                                {currentTab === Tabs.NORMALIZATION && <Normalization/>}
+                                {currentTab === Tabs.FORECAST && <Forecast/>}
+                            </Page>
+                        </ContentWrapper>
                     </>
                 )}
                 {!signedIn && <Unauthorized loginUrl={chrome.extension.getURL('options.html')}/>}
@@ -100,8 +114,11 @@ const mapStateToProps = (state: AppState): ContentStateProps => {
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, AnyAction>): ContentDispatchProps => ({
-    parseLibrary: async (): Promise<void> => (
-        await dispatch(parseLibraryAction())
+    getLibraries: async (): Promise<void> => (
+        await dispatch(getLibrariesAction())
+    ),
+    parseLibrary: async (libraryId: number): Promise<void> => (
+        await dispatch(parseLibraryAction(libraryId))
     )
 })
 

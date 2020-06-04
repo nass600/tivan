@@ -63,7 +63,9 @@ export const variables = {
     },
     colors: {
         white: '#fff',
+        whiteA08: 'hsla(0, 0%, 100%, 0.08)',
         whiteA20: 'hsla(0, 0%, 100%, 0.2)',
+        whiteA30: 'hsla(0, 0%, 100%, 0.3)',
         whiteA45: 'hsla(0, 0%, 100%, 0.45)',
         whiteA75: 'hsla(0, 0%, 100%, 0.75)',
         blackA15: 'rgba(0, 0, 0, 0.15)',

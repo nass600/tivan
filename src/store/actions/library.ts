@@ -1,5 +1,6 @@
 import {
     AllSectionItemsResponse,
+    AllSectionsResponse,
     Stream,
     StreamType,
     MetadataInfo,
@@ -7,7 +8,9 @@ import {
     VideoResolution,
     AudioCodec,
     SubtitleCodec,
-    FileContainer
+    FileContainer,
+    Directory,
+    SectionType
 } from '@api'
 import { ThunkDispatch, ThunkAction } from 'redux-thunk'
 import { AnyAction } from 'redux'
@@ -20,11 +23,14 @@ import {
     ADD_MEDIA_ITEMS,
     ADD_STATS,
     ADD_NON_NORMALIZED_ITEMS,
+    SET_LIBRARIES,
     RESET_LIBRARY,
     RESET_STATS,
-    RESET_NORMALIZATION
+    RESET_NORMALIZATION,
+    setLoadingAction,
+    setCurrentLibraryAction
 } from '@actions'
-import { MediaState, StatsState } from '@reducers/library'
+import { MediaState, StatsState, LibrariesState } from '@reducers/library'
 
 export interface AddMediaItemsAction {
     type: 'ADD_MEDIA_ITEMS';
@@ -39,6 +45,11 @@ export interface AddNonNormalizedItemsAction {
 export interface AddStatsAction {
     type: 'ADD_STATS';
     payload: { library: number; stats: StatsState };
+}
+
+export interface SetLibrariesAction {
+    type: 'SET_LIBRARIES';
+    payload: LibrariesState;
 }
 
 export interface ResetLibraryAction {
@@ -60,6 +71,7 @@ export type LibraryAction =
     AddMediaItemsAction |
     AddStatsAction |
     AddNonNormalizedItemsAction |
+    SetLibrariesAction |
     ResetLibraryAction |
     ResetStatsAction |
     ResetNormalizationAction;
@@ -74,6 +86,10 @@ export const addStatsAction = (library: number, stats: StatsState): AddStatsActi
 
 export const addNonNormalizedItemsAction = (library: number, items: MediaState[]): AddNonNormalizedItemsAction => (
     { type: ADD_NON_NORMALIZED_ITEMS, payload: { library, items } }
+)
+
+export const setLibrariesAction = (libraries: LibrariesState): SetLibrariesAction => (
+    { type: SET_LIBRARIES, payload: libraries }
 )
 
 export const resetLibraryAction = (library: number): ResetLibraryAction => (
@@ -216,7 +232,7 @@ const extractStats = (items: MediaState[]): StatsState => {
     return data
 }
 
-export const parseLibraryAction = (): ThunkAction<Promise<void>, {}, {}, AnyAction> =>
+export const parseLibraryAction = (libraryId: number): ThunkAction<Promise<void>, {}, {}, AnyAction> =>
     async (dispatch: ThunkDispatch<{}, {}, AnyAction>, getState: () => AppState): Promise<void> => {
         const state = getState()
 
@@ -224,13 +240,15 @@ export const parseLibraryAction = (): ThunkAction<Promise<void>, {}, {}, AnyActi
             return Promise.reject(new Error('No token'))
         }
 
+        dispatch(setLoadingAction({ library: true }))
+
         plex.setBaseUrl(state.auth.connection.uri)
         plex.setAuthorization(state.auth.connection.token)
 
-        plex.pms.sections.allSectionItems(2).then(async (data: AllSectionItemsResponse) => {
+        plex.pms.sections.allSectionItems(libraryId).then(async (data: AllSectionItemsResponse) => {
             const ids = data.MediaContainer.Metadata.map(item => item.ratingKey)
 
-            dispatch(resetLibraryAction(2))
+            dispatch(resetLibraryAction(libraryId))
 
             const chunks = chunk(ids)
 
@@ -244,9 +262,52 @@ export const parseLibraryAction = (): ThunkAction<Promise<void>, {}, {}, AnyActi
                         return acc.concat(item.MediaContainer.Metadata as [])
                     }, []).map(mapMedia)
 
-                    dispatch(addNonNormalizedItemsAction(2, extractNonNormalized(items)))
-                    dispatch(addStatsAction(2, extractStats(items)))
+                    dispatch(addNonNormalizedItemsAction(libraryId, extractNonNormalized(items)))
+                    dispatch(addStatsAction(libraryId, extractStats(items)))
                 })
             }
+
+            dispatch(setLoadingAction({ library: false }))
+        })
+    }
+
+const ALLOWED_LIBRARY_TYPES = [SectionType.MOVIE]
+
+export const getLibrariesAction = (): ThunkAction<Promise<void>, {}, {}, AnyAction> =>
+    async (dispatch: ThunkDispatch<{}, {}, AnyAction>, getState: () => AppState): Promise<void> => {
+        const state = getState()
+
+        if (!state.auth.connection) {
+            return Promise.reject(new Error('No token'))
+        }
+
+        dispatch(setLoadingAction({ library: true }))
+
+        plex.setBaseUrl(state.auth.connection.uri)
+        plex.setAuthorization(state.auth.connection.token)
+
+        plex.pms.sections.all().then(async (data: AllSectionsResponse) => {
+            const libraries = data.MediaContainer.Directory.reduce((acc: LibrariesState, directory: Directory) => {
+                if (ALLOWED_LIBRARY_TYPES.includes(directory.type)) {
+                    acc[directory.Location[0].id] = {
+                        title: directory.title,
+                        type: directory.type,
+                        stats: {},
+                        normalization: []
+                    }
+                }
+
+                return acc
+            }, {})
+
+            dispatch(setLibrariesAction(libraries))
+
+            const items = Object.keys(libraries)
+
+            if (state.status.currentLibrary === null && items.length > 0) {
+                dispatch(setCurrentLibraryAction(parseInt(items[0])))
+            }
+
+            dispatch(setLoadingAction({ library: false }))
         })
     }
