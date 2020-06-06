@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/nass600/tivan/compare/1.3.0...1.4.0) (2020-06-06)
+
+
+### Features
+
+* added sidebar listing the libraries ([6fd4e86](https://github.com/nass600/tivan/commit/6fd4e86bc4ffdb447e3c8042e6971b398763f392))
+
 # [1.3.0](https://github.com/nass600/tivan/compare/1.2.0...1.3.0) (2020-06-02)
 
 ### Features
