@@ -7,7 +7,7 @@ import { GlobalStyles } from '@styles'
 import { Tabs } from '@reducers/status'
 import { ThunkDispatch } from 'redux-thunk'
 import { AnyAction } from 'redux'
-import { parseLibraryAction, getLibrariesAction } from '@actions'
+import { parseLibraryAction, getLibrariesAction, setCurrentLibraryAction } from '@actions'
 import styled from 'styled-components'
 
 const ContentWrapper = styled.div`
@@ -26,6 +26,7 @@ interface ContentStateProps {
 interface ContentDispatchProps {
     getLibraries(): void;
     parseLibrary(libraryId: number): void;
+    setCurrentLibrary(libraryId: number): void;
 }
 
 type ContentProps = ContentDispatchProps & ContentStateProps
@@ -76,6 +77,29 @@ class Content extends React.Component<ContentProps, {}> {
         }
     }
 
+    onChangeCurrentLibrary = (event: React.MouseEvent<HTMLAnchorElement>): void => {
+        event.preventDefault()
+        const libraryId = parseInt((event.target as HTMLAnchorElement).dataset.id || '')
+
+        if (!libraryId) {
+            return
+        }
+
+        this.props.setCurrentLibrary(libraryId)
+    }
+
+    onScanLibrary = (event: React.MouseEvent<HTMLButtonElement>): void => {
+        event.preventDefault()
+        event.stopPropagation()
+        const libraryId = parseInt((event.currentTarget as HTMLButtonElement).dataset.id || '')
+
+        if (!libraryId) {
+            return
+        }
+
+        this.props.parseLibrary(libraryId)
+    }
+
     render (): React.ReactNode {
         const { display, currentTab, signedIn } = this.props
 
@@ -87,7 +111,10 @@ class Content extends React.Component<ContentProps, {}> {
             <>
                 {signedIn && (
                     <>
-                        <Sidebar/>
+                        <Sidebar
+                            onChangeCurrentLibrary={this.onChangeCurrentLibrary}
+                            onScanLibrary={this.onScanLibrary}
+                        />
                         <ContentWrapper>
                             <Menu/>
                             <Page>
@@ -116,6 +143,9 @@ const mapStateToProps = (state: AppState): ContentStateProps => {
 const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, AnyAction>): ContentDispatchProps => ({
     getLibraries: async (): Promise<void> => (
         await dispatch(getLibrariesAction())
+    ),
+    setCurrentLibrary: async (libraryId: number): Promise<void> => (
+        await dispatch(setCurrentLibraryAction(libraryId))
     ),
     parseLibrary: async (libraryId: number): Promise<void> => (
         await dispatch(parseLibraryAction(libraryId))

@@ -74,6 +74,7 @@ export const variables = {
         gray40: '#51595e',
         gray60: '#3f4245',
         gray80: '#282a2d',
+        gray100: '#191a1c',
         orange20: '#fef8ec',
         orange60: '#e5a00d',
         red40: '#f5ccc6',

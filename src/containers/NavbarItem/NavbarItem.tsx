@@ -5,6 +5,7 @@ import { render } from 'react-dom'
 import store from '@store/createStore'
 import { NavbarButton, NavbarGlobalStyles } from '@styles'
 import { Content } from '@containers'
+import { Tooltip, TooltipContainer } from '@components'
 import { IconContext } from 'react-icons'
 import { BsPieChart, BsPieChartFill } from 'react-icons/bs'
 import { AppState } from '@reducers'
@@ -53,15 +54,19 @@ class NavbarItem extends Component<NavbarItemProps> {
 
     render (): React.ReactNode {
         const { display } = this.props
+        const label = 'Tivan Stats'
 
         return (
             <>
                 <NavbarGlobalStyles/>
                 <NavbarButton onClick={this.handleClick}>
-                    <IconContext.Provider value={{ style: { width: '1em', height: '1em' } }}>
-                        {display ? <BsPieChartFill /> : <BsPieChart />}
-                    </IconContext.Provider>
+                    <TooltipContainer aria-label={label} data-tip={label}>
+                        <IconContext.Provider value={{ style: { width: '1em', height: '1em' } }}>
+                            {display ? <BsPieChartFill /> : <BsPieChart />}
+                        </IconContext.Provider>
+                    </TooltipContainer>
                 </NavbarButton>
+                <Tooltip place="bottom" type="dark" effect="solid"/>
             </>
         )
     }

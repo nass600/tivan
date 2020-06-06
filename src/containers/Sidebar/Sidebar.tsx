@@ -4,7 +4,10 @@ import { setCurrentLibraryAction } from '@actions'
 import { AppState } from '@reducers'
 import styled, { css, FlattenSimpleInterpolation } from 'styled-components'
 import { variables, customScrollbar } from '@styles'
+import { Tooltip, TooltipContainer } from '@components'
 import { LibrariesState } from '@reducers/library'
+import { IconContext } from 'react-icons'
+import { MdRefresh } from 'react-icons/md'
 
 const SidebarWrapper = styled.div`
     ${customScrollbar}
@@ -38,9 +41,26 @@ const SidebarItems = styled.div`
     margin-bottom: ${variables.spacing.xl};
 `
 
+const SidebarAction = styled.button`
+    display: none;
+    margin: 0;
+    padding: 0;
+    color: ${variables.colors.whiteA30};
+    background: transparent;
+    border: 0;
+    outline: none;
+    transition: all 0.2s ease-in-out;
+
+    &:hover {
+        color: ${variables.colors.white};
+    }
+`
+
 const SidebarItem = styled.a<{active?: boolean}>`
     position: relative;
     display: flex;
+    align-items: center;
+    justify-content: space-between;
     padding: ${variables.spacing.m} ${variables.spacing.m} ${variables.spacing.m} ${variables.spacing.xxl};
     color: inherit;
     border-top-right-radius: ${variables.borderRadius.s};
@@ -48,23 +68,34 @@ const SidebarItem = styled.a<{active?: boolean}>`
     cursor: pointer;
     transition: all 0.2s ease-in-out;
 
-    &:hover {
-        color: ${variables.colors.white};
-        background-color: ${variables.colors.whiteA08};
-    }
+    ${({ active }): FlattenSimpleInterpolation | undefined | false => {
+        if (active) {
+            return css`
+                color: ${variables.colors.orange60};
+                cursor: default;
 
-    ${({ active }): FlattenSimpleInterpolation | undefined | false => active && css`
-        color: ${variables.colors.orange60};
+                ${SidebarAction} {
+                    display: flex;
+                }
 
-        &::before {
-            position: absolute;
-            left: ${variables.spacing.l};
-            width: ${variables.spacing.l};
-            height: ${variables.spacing.l};
-            text-align: center;
-            content: '•';
+                &::before {
+                    position: absolute;
+                    left: ${variables.spacing.l};
+                    width: ${variables.spacing.l};
+                    height: ${variables.spacing.l};
+                    text-align: center;
+                    content: '•';
+                }
+            `
+        } else {
+            return css`
+                &:hover {
+                    color: ${variables.colors.white};
+                    background-color: ${variables.colors.whiteA08};
+                }
+            `
         }
-    `}
+    }}
 `
 
 interface SidebarDispatchProps {
@@ -76,23 +107,18 @@ interface SidebarStateProps {
     currentLibrary: number | null;
 }
 
-type SidebarProps = SidebarDispatchProps & SidebarStateProps
+interface SidebarProps {
+    onChangeCurrentLibrary: (event: React.MouseEvent<HTMLAnchorElement>) => void;
+    onScanLibrary: (event: React.MouseEvent<HTMLButtonElement>) => void;
+}
 
-class Sidebar extends Component<SidebarProps> {
-    onChange = (event: React.MouseEvent<HTMLAnchorElement>): void => {
-        event.preventDefault()
-        const libraryId = parseInt((event.target as HTMLAnchorElement).dataset.id || '')
+type SidebarType = SidebarProps & SidebarDispatchProps & SidebarStateProps
 
-        if (!libraryId) {
-            return
-        }
-
-        this.props.setCurrentLibrary(libraryId)
-    }
-
+class Sidebar extends Component<SidebarType> {
     render (): React.ReactNode {
-        const { libraries, currentLibrary } = this.props
+        const { libraries, currentLibrary, onScanLibrary, onChangeCurrentLibrary } = this.props
         const items = Object.keys(libraries)
+        const label = 'Scan Library Files'
 
         return (
             <SidebarWrapper>
@@ -105,9 +131,19 @@ class Sidebar extends Component<SidebarProps> {
                                     key={index}
                                     data-id={libraryId}
                                     active={parseInt(libraryId) === currentLibrary}
-                                    onClick={this.onChange}
+                                    onClick={onChangeCurrentLibrary}
                                 >
                                     {libraries[parseInt(libraryId)].title}
+                                    <SidebarAction onClick={onScanLibrary} data-id={libraryId}>
+                                        <TooltipContainer aria-label={label} data-tip={label}>
+                                            <IconContext.Provider
+                                                value={{ style: { width: '1.3em', height: '1.3em' } }}
+                                            >
+                                                <MdRefresh/>
+                                            </IconContext.Provider>
+                                        </TooltipContainer>
+                                    </SidebarAction>
+                                    <Tooltip place="bottom" type="dark" effect="solid"/>
                                 </SidebarItem>
                             ))}
                         </SidebarItems>

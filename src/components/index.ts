@@ -1,3 +1,4 @@
+export * from './Tooltip'
 export * from './Well'
 export * from './Page'
 export * from './Section'
