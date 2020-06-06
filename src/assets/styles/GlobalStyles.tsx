@@ -39,7 +39,8 @@ export const GlobalStyles = createGlobalStyle`
 
     #tivan {
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
+        width: 100%;
         height: 100%;
         color: ${variables.colors.whiteA75};
     }

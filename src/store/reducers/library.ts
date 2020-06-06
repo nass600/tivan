@@ -3,12 +3,13 @@ import {
     RESET_NORMALIZATION,
     ADD_STATS,
     ADD_NON_NORMALIZED_ITEMS,
-    ADD_MEDIA_ITEMS,
+    UPDATE_LIBRARY_INFO,
     LibraryAction,
+    SET_LIBRARIES,
     RESET_LIBRARY
 } from '@actions'
 import _ from 'lodash'
-import { Stream, VideoResolution, FileContainer } from '@api'
+import { Stream, VideoResolution, FileContainer, SectionType } from '@api'
 
 export interface StatsDataItemsState {
     [key: string]: number;
@@ -38,25 +39,48 @@ export interface MediaState {
     errors: string[];
 }
 
+export enum StatsType {
+    VIDEO_CODEC = 'videoCodec',
+    VIDEO_RESOLUTION = 'videoResolution',
+    AUDIO_CODEC = 'audioCodec',
+    AUDIO_LANGUAGE = 'audioLanguage',
+    SUBTITLE_CODEC = 'subtitleCodec',
+    SUBTITLE_LANGUAGE = 'subtitleLanguage',
+    NORMALIZATION = 'normalization'
+}
+
 export interface StatsState {
     [id: string]: StatsDataState;
 }
 
 export interface LibraryState {
-    [libraryId: number]: {
-        stats: StatsState;
-        normalization: MediaState[];
-    };
+    title: string;
+    type: SectionType;
+    totalItems: number;
+    stats: StatsState;
+    normalization: MediaState[];
+}
+
+export interface LibrariesState {
+    [libraryId: number]: LibraryState;
 }
 
 export const initialState = {}
 
-export const libraryReducer = (state: LibraryState = initialState, action: LibraryAction): LibraryState => {
+export const libraryReducer = (state: LibrariesState = initialState, action: LibraryAction): LibrariesState => {
     switch (action.type) {
+        case SET_LIBRARIES:
+            return Object.keys(action.payload).reduce((acc: LibrariesState, libraryId: string) => {
+                const id = parseInt(libraryId)
+                acc[id] = _.merge({}, state[id], action.payload[id])
+
+                return acc
+            }, {})
         case RESET_LIBRARY:
             return {
                 ...state,
                 [action.payload]: {
+                    ...state[action.payload],
                     stats: {},
                     normalization: []
                 }
@@ -100,10 +124,10 @@ export const libraryReducer = (state: LibraryState = initialState, action: Libra
                 }
             }
         }
-        case ADD_MEDIA_ITEMS:
+        case UPDATE_LIBRARY_INFO:
             return {
                 ...state,
-                [action.payload.library]: _.merge({}, state[action.payload.library], action.payload.items)
+                [action.payload.library]: _.merge({}, state[action.payload.library], action.payload.info)
             }
         default:
             return state

@@ -63,7 +63,9 @@ export const variables = {
     },
     colors: {
         white: '#fff',
+        whiteA08: 'hsla(0, 0%, 100%, 0.08)',
         whiteA20: 'hsla(0, 0%, 100%, 0.2)',
+        whiteA30: 'hsla(0, 0%, 100%, 0.3)',
         whiteA45: 'hsla(0, 0%, 100%, 0.45)',
         whiteA75: 'hsla(0, 0%, 100%, 0.75)',
         blackA15: 'rgba(0, 0, 0, 0.15)',
@@ -72,6 +74,7 @@ export const variables = {
         gray40: '#51595e',
         gray60: '#3f4245',
         gray80: '#282a2d',
+        gray100: '#191a1c',
         orange20: '#fef8ec',
         orange60: '#e5a00d',
         red40: '#f5ccc6',

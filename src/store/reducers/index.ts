@@ -1,12 +1,12 @@
 import { combineReducers } from 'redux'
 import { statusReducer, StatusState } from './status'
 import { authReducer, AuthState } from './auth'
-import { libraryReducer, LibraryState } from './library'
+import { libraryReducer, LibrariesState } from './library'
 
 export interface AppState {
     auth: AuthState;
     status: StatusState;
-    library: LibraryState;
+    library: LibrariesState;
 }
 
 export default combineReducers<AppState>({

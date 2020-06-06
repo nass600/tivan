@@ -1,19 +1,40 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { AppState } from '@reducers'
-import { PieChart, Table, Section, Column, Row, Title, SectionTitle, TableItem } from '@components'
-import { getVideoResolutionChartData, getAudioCodecChartData, getSubtitleCodecChartData } from '@selectors'
+import {
+    PieChart,
+    Table,
+    Section,
+    Column,
+    Row,
+    Title,
+    SectionTitle,
+    TableItem,
+    Error,
+    Strong,
+    Badge
+} from '@components'
+import {
+    getVideoResolutionChartData,
+    getAudioCodecChartData,
+    getSubtitleCodecChartData,
+    getCurrentLibrary
+} from '@selectors'
 import { StatsDataItem } from '@types'
 import { formatShort, formatLong } from '@utils/name-formatter'
 import styled, { css, FlattenSimpleInterpolation } from 'styled-components'
 import { variables } from '@styles'
 import { darken } from 'polished'
+import { LibraryState } from '@reducers/library'
+import { BsQuestionCircle } from 'react-icons/bs'
+import { isEmpty } from 'lodash'
 
 interface ContentStateProps {
     connection?: string;
     videoResolutionStats: StatsDataItem[];
     audioCodecStats: StatsDataItem[];
     subtitleCodecStats: StatsDataItem[];
+    currentLibrary: LibraryState | null;
 }
 
 const tableStyles = css`
@@ -55,7 +76,7 @@ class Stats extends React.Component<ContentStateProps, {}> {
     }
 
     render (): React.ReactNode {
-        const { connection, videoResolutionStats, audioCodecStats, subtitleCodecStats } = this.props
+        const { connection, currentLibrary, videoResolutionStats, audioCodecStats, subtitleCodecStats } = this.props
 
         const videoResolutionTable = {
             headings: ['#', 'resolution', 'movies', '%'],
@@ -74,45 +95,60 @@ class Stats extends React.Component<ContentStateProps, {}> {
 
         return (
             <>
-                <Title>{connection} - Stats</Title>
-                {videoResolutionStats && videoResolutionStats.length > 0 && (
-                    <Section>
-                        <SectionTitle>Video Resolution</SectionTitle>
-                        <Row>
-                            <Column>
-                                <PieChart data={videoResolutionStats} nameFormatter={formatShort}/>
-                            </Column>
-                            <Column>
-                                <Table data={videoResolutionTable} styles={tableStyles}/>
-                            </Column>
-                        </Row>
-                    </Section>
+                {(!currentLibrary || isEmpty(currentLibrary.stats)) && (
+                    <Error title="No stats found" icon={BsQuestionCircle}>
+                        <p>
+                            It seems there are no stats recorded for the library
+                            <Strong>{currentLibrary?.title}</Strong>
+                        </p>
+                    </Error>
                 )}
-                {audioCodecStats && audioCodecStats.length > 0 && (
-                    <Section>
-                        <SectionTitle>Audio Format</SectionTitle>
-                        <Row>
-                            <Column>
-                                <PieChart data={audioCodecStats} nameFormatter={formatShort}/>
-                            </Column>
-                            <Column>
-                                <Table data={audioCodecTable} styles={tableStyles}/>
-                            </Column>
-                        </Row>
-                    </Section>
-                )}
-                {subtitleCodecStats && subtitleCodecStats.length > 0 && (
-                    <Section>
-                        <SectionTitle>Subtitle Format</SectionTitle>
-                        <Row>
-                            <Column>
-                                <PieChart data={subtitleCodecStats} nameFormatter={formatShort}/>
-                            </Column>
-                            <Column>
-                                <Table data={subtitleCodecTable} styles={tableStyles}/>
-                            </Column>
-                        </Row>
-                    </Section>
+                {!isEmpty(currentLibrary?.stats) && (
+                    <>
+                        <Title>
+                            <span>{connection} - Stats</span>
+                            <Badge>{currentLibrary?.totalItems}</Badge>
+                        </Title>
+                        {videoResolutionStats && videoResolutionStats.length > 0 && (
+                            <Section>
+                                <SectionTitle>Video Resolution</SectionTitle>
+                                <Row>
+                                    <Column>
+                                        <PieChart data={videoResolutionStats} nameFormatter={formatShort}/>
+                                    </Column>
+                                    <Column>
+                                        <Table data={videoResolutionTable} styles={tableStyles}/>
+                                    </Column>
+                                </Row>
+                            </Section>
+                        )}
+                        {audioCodecStats && audioCodecStats.length > 0 && (
+                            <Section>
+                                <SectionTitle>Audio Format</SectionTitle>
+                                <Row>
+                                    <Column>
+                                        <PieChart data={audioCodecStats} nameFormatter={formatShort}/>
+                                    </Column>
+                                    <Column>
+                                        <Table data={audioCodecTable} styles={tableStyles}/>
+                                    </Column>
+                                </Row>
+                            </Section>
+                        )}
+                        {subtitleCodecStats && subtitleCodecStats.length > 0 && (
+                            <Section>
+                                <SectionTitle>Subtitle Format</SectionTitle>
+                                <Row>
+                                    <Column>
+                                        <PieChart data={subtitleCodecStats} nameFormatter={formatShort}/>
+                                    </Column>
+                                    <Column>
+                                        <Table data={subtitleCodecTable} styles={tableStyles}/>
+                                    </Column>
+                                </Row>
+                            </Section>
+                        )}
+                    </>
                 )}
             </>
         )
@@ -124,7 +160,8 @@ const mapStateToProps = (state: AppState): ContentStateProps => {
         connection: state.auth.connection?.name,
         videoResolutionStats: getVideoResolutionChartData(state),
         audioCodecStats: getAudioCodecChartData(state),
-        subtitleCodecStats: getSubtitleCodecChartData(state)
+        subtitleCodecStats: getSubtitleCodecChartData(state),
+        currentLibrary: getCurrentLibrary(state)
     }
 }
 
