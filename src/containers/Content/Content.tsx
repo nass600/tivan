@@ -1,14 +1,15 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { AppState } from '@reducers'
-import { Page, Menu, Unauthorized } from '@components'
-import { Stats, Normalization, Forecast, Sidebar } from '@containers'
+import { Page, Menu, Unauthorized, Sidebar } from '@components'
+import { Stats, Normalization, Forecast } from '@containers'
 import { GlobalStyles } from '@styles'
 import { Tabs } from '@reducers/status'
 import { ThunkDispatch } from 'redux-thunk'
 import { AnyAction } from 'redux'
-import { parseLibraryAction, getLibrariesAction, setCurrentLibraryAction } from '@actions'
+import { parseLibraryAction, getLibrariesAction, setCurrentLibraryAction, setCurrentTabAction } from '@actions'
 import styled from 'styled-components'
+import { LibrariesState } from '@reducers/library'
 
 const ContentWrapper = styled.div`
     display: flex;
@@ -18,6 +19,9 @@ const ContentWrapper = styled.div`
 `
 
 interface ContentStateProps {
+    libraries: LibrariesState;
+    currentLibraryId: number | null;
+    loadingLibrary: boolean;
     display: boolean;
     currentTab: Tabs;
     signedIn: boolean;
@@ -27,6 +31,7 @@ interface ContentDispatchProps {
     getLibraries(): void;
     parseLibrary(libraryId: number): void;
     setCurrentLibrary(libraryId: number): void;
+    setCurrentTab (tab: Tabs): void;
 }
 
 type ContentProps = ContentDispatchProps & ContentStateProps
@@ -47,7 +52,6 @@ class Content extends React.Component<ContentProps, {}> {
     componentDidMount (): void {
         this.toggleOriginalPage(this.props.display)
         if (this.props.display && this.props.signedIn) {
-            // this.props.parseLibrary()
             this.props.getLibraries()
         }
     }
@@ -56,7 +60,6 @@ class Content extends React.Component<ContentProps, {}> {
         this.toggleOriginalPage(this.props.display)
 
         if ((!prevProps.display && this.props.display) || (!prevProps.signedIn && this.props.signedIn)) {
-            // this.props.parseLibrary()
             this.props.getLibraries()
         }
     }
@@ -100,8 +103,26 @@ class Content extends React.Component<ContentProps, {}> {
         this.props.parseLibrary(libraryId)
     }
 
+    onChangeSection = (event: React.MouseEvent<HTMLAnchorElement>): void => {
+        event.preventDefault()
+        const tab = (event.target as HTMLAnchorElement).dataset.value as Tabs
+
+        if (!tab) {
+            return
+        }
+
+        this.props.setCurrentTab(tab)
+    }
+
     render (): React.ReactNode {
-        const { display, currentTab, signedIn } = this.props
+        const {
+            display,
+            currentTab,
+            signedIn,
+            loadingLibrary,
+            libraries,
+            currentLibraryId
+        } = this.props
 
         if (!display) {
             return null
@@ -112,11 +133,20 @@ class Content extends React.Component<ContentProps, {}> {
                 {signedIn && (
                     <>
                         <Sidebar
-                            onChangeCurrentLibrary={this.onChangeCurrentLibrary}
-                            onScanLibrary={this.onScanLibrary}
+                            heading="Libraries"
+                            actionLabel={loadingLibrary ? 'Scanning...' : 'Scan Library Files'}
+                            items={libraries}
+                            currentItemId={currentLibraryId}
+                            loading={loadingLibrary}
+                            onSelectItem={this.onChangeCurrentLibrary}
+                            onTriggerAction={this.onScanLibrary}
                         />
                         <ContentWrapper>
-                            <Menu/>
+                            <Menu
+                                items={Object.values(Tabs)}
+                                currentItem={currentTab}
+                                onSelectItem={this.onChangeSection}
+                            />
                             <Page>
                                 {currentTab === Tabs.STATS && <Stats/>}
                                 {currentTab === Tabs.NORMALIZATION && <Normalization/>}
@@ -134,6 +164,9 @@ class Content extends React.Component<ContentProps, {}> {
 
 const mapStateToProps = (state: AppState): ContentStateProps => {
     return {
+        libraries: state.library,
+        currentLibraryId: state.status.currentLibrary,
+        loadingLibrary: state.status.loading.library,
         display: state.status.display,
         currentTab: state.status.currentTab,
         signedIn: !!state.auth.connection
@@ -149,7 +182,10 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, AnyAction>): Content
     ),
     parseLibrary: async (libraryId: number): Promise<void> => (
         await dispatch(parseLibraryAction(libraryId))
-    )
+    ),
+    setCurrentTab: (tab: Tabs): void => {
+        dispatch(setCurrentTabAction(tab))
+    }
 })
 
 export default connect<ContentStateProps, ContentDispatchProps>(mapStateToProps, mapDispatchToProps)(Content)

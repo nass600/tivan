@@ -9,7 +9,7 @@ export interface ToggleDisplayAction {
     type: 'TOGGLE_DISPLAY';
     payload?: boolean;
 }
-export interface ToggleTabAction {
+export interface SetCurrentTabAction {
     type: 'SET_CURRENT_TAB';
     payload: Tabs;
 }
@@ -24,13 +24,13 @@ export interface SetCurrentLibraryAction {
     payload: number;
 }
 
-export type StatusAction = ToggleDisplayAction | ToggleTabAction | SetLoadingAction | SetCurrentLibraryAction;
+export type StatusAction = ToggleDisplayAction | SetCurrentTabAction | SetLoadingAction | SetCurrentLibraryAction;
 
 export const toggleDisplayAction = (display?: boolean): ToggleDisplayAction => (
     { type: TOGGLE_DISPLAY, payload: display }
 )
 
-export const toggleTabAction = (tab: Tabs): ToggleTabAction => (
+export const setCurrentTabAction = (tab: Tabs): SetCurrentTabAction => (
     { type: SET_CURRENT_TAB, payload: tab }
 )
 

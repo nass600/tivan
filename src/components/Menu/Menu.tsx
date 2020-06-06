@@ -1,12 +1,6 @@
 import React from 'react'
 import { variables } from '@styles'
 import styled, { css, FlattenSimpleInterpolation } from 'styled-components'
-import { Tabs } from '@reducers/status'
-import { connect } from 'react-redux'
-import { AppState } from '@reducers'
-import { toggleTabAction } from '@actions'
-import { ThunkDispatch } from 'redux-thunk'
-import { AnyAction } from 'redux'
 
 export const Navbar = styled.div`
     z-index: 1;
@@ -47,41 +41,26 @@ export const Tab = styled.a<{active?: boolean}>`
     `}
 `
 
-interface MenuStateProps {
-    currentTab: Tabs;
+interface MenuProps {
+    items: string[];
+    currentItem: string;
+    onSelectItem (event: React.MouseEvent<HTMLAnchorElement>): void;
 }
-
-interface MenuDispatchProps {
-    toggleTab(tab: Tabs): void;
-}
-
-type MenuProps = MenuDispatchProps & MenuStateProps
 
 class Menu extends React.Component<MenuProps> {
-    changeTab = (event: React.MouseEvent<HTMLAnchorElement>): void => {
-        event.preventDefault()
-        const tab = (event.target as HTMLAnchorElement).dataset.value as Tabs
-
-        if (!tab) {
-            return
-        }
-
-        this.props.toggleTab(tab)
-    }
-
     render (): React.ReactNode {
-        const { currentTab } = this.props
+        const { items, currentItem, onSelectItem } = this.props
 
         return (
             <Navbar>
-                {Object.keys(Tabs).map((key: Tabs): React.ReactNode => (
+                {items.map((item: string): React.ReactNode => (
                     <Tab
-                        key={Tabs[key]}
-                        active={currentTab === Tabs[key]}
-                        onClick={this.changeTab}
-                        data-value={Tabs[key]}
+                        key={item}
+                        active={currentItem === item}
+                        onClick={onSelectItem}
+                        data-value={item}
                     >
-                        {Tabs[key]}
+                        {item}
                     </Tab>
                 ))}
             </Navbar>
@@ -89,16 +68,4 @@ class Menu extends React.Component<MenuProps> {
     }
 }
 
-const mapStateToProps = (state: AppState): MenuStateProps => {
-    return {
-        currentTab: state.status.currentTab
-    }
-}
-
-const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, AnyAction>): MenuDispatchProps => ({
-    toggleTab: (tab: Tabs): void => {
-        dispatch(toggleTabAction(tab))
-    }
-})
-
-export default connect<MenuStateProps, MenuDispatchProps>(mapStateToProps, mapDispatchToProps)(Menu)
+export default Menu

@@ -20,7 +20,7 @@ import _ from 'lodash'
 import { plex } from '@sdk'
 import { formatShort, formatSize } from '@utils/name-formatter'
 import {
-    ADD_MEDIA_ITEMS,
+    UPDATE_LIBRARY_INFO,
     ADD_STATS,
     ADD_NON_NORMALIZED_ITEMS,
     SET_LIBRARIES,
@@ -30,11 +30,11 @@ import {
     setLoadingAction,
     setCurrentLibraryAction
 } from '@actions'
-import { MediaState, StatsState, LibrariesState } from '@reducers/library'
+import { MediaState, StatsState, LibrariesState, LibraryState } from '@reducers/library'
 
-export interface AddMediaItemsAction {
-    type: 'ADD_MEDIA_ITEMS';
-    payload: { library: number; items: MediaState[] };
+export interface UpdatelibraryInfoAction {
+    type: 'UPDATE_LIBRARY_INFO';
+    payload: { library: number; info: Pick<LibraryState, 'totalItems'> };
 }
 
 export interface AddNonNormalizedItemsAction {
@@ -68,16 +68,19 @@ export interface ResetNormalizationAction {
 }
 
 export type LibraryAction =
-    AddMediaItemsAction |
-    AddStatsAction |
-    AddNonNormalizedItemsAction |
-    SetLibrariesAction |
-    ResetLibraryAction |
-    ResetStatsAction |
-    ResetNormalizationAction;
+UpdatelibraryInfoAction |
+AddStatsAction |
+AddNonNormalizedItemsAction |
+SetLibrariesAction |
+ResetLibraryAction |
+ResetStatsAction |
+ResetNormalizationAction;
 
-export const addMediaItemsAction = (library: number, items: MediaState[]): AddMediaItemsAction => (
-    { type: ADD_MEDIA_ITEMS, payload: { library, items } }
+export const updateLibraryInfoAction = (
+    library: number,
+    info: Pick<LibraryState, 'totalItems'>
+): UpdatelibraryInfoAction => (
+    { type: UPDATE_LIBRARY_INFO, payload: { library, info } }
 )
 
 export const addStatsAction = (library: number, stats: StatsState): AddStatsAction => (
@@ -249,6 +252,9 @@ export const parseLibraryAction = (libraryId: number): ThunkAction<Promise<void>
             const ids = data.MediaContainer.Metadata.map(item => item.ratingKey)
 
             dispatch(resetLibraryAction(libraryId))
+            dispatch(updateLibraryInfoAction(libraryId, {
+                totalItems: data.MediaContainer.size
+            }))
 
             const chunks = chunk(ids)
 
@@ -281,8 +287,6 @@ export const getLibrariesAction = (): ThunkAction<Promise<void>, {}, {}, AnyActi
             return Promise.reject(new Error('No token'))
         }
 
-        dispatch(setLoadingAction({ library: true }))
-
         plex.setBaseUrl(state.auth.connection.uri)
         plex.setAuthorization(state.auth.connection.token)
 
@@ -292,6 +296,7 @@ export const getLibrariesAction = (): ThunkAction<Promise<void>, {}, {}, AnyActi
                     acc[directory.Location[0].id] = {
                         title: directory.title,
                         type: directory.type,
+                        totalItems: 0,
                         stats: {},
                         normalization: []
                     }
@@ -307,7 +312,5 @@ export const getLibrariesAction = (): ThunkAction<Promise<void>, {}, {}, AnyActi
             if (state.status.currentLibrary === null && items.length > 0) {
                 dispatch(setCurrentLibraryAction(parseInt(items[0])))
             }
-
-            dispatch(setLoadingAction({ library: false }))
         })
     }

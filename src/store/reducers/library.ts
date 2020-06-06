@@ -3,7 +3,7 @@ import {
     RESET_NORMALIZATION,
     ADD_STATS,
     ADD_NON_NORMALIZED_ITEMS,
-    ADD_MEDIA_ITEMS,
+    UPDATE_LIBRARY_INFO,
     LibraryAction,
     SET_LIBRARIES,
     RESET_LIBRARY
@@ -56,6 +56,7 @@ export interface StatsState {
 export interface LibraryState {
     title: string;
     type: SectionType;
+    totalItems: number;
     stats: StatsState;
     normalization: MediaState[];
 }
@@ -123,10 +124,10 @@ export const libraryReducer = (state: LibrariesState = initialState, action: Lib
                 }
             }
         }
-        case ADD_MEDIA_ITEMS:
+        case UPDATE_LIBRARY_INFO:
             return {
                 ...state,
-                [action.payload.library]: _.merge({}, state[action.payload.library], action.payload.items)
+                [action.payload.library]: _.merge({}, state[action.payload.library], action.payload.info)
             }
         default:
             return state

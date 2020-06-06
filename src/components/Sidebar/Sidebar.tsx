@@ -1,8 +1,5 @@
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import { setCurrentLibraryAction } from '@actions'
-import { AppState } from '@reducers'
-import styled, { css, FlattenSimpleInterpolation } from 'styled-components'
+import styled, { css, FlattenSimpleInterpolation, keyframes } from 'styled-components'
 import { variables, customScrollbar } from '@styles'
 import { Tooltip, TooltipContainer } from '@components'
 import { LibrariesState } from '@reducers/library'
@@ -41,7 +38,17 @@ const SidebarItems = styled.div`
     margin-bottom: ${variables.spacing.xl};
 `
 
-const SidebarAction = styled.button`
+const animation = keyframes`
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+`
+
+const SidebarAction = styled.button<{loading?: number}>`
     display: none;
     margin: 0;
     padding: 0;
@@ -51,9 +58,21 @@ const SidebarAction = styled.button`
     outline: none;
     transition: all 0.2s ease-in-out;
 
-    &:hover {
-        color: ${variables.colors.white};
-    }
+    ${({ loading }): FlattenSimpleInterpolation | undefined | false => !loading && css`
+        &:hover {
+            color: ${variables.colors.white};
+        }
+    `}
+
+    ${({ loading }): FlattenSimpleInterpolation | undefined | false => (loading === 1) && css`
+        color: ${variables.colors.orange60};
+        cursor: default;
+        user-select: none;
+
+        svg {
+            animation: ${animation} infinite 1s linear;
+        }
+    `}
 `
 
 const SidebarItem = styled.a<{active?: boolean}>`
@@ -98,44 +117,49 @@ const SidebarItem = styled.a<{active?: boolean}>`
     }}
 `
 
-interface SidebarDispatchProps {
-    setCurrentLibrary(libraryId: number): void;
-}
-
-interface SidebarStateProps {
-    libraries: LibrariesState;
-    currentLibrary: number | null;
-}
-
 interface SidebarProps {
-    onChangeCurrentLibrary: (event: React.MouseEvent<HTMLAnchorElement>) => void;
-    onScanLibrary: (event: React.MouseEvent<HTMLButtonElement>) => void;
+    heading: string;
+    items: LibrariesState;
+    currentItemId: number | null;
+    loading: boolean;
+    onSelectItem: (event: React.MouseEvent<HTMLAnchorElement>) => void;
+    actionLabel: string;
+    onTriggerAction: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
-type SidebarType = SidebarProps & SidebarDispatchProps & SidebarStateProps
+class Sidebar extends Component<SidebarProps> {
+    static defaultProps = {
+        loading: false
+    }
 
-class Sidebar extends Component<SidebarType> {
     render (): React.ReactNode {
-        const { libraries, currentLibrary, onScanLibrary, onChangeCurrentLibrary } = this.props
-        const items = Object.keys(libraries)
-        const label = 'Scan Library Files'
+        const {
+            heading,
+            items,
+            currentItemId,
+            onTriggerAction,
+            actionLabel,
+            onSelectItem,
+            loading
+        } = this.props
+        const itemKeys = Object.keys(items)
 
         return (
             <SidebarWrapper>
                 <div>
-                    <SidebarHeading>Libraries</SidebarHeading>
-                    {items.length > 0 && (
+                    <SidebarHeading>{heading}</SidebarHeading>
+                    {itemKeys.length > 0 && (
                         <SidebarItems>
-                            {items.map((libraryId: string, index: number): React.ReactNode => (
+                            {itemKeys.map((id: string, index: number): React.ReactNode => (
                                 <SidebarItem
                                     key={index}
-                                    data-id={libraryId}
-                                    active={parseInt(libraryId) === currentLibrary}
-                                    onClick={onChangeCurrentLibrary}
+                                    data-id={id}
+                                    active={parseInt(id) === currentItemId}
+                                    onClick={onSelectItem}
                                 >
-                                    {libraries[parseInt(libraryId)].title}
-                                    <SidebarAction onClick={onScanLibrary} data-id={libraryId}>
-                                        <TooltipContainer aria-label={label} data-tip={label}>
+                                    {items[parseInt(id)].title}
+                                    <SidebarAction onClick={onTriggerAction} data-id={id} loading={loading ? 1 : 0}>
+                                        <TooltipContainer aria-label={actionLabel} data-tip={actionLabel}>
                                             <IconContext.Provider
                                                 value={{ style: { width: '1.3em', height: '1.3em' } }}
                                             >
@@ -154,15 +178,4 @@ class Sidebar extends Component<SidebarType> {
     }
 }
 
-const mapStateToProps = (state: AppState): SidebarStateProps => {
-    return {
-        libraries: state.library,
-        currentLibrary: state.status.currentLibrary
-    }
-}
-
-const mapDispatchToProps: SidebarDispatchProps = {
-    setCurrentLibrary: setCurrentLibraryAction
-}
-
-export default connect<SidebarStateProps, SidebarDispatchProps>(mapStateToProps, mapDispatchToProps)(Sidebar)
+export default Sidebar

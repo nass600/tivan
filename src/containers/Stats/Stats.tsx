@@ -1,7 +1,19 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { AppState } from '@reducers'
-import { PieChart, Table, Section, Column, Row, Title, SectionTitle, TableItem, Error, Strong } from '@components'
+import {
+    PieChart,
+    Table,
+    Section,
+    Column,
+    Row,
+    Title,
+    SectionTitle,
+    TableItem,
+    Error,
+    Strong,
+    Badge
+} from '@components'
 import {
     getVideoResolutionChartData,
     getAudioCodecChartData,
@@ -93,7 +105,10 @@ class Stats extends React.Component<ContentStateProps, {}> {
                 )}
                 {!isEmpty(currentLibrary?.stats) && (
                     <>
-                        <Title>{connection} - Stats</Title>
+                        <Title>
+                            <span>{connection} - Stats</span>
+                            <Badge>{currentLibrary?.totalItems}</Badge>
+                        </Title>
                         {videoResolutionStats && videoResolutionStats.length > 0 && (
                             <Section>
                                 <SectionTitle>Video Resolution</SectionTitle>
