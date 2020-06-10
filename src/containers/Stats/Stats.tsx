@@ -11,11 +11,11 @@ import {
     SectionTitle,
     TableItem,
     Error,
-    Strong,
     Badge
 } from '@components'
 import {
     getVideoResolutionChartData,
+    getVideoCodecChartData,
     getAudioCodecChartData,
     getSubtitleCodecChartData,
     getCurrentLibrary
@@ -26,12 +26,13 @@ import styled, { css, FlattenSimpleInterpolation } from 'styled-components'
 import { variables } from '@styles'
 import { darken } from 'polished'
 import { LibraryState } from '@reducers/library'
-import { BsQuestionCircle } from 'react-icons/bs'
+import { MdErrorOutline } from 'react-icons/md'
 import { isEmpty } from 'lodash'
 
 interface ContentStateProps {
     connection?: string;
     videoResolutionStats: StatsDataItem[];
+    videoCodecStats: StatsDataItem[];
     audioCodecStats: StatsDataItem[];
     subtitleCodecStats: StatsDataItem[];
     currentLibrary: LibraryState | null;
@@ -76,30 +77,42 @@ class Stats extends React.Component<ContentStateProps, {}> {
     }
 
     render (): React.ReactNode {
-        const { connection, currentLibrary, videoResolutionStats, audioCodecStats, subtitleCodecStats } = this.props
+        const {
+            connection,
+            currentLibrary,
+            videoResolutionStats,
+            videoCodecStats,
+            audioCodecStats,
+            subtitleCodecStats
+        } = this.props
 
         const videoResolutionTable = {
-            headings: ['#', 'resolution', 'movies', '%'],
+            headings: ['#', 'resolution', 'items', '%'],
             items: this.enhanceTableItems(videoResolutionStats || [])
         }
 
+        const videoCodecTable = {
+            headings: ['#', 'codec', 'items', '%'],
+            items: this.enhanceTableItems(videoCodecStats || [])
+        }
+
         const audioCodecTable = {
-            headings: ['#', 'codec', 'movies', '%'],
+            headings: ['#', 'codec', 'items', '%'],
             items: this.enhanceTableItems(audioCodecStats || [])
         }
 
         const subtitleCodecTable = {
-            headings: ['#', 'codec', 'movies', '%'],
+            headings: ['#', 'codec', 'items', '%'],
             items: this.enhanceTableItems(subtitleCodecStats || [])
         }
 
         return (
             <>
                 {(!currentLibrary || isEmpty(currentLibrary.stats)) && (
-                    <Error title="No stats found" icon={BsQuestionCircle}>
+                    <Error title="No stats found" icon={MdErrorOutline}>
                         <p>
-                            It seems there are no stats recorded for the library
-                            <Strong>{currentLibrary?.title}</Strong>
+                            It seems there are no stats recorded for the
+                            library <strong>{currentLibrary?.title}</strong>
                         </p>
                     </Error>
                 )}
@@ -122,9 +135,22 @@ class Stats extends React.Component<ContentStateProps, {}> {
                                 </Row>
                             </Section>
                         )}
+                        {videoCodecStats && videoCodecStats.length > 0 && (
+                            <Section>
+                                <SectionTitle>Video Codec</SectionTitle>
+                                <Row>
+                                    <Column>
+                                        <PieChart data={videoCodecStats} nameFormatter={formatShort}/>
+                                    </Column>
+                                    <Column>
+                                        <Table data={videoCodecTable} styles={tableStyles}/>
+                                    </Column>
+                                </Row>
+                            </Section>
+                        )}
                         {audioCodecStats && audioCodecStats.length > 0 && (
                             <Section>
-                                <SectionTitle>Audio Format</SectionTitle>
+                                <SectionTitle>Audio Codec</SectionTitle>
                                 <Row>
                                     <Column>
                                         <PieChart data={audioCodecStats} nameFormatter={formatShort}/>
@@ -137,7 +163,7 @@ class Stats extends React.Component<ContentStateProps, {}> {
                         )}
                         {subtitleCodecStats && subtitleCodecStats.length > 0 && (
                             <Section>
-                                <SectionTitle>Subtitle Format</SectionTitle>
+                                <SectionTitle>Subtitle Codec</SectionTitle>
                                 <Row>
                                     <Column>
                                         <PieChart data={subtitleCodecStats} nameFormatter={formatShort}/>
@@ -159,6 +185,7 @@ const mapStateToProps = (state: AppState): ContentStateProps => {
     return {
         connection: state.auth.connection?.name,
         videoResolutionStats: getVideoResolutionChartData(state),
+        videoCodecStats: getVideoCodecChartData(state),
         audioCodecStats: getAudioCodecChartData(state),
         subtitleCodecStats: getSubtitleCodecChartData(state),
         currentLibrary: getCurrentLibrary(state)

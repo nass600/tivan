@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import styled, { css, FlattenSimpleInterpolation, keyframes } from 'styled-components'
-import { variables, customScrollbar } from '@styles'
+import styled, { css, FlattenSimpleInterpolation } from 'styled-components'
+import { variables, customScrollbar, rotateAnimation } from '@styles'
 import { Tooltip, TooltipContainer } from '@components'
 import { LibrariesState } from '@reducers/library'
 import { IconContext } from 'react-icons'
@@ -20,7 +20,7 @@ const SidebarWrapper = styled.div`
 `
 
 const SidebarHeading = styled.div`
-    ${variables.font.h3}
+    ${variables.fontFamily.bold}
     align-content: center;
     min-width: 0;
     max-width: 100%;
@@ -28,6 +28,7 @@ const SidebarHeading = styled.div`
     padding-left: ${variables.spacing.l};
     overflow: hidden;
     color: ${variables.colors.whiteA30};
+    font-size: 12px;
     line-height: 50px;
     white-space: nowrap;
     text-transform: uppercase;
@@ -36,16 +37,6 @@ const SidebarHeading = styled.div`
 
 const SidebarItems = styled.div`
     margin-bottom: ${variables.spacing.xl};
-`
-
-const animation = keyframes`
-    from {
-        transform: rotate(0deg);
-    }
-
-    to {
-        transform: rotate(360deg);
-    }
 `
 
 const SidebarAction = styled.button<{loading?: number}>`
@@ -70,7 +61,7 @@ const SidebarAction = styled.button<{loading?: number}>`
         user-select: none;
 
         svg {
-            animation: ${animation} infinite 1s linear;
+            animation: ${rotateAnimation} infinite 1s linear;
         }
     `}
 `
@@ -160,9 +151,7 @@ class Sidebar extends Component<SidebarProps> {
                                     {items[parseInt(id)].title}
                                     <SidebarAction onClick={onTriggerAction} data-id={id} loading={loading ? 1 : 0}>
                                         <TooltipContainer aria-label={actionLabel} data-tip={actionLabel}>
-                                            <IconContext.Provider
-                                                value={{ style: { width: '1.3em', height: '1.3em' } }}
-                                            >
+                                            <IconContext.Provider value={{ style: { width: '2rem', height: '2rem' } }}>
                                                 <MdRefresh/>
                                             </IconContext.Provider>
                                         </TooltipContainer>

@@ -29,12 +29,9 @@ export const GlobalStyles = createGlobalStyle`
         box-sizing: border-box;
     }
 
+    html,
     body {
-        margin: 0;
-        font-size: 16px;
-        font-family: ${variables.fontFamily.regular}, Helvetica, sans-serif;
-        line-height: 1.5;
-        background-color: ${variables.colors.gray60};
+        height: 100%;
     }
 
     #tivan {
@@ -49,9 +46,15 @@ export const GlobalStyles = createGlobalStyle`
         height: 100%;
     }
 
-    [class^="Page-page"] {
-        padding-right: 0;
-        overflow-y: hidden;
+    a {
+        ${variables.fontFamily.bold}
+        color: ${variables.colors.orange60};
+        text-decoration: none;
+        transition: color 0.2s ease-in-out;
+
+        &:hover {
+            color: ${variables.colors.orange40};
+        }
     }
 
     strong {

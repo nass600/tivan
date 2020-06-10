@@ -31,6 +31,7 @@ import {
     setCurrentLibraryAction
 } from '@actions'
 import { MediaState, StatsState, LibrariesState, LibraryState } from '@reducers/library'
+import { getCurrentLibrary } from '@selectors'
 
 export interface UpdatelibraryInfoAction {
     type: 'UPDATE_LIBRARY_INFO';
@@ -219,7 +220,7 @@ const extractStats = (items: MediaState[]): StatsState => {
         path.total++
 
         path = data.normalization
-        key = item.errors && item.errors.length > 0 ? 'normalized' : 'non-normalized'
+        key = item.errors && item.errors.length > 0 ? 'non-normalized' : 'normalized'
         path.items[key] ? path.items[key]++ : path.items[key] = 1
         path.total++
 
@@ -296,7 +297,6 @@ export const getLibrariesAction = (): ThunkAction<Promise<void>, {}, {}, AnyActi
                     acc[directory.Location[0].id] = {
                         title: directory.title,
                         type: directory.type,
-                        totalItems: 0,
                         stats: {},
                         normalization: []
                     }
@@ -309,7 +309,10 @@ export const getLibrariesAction = (): ThunkAction<Promise<void>, {}, {}, AnyActi
 
             const items = Object.keys(libraries)
 
-            if (state.status.currentLibrary === null && items.length > 0) {
+            if (
+                (state.status.currentLibrary === null && items.length > 0) ||
+                _.isEmpty(getCurrentLibrary(state)?.stats)
+            ) {
                 dispatch(setCurrentLibraryAction(parseInt(items[0])))
             }
         })
