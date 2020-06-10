@@ -1,3 +1,10 @@
+# [1.5.0](https://github.com/nass600/tivan/compare/1.4.0...1.5.0) (2020-06-10)
+
+
+### Features
+
+* standardized messages and loaders ([cffbc8b](https://github.com/nass600/tivan/commit/cffbc8b5631212ed4830b1c0f2dab94a552193f6))
+
 # [1.4.0](https://github.com/nass600/tivan/compare/1.3.0...1.4.0) (2020-06-06)
 
 ### Features
