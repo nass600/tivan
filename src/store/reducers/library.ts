@@ -56,7 +56,7 @@ export interface StatsState {
 export interface LibraryState {
     title: string;
     type: SectionType;
-    totalItems: number;
+    totalItems?: number;
     stats: StatsState;
     normalization: MediaState[];
 }

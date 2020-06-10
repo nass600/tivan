@@ -22,6 +22,8 @@ const ErrorIcon = styled.div`
 `
 
 const ErrorTitle = styled(Title)`
+    ${variables.font.h3}
+    justify-content: center;
     margin-bottom: ${variables.spacing.xl};
     color: ${variables.colors.white};
 `

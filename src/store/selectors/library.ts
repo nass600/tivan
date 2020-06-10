@@ -39,7 +39,7 @@ export const getCurrentLibrary = createSelector(
 )
 
 export const getVideoCodecChartData = createSelector(
-    [getCurrentLibrary, (): StatsType => StatsType.VIDEO_CODEC, (): string[] => variables.palettes.blue],
+    [getCurrentLibrary, (): StatsType => StatsType.VIDEO_CODEC, (): string[] => variables.palettes.green],
     getChartData
 )
 

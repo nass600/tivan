@@ -10,15 +10,13 @@ export const Navbar = styled.div`
     justify-content: center;
     width: 100%;
     height: 50px;
-    padding: 0 ${variables.spacing.m};
+    padding: 0 ${variables.spacing.gutter};
     color: ${variables.colors.whiteA75};
-
-    /* background-color: ${variables.colors.blackA15}; */
     box-shadow: 0 3px 6px 0 ${variables.colors.blackA30};
 `
 
 export const Tab = styled.a<{active?: boolean}>`
-    ${variables.font.h2}
+    ${variables.font.h4}
     max-width: 250px;
     margin: 0 ${variables.spacing.s};
     padding: ${variables.spacing.s} ${variables.spacing.l};

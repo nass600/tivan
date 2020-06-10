@@ -7,8 +7,27 @@ import { authenticateAction, removeAvailableConnectionsAction, setConnectionActi
 import { Normalize } from 'styled-normalize'
 import { AnyAction } from 'redux'
 import { ThunkDispatch } from 'redux-thunk'
-import { Avatar, Box, Title, OptionsGlobalStyles, CancelButton, FormGroup } from '@styles'
+import { Avatar, Box, Title, GlobalStyles, CancelButton, FormGroup, variables } from '@styles'
 import logo from '@assets/img/logo.png'
+import { createGlobalStyle } from 'styled-components'
+
+const OptionsGlobalStyles = createGlobalStyle`
+    body {
+        margin: 0;
+        color: ${variables.colors.white};
+        font-size: 14px;
+        ${variables.fontFamily.regular}
+        line-height: 1.5;
+        background-color: ${variables.colors.gray60};
+    }
+
+    #tivan {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+    }
+`
 
 interface OptionsStateProps {
     display: boolean;
@@ -71,6 +90,7 @@ class Options extends React.Component<OptionsProps, {}> {
         return (
             <>
                 <Normalize/>
+                <GlobalStyles/>
                 <OptionsGlobalStyles/>
                 <Box>
                     <Avatar>

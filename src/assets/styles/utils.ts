@@ -1,4 +1,4 @@
-import { css } from 'styled-components'
+import { css, keyframes } from 'styled-components'
 import { variables } from '@styles'
 
 export const customScrollbar = css`
@@ -16,5 +16,15 @@ export const customScrollbar = css`
         background-clip: padding-box;
         border: 3px solid transparent;
         border-radius: 8px;
+    }
+`
+
+export const rotateAnimation = keyframes`
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
     }
 `

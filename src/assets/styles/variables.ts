@@ -12,11 +12,12 @@ const fontName = {
 
 // Font Size
 const fontSize = {
-    s: `${fontSizeBase * 0.8}rem`, // small
-    m: `${fontSizeBase}rem`, // p
-    l: `${fontSizeBase * 1.2}rem`, // h3
-    xl: `${fontSizeBase * 1.4}rem`, // h2
-    xxl: `${fontSizeBase * 2}rem` // h1
+    s: `${fontSizeBase * 0.8}rem`, // 8px
+    p: `${fontSizeBase * 1.3}rem`, // 13px
+    h4: `${fontSizeBase * 1.5}rem`, // 15px
+    h3: `${fontSizeBase * 2}rem`, // 20px
+    h2: `${fontSizeBase * 2.4}rem`, // 24px
+    h1: `${fontSizeBase * 2.4}rem` // 24px
 }
 
 // Font Family
@@ -28,7 +29,7 @@ const fontFamily = {
 
 const fontBase = css`
     ${fontFamily.regular}
-    font-size: ${fontSize.m};
+    font-size: ${fontSize.p};
 `
 const fontSmall = css`
     ${fontFamily.regular}
@@ -37,19 +38,25 @@ const fontSmall = css`
 
 const fontH1 = css`
     ${fontFamily.bold}
-    font-size: ${fontSize.xxl};
+    font-size: ${fontSize.h1};
     line-height: 1.2em;
 `
 
 const fontH2 = css`
     ${fontFamily.bold}
-    font-size: ${fontSize.xl};
+    font-size: ${fontSize.h2};
     line-height: 1em;
 `
 
 const fontH3 = css`
     ${fontFamily.bold}
-    font-size: ${fontSize.l};
+    font-size: ${fontSize.h3};
+    line-height: 1em;
+`
+
+const fontH4 = css`
+    ${fontFamily.bold}
+    font-size: ${fontSize.h4};
     line-height: 1em;
 `
 
@@ -59,7 +66,8 @@ export const variables = {
         m: `${spacerBase}rem`,
         l: `${spacerBase * 2}rem`,
         xl: `${spacerBase * 3}rem`,
-        xxl: `${spacerBase * 4}rem`
+        xxl: `${spacerBase * 4}rem`,
+        gutter: `${spacerBase * 3}rem`
     },
     colors: {
         white: '#fff',
@@ -76,14 +84,17 @@ export const variables = {
         gray80: '#282a2d',
         gray100: '#191a1c',
         orange20: '#fef8ec',
+        orange40: '#e8aa26',
         orange60: '#e5a00d',
+        orange80: '#cc7b19',
         red40: '#f5ccc6',
         red60: '#dd4b39'
     },
     palettes: {
         blue: ['#8893c7', '#f5cf73', '#5a67a7', '#d3aa47', '#3c4b90', '#ffe4a3', '#26357b', '#b58b26'],
         red: ['#f57373', '#5cc45c', '#d34747', '#39a939', '#b52626', '#1f911f', '#ffa3a3', '#8cdc8c'],
-        turquoise: ['#d38247', '#2c8371', '#ffcaa3', '#78bcb5', '#f5aa73', '#489890', '#b56326', '#187067']
+        turquoise: ['#d38247', '#2c8371', '#ffcaa3', '#78bcb5', '#f5aa73', '#489890', '#b56326', '#187067'],
+        green: ['#64b28a', '#5e88a1', '#99d2b5', '#95b5c8', '#3b9567', '#3a6b87', '#d2ecdf', '#d0dfe8']
     },
     borderRadius: {
         s: '4px',
@@ -94,7 +105,8 @@ export const variables = {
         base: fontBase,
         h1: fontH1,
         h2: fontH2,
-        h3: fontH3
+        h3: fontH3,
+        h4: fontH4
     },
     fontName,
     fontFamily

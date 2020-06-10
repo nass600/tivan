@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { AppState } from '@reducers'
-import { Page, Menu, Unauthorized, Sidebar } from '@components'
+import { Page, Menu, Error, Sidebar, Button, Loader } from '@components'
 import { Stats, Normalization, Forecast } from '@containers'
 import { GlobalStyles } from '@styles'
 import { Tabs } from '@reducers/status'
@@ -10,6 +10,8 @@ import { AnyAction } from 'redux'
 import { parseLibraryAction, getLibrariesAction, setCurrentLibraryAction, setCurrentTabAction } from '@actions'
 import styled from 'styled-components'
 import { LibrariesState } from '@reducers/library'
+import { MdFingerprint } from 'react-icons/md'
+import { isEmpty } from 'lodash'
 
 const ContentWrapper = styled.div`
     display: flex;
@@ -28,9 +30,9 @@ interface ContentStateProps {
 }
 
 interface ContentDispatchProps {
-    getLibraries(): void;
-    parseLibrary(libraryId: number): void;
-    setCurrentLibrary(libraryId: number): void;
+    getLibraries(): Promise<void>;
+    parseLibrary(libraryId: number): Promise<void>;
+    setCurrentLibrary(libraryId: number): Promise<void>;
     setCurrentTab (tab: Tabs): void;
 }
 
@@ -52,7 +54,7 @@ class Content extends React.Component<ContentProps, {}> {
     componentDidMount (): void {
         this.toggleOriginalPage(this.props.display)
         if (this.props.display && this.props.signedIn) {
-            this.props.getLibraries()
+            this.props.getLibraries().catch((e: Error) => e)
         }
     }
 
@@ -60,7 +62,7 @@ class Content extends React.Component<ContentProps, {}> {
         this.toggleOriginalPage(this.props.display)
 
         if ((!prevProps.display && this.props.display) || (!prevProps.signedIn && this.props.signedIn)) {
-            this.props.getLibraries()
+            this.props.getLibraries().catch((e: Error) => e)
         }
     }
 
@@ -114,6 +116,33 @@ class Content extends React.Component<ContentProps, {}> {
         this.props.setCurrentTab(tab)
     }
 
+    renderUnauthorized = (): React.ReactNode => (
+        <Error title="Unauthorized" icon={MdFingerprint}>
+            <p>
+                To let <strong>Tivan</strong> display information about your media library
+                you need to <strong>sign in to Plex</strong> through the extension first by clicking in the button
+                below.
+            </p>
+            <p>
+                We <strong>do not store or send</strong> any user information or credentials, we only
+                need to get an <strong>access token</strong> to the Plex Media Server you will choose in the
+                Options page.
+            </p>
+            <br/>
+            <Button as="a" target="_blank" rel="noopener noreferrer" href={chrome.extension.getURL('options.html')}>
+                Sign in to Plex
+            </Button>
+        </Error>
+    )
+
+    renderPage = (currentTab: Tabs): React.ReactNode => (
+        <>
+            {currentTab === Tabs.STATS && <Stats/>}
+            {currentTab === Tabs.NORMALIZATION && <Normalization/>}
+            {currentTab === Tabs.FORECAST && <Forecast/>}
+        </>
+    )
+
     render (): React.ReactNode {
         const {
             display,
@@ -127,6 +156,8 @@ class Content extends React.Component<ContentProps, {}> {
         if (!display) {
             return null
         }
+
+        const hasData = !isEmpty(libraries[currentLibraryId || 0]?.stats)
 
         return (
             <>
@@ -148,14 +179,13 @@ class Content extends React.Component<ContentProps, {}> {
                                 onSelectItem={this.onChangeSection}
                             />
                             <Page>
-                                {currentTab === Tabs.STATS && <Stats/>}
-                                {currentTab === Tabs.NORMALIZATION && <Normalization/>}
-                                {currentTab === Tabs.FORECAST && <Forecast/>}
+                                {hasData && this.renderPage(currentTab)}
+                                {loadingLibrary && !hasData && <Loader/>}
                             </Page>
                         </ContentWrapper>
                     </>
                 )}
-                {!signedIn && <Unauthorized loginUrl={chrome.extension.getURL('options.html')}/>}
+                {!signedIn && this.renderUnauthorized()}
                 <GlobalStyles />
             </>
         )

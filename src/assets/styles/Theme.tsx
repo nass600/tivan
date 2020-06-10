@@ -117,7 +117,7 @@ export const CancelButton = styled(Button)`
 `
 
 export const Title = styled.h1`
-    ${variables.font.h1}
+    ${variables.font.h3}
     margin-top: ${variables.spacing.m};
     padding-bottom: ${variables.spacing.m};
     color: ${variables.colors.gray80};
@@ -125,10 +125,9 @@ export const Title = styled.h1`
     text-align: center;
 `
 
-export const Hint = styled.div`
+export const Hint = styled.p`
     margin-top: ${variables.spacing.l};
     text-align: center;
-    ${variables.font.small}
 `
 
 export const AlertInfo = styled.p`
