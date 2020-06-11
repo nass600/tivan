@@ -3,7 +3,8 @@ import { Formik, Form, ErrorMessage, FormikValues } from 'formik'
 import * as Yup from 'yup'
 import { AuthConnectionState } from '@reducers/auth'
 import { Theme } from 'react-select'
-import { FormGroup, Label, FieldError, Select, variables } from '@styles'
+import { variables } from '@styles'
+import { FormGroup, FieldLabel, FieldSelect, FieldError, Button } from '@components'
 
 export interface Connection {
     connection: SelectOption;
@@ -63,15 +64,15 @@ class OptionsForm extends React.Component<ConnectionSelectorProps, State> {
                 {({ values, errors, touched, submitForm, setFieldValue }): React.ReactNode => (
                     <Form>
                         <FormGroup>
-                            <Label htmlFor="connection">
+                            <FieldLabel htmlFor="connection">
                                 Choose a connection {errors.connection && touched.connection && (
                                     <FieldError>
                                         <span> — </span>
                                         <ErrorMessage name="connection" component="span"/>
                                     </FieldError>
                                 )}
-                            </Label>
-                            <Select
+                            </FieldLabel>
+                            <FieldSelect
                                 name="connection"
                                 value={values.connection}
                                 options={connections.map(this.transformOption)}
@@ -95,6 +96,9 @@ class OptionsForm extends React.Component<ConnectionSelectorProps, State> {
                                     }
                                 })}
                             />
+                        </FormGroup>
+                        <FormGroup>
+                            <Button block type="submit">Save</Button>
                         </FormGroup>
                     </Form>
                 )}

@@ -2,14 +2,14 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { AppState } from '@reducers'
 import { AuthConnectionState } from '@reducers/auth'
-import { LoginForm, OptionsForm } from '@components'
+import { LoginForm, OptionsForm, Title, FormGroup, CancelLink, Modal } from '@components'
 import { authenticateAction, removeAvailableConnectionsAction, setConnectionAction } from '@actions'
 import { Normalize } from 'styled-normalize'
 import { AnyAction } from 'redux'
 import { ThunkDispatch } from 'redux-thunk'
-import { Avatar, Box, Title, GlobalStyles, CancelButton, FormGroup, variables } from '@styles'
+import { GlobalStyles, variables } from '@styles'
 import logo from '@assets/img/logo.png'
-import { createGlobalStyle } from 'styled-components'
+import styled, { createGlobalStyle } from 'styled-components'
 
 const OptionsGlobalStyles = createGlobalStyle`
     body {
@@ -26,6 +26,51 @@ const OptionsGlobalStyles = createGlobalStyle`
         align-items: center;
         justify-content: center;
         height: 100%;
+    }
+
+    hr {
+        display: flex;
+        width: 100%;
+        border: 0;
+        border-top: 1px solid ${variables.colors.gray20};
+        margin-block-start: ${variables.spacing.m};
+        margin-block-end: ${variables.spacing.m};
+    }
+
+    button {
+        font-size: 1.2rem !important;
+    }
+
+    p {
+        margin-block-start: 0;
+        margin-block-end: 0;
+    }
+`
+
+const OptionsTitle = styled(Title)`
+    ${variables.font.h3}
+    justify-content: center;
+    margin-top: ${variables.spacing.m};
+    padding-bottom: ${variables.spacing.m};
+    color: ${variables.colors.gray80};
+`
+
+const avatarSize = 140
+
+const Avatar = styled.div`
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: ${avatarSize}px;
+    height: ${avatarSize}px;
+    margin-top: -${avatarSize * 2 / 3}px;
+    margin-left: -${avatarSize / 2}px;
+    padding: 1.5rem;
+    background-color: ${variables.colors.gray80};
+    border-radius: 50%;
+
+    img {
+        max-width: 100%;
     }
 `
 
@@ -59,7 +104,7 @@ class Options extends React.Component<OptionsProps, {}> {
     renderLogin (): React.ReactNode {
         return (
             <>
-                <Title>Sign in to Plex</Title>
+                <OptionsTitle as="h1">Sign in to Plex</OptionsTitle>
                 <LoginForm onSubmit={this.onSubmit}/>
             </>
         )
@@ -69,7 +114,7 @@ class Options extends React.Component<OptionsProps, {}> {
         const { availableConnections, connection } = this.props
         return (
             <>
-                <Title>Tivan Options</Title>
+                <OptionsTitle as="h1">Tivan Settings</OptionsTitle>
                 {connection && (
                     <OptionsForm
                         selectedConnection={connection}
@@ -78,7 +123,11 @@ class Options extends React.Component<OptionsProps, {}> {
                     />
                 )}
                 <FormGroup>
-                    <CancelButton type="button" onClick={this.logout}>Sign Out of Plex</CancelButton>
+                    <hr/>
+                    <p>
+                        If you don&apos;t want to keep using this extension you
+                        can <CancelLink href="#" onClick={this.logout}>sign out of Plex</CancelLink>.
+                    </p>
                 </FormGroup>
             </>
         )
@@ -92,13 +141,13 @@ class Options extends React.Component<OptionsProps, {}> {
                 <Normalize/>
                 <GlobalStyles/>
                 <OptionsGlobalStyles/>
-                <Box>
+                <Modal>
                     <Avatar>
                         <img src={logo} alt="Tivan"/>
                     </Avatar>
                     {!connection && this.renderLogin()}
                     {connection && this.renderLogout()}
-                </Box>
+                </Modal>
             </>
         )
     }

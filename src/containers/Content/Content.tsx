@@ -124,13 +124,13 @@ class Content extends React.Component<ContentProps, {}> {
                 below.
             </p>
             <p>
-                We <strong>do not store or send</strong> any user information or credentials, we only
-                need to get an <strong>access token</strong> to the Plex Media Server you will choose in the
-                Options page.
+                We <strong>do not store</strong> your credentials, they are only used to issue
+                an <strong>access token</strong> so we can display the needed information from your
+                Plex Media Server.
             </p>
             <br/>
             <Button as="a" target="_blank" rel="noopener noreferrer" href={chrome.extension.getURL('options.html')}>
-                Sign in to Plex
+                SIGN IN TO PLEX
             </Button>
         </Error>
     )

@@ -1,5 +1,3 @@
 export * from './variables'
 export * from './utils'
-export * from './Theme'
-export * from './NavbarGlobalStyles'
 export * from './GlobalStyles'
