@@ -87,8 +87,15 @@ export const variables = {
         orange40: '#e8aa26',
         orange60: '#e5a00d',
         orange80: '#cc7b19',
-        red40: '#f5ccc6',
-        red60: '#dd4b39'
+        red20: '#f5ccc6',
+        red40: '#f76553',
+        red60: '#dd4b39',
+        blue20: '#d8f5ff',
+        blue60: '#007dc7',
+        yellow20: '#f1e8d2',
+        yellow60: '#e0a700',
+        green20: '#d3f8e6',
+        green60: '#1e942c'
     },
     palettes: {
         blue: ['#8893c7', '#f5cf73', '#5a67a7', '#d3aa47', '#3c4b90', '#ffe4a3', '#26357b', '#b58b26'],

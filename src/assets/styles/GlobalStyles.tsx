@@ -46,17 +46,6 @@ export const GlobalStyles = createGlobalStyle`
         height: 100%;
     }
 
-    a {
-        ${variables.fontFamily.bold}
-        color: ${variables.colors.orange60};
-        text-decoration: none;
-        transition: color 0.2s ease-in-out;
-
-        &:hover {
-            color: ${variables.colors.orange40};
-        }
-    }
-
     strong {
         ${variables.fontFamily.bold}
         color: ${variables.colors.white};

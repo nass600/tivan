@@ -6,6 +6,7 @@ import {
     UPDATE_LIBRARY_INFO,
     LibraryAction,
     SET_LIBRARIES,
+    CLEAN_LIBRARIES,
     RESET_LIBRARY
 } from '@actions'
 import _ from 'lodash'
@@ -69,6 +70,8 @@ export const initialState = {}
 
 export const libraryReducer = (state: LibrariesState = initialState, action: LibraryAction): LibrariesState => {
     switch (action.type) {
+        case CLEAN_LIBRARIES:
+            return {}
         case SET_LIBRARIES:
             return Object.keys(action.payload).reduce((acc: LibrariesState, libraryId: string) => {
                 const id = parseInt(libraryId)

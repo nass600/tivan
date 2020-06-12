@@ -2,7 +2,7 @@ import React from 'react'
 import { variables } from '@styles'
 import styled, { css, FlattenSimpleInterpolation } from 'styled-components'
 
-export const Navbar = styled.div`
+const Navbar = styled.div`
     z-index: 1;
     display: flex;
     flex-shrink: 0;
@@ -15,7 +15,7 @@ export const Navbar = styled.div`
     box-shadow: 0 3px 6px 0 ${variables.colors.blackA30};
 `
 
-export const Tab = styled.a<{active?: boolean}>`
+const Tab = styled.a<{active?: boolean}>`
     ${variables.font.h4}
     max-width: 250px;
     margin: 0 ${variables.spacing.s};

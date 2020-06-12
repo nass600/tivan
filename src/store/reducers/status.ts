@@ -1,4 +1,4 @@
-import { TOGGLE_DISPLAY, SET_CURRENT_TAB, SET_LOADING, StatusAction, SET_CURRENT_LIBRARY } from '@actions'
+import { TOGGLE_DISPLAY, SET_CURRENT_TAB, SET_LOADING, StatusAction, SET_CURRENT_LIBRARY, SET_ERROR } from '@actions'
 
 export enum Tabs {
     STATS = 'STATS',
@@ -10,11 +10,16 @@ export interface LoadingState {
     library: boolean;
 }
 
+export interface ErrorState {
+    message: string;
+    code: number;
+}
 export interface StatusState {
     display: boolean;
     currentTab: Tabs;
     currentLibrary: number | null;
     loading: LoadingState;
+    error: ErrorState | null;
 }
 
 const initialState = {
@@ -23,11 +28,17 @@ const initialState = {
     currentLibrary: null,
     loading: {
         library: false
-    }
+    },
+    error: null
 }
 
 export const statusReducer = (state: StatusState = initialState, action: StatusAction): StatusState => {
     switch (action.type) {
+        case SET_ERROR:
+            return {
+                ...state,
+                error: action.payload
+            }
         case TOGGLE_DISPLAY:
             return {
                 ...state,
