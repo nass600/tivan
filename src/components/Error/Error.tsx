@@ -28,6 +28,17 @@ const ErrorTitle = styled(Title)`
     color: ${variables.colors.white};
 `
 
+const ErrorMessage = styled.div`
+    ul {
+        margin: 0;
+        padding: 0;
+    }
+
+    li {
+        margin-left: 20px;
+    }
+`
+
 interface ErrorProps {
     icon: IconType;
     title: string;
@@ -48,7 +59,7 @@ class Error extends React.Component<ErrorProps> {
                     </ErrorIcon>
                 )}
                 {title && <ErrorTitle>{title}</ErrorTitle>}
-                {children && children}
+                {children && <ErrorMessage>{children}</ErrorMessage>}
             </ErrorContainer>
         )
     }

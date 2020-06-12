@@ -1,7 +1,6 @@
 import React from 'react'
 import { Formik, Form, ErrorMessage, FormikValues } from 'formik'
 import * as Yup from 'yup'
-import { AxiosError } from 'axios'
 import { FieldError, FieldLabel, FieldInput, FormGroup, Alert, AlertType, Button, Link } from '@components'
 import styled from 'styled-components'
 
@@ -17,7 +16,7 @@ export interface Login {
 }
 
 interface LoginFormProps {
-    onSubmit: (username: string, password: string) => Promise<void>;
+    onSubmit: (username: string, password: string) => void;
 }
 
 const initialState = {
@@ -34,11 +33,7 @@ class LoginForm extends React.Component<LoginFormProps, {}> {
     }
 
     onSubmit = (values: FormikValues): void => {
-        this.props.onSubmit(values.username, values.password).catch((e: AxiosError): void => {
-            this.setState({
-                error: e.response?.status === 401 ? 'The username or password is incorrect' : 'Something wrong happened'
-            })
-        })
+        this.props.onSubmit(values.username, values.password)
     }
 
     validationSchema = Yup.object().shape({
@@ -71,9 +66,6 @@ class LoginForm extends React.Component<LoginFormProps, {}> {
                                     information from your Plex Media Server.
                                 </p>
                             </Alert>
-                            {this.state.error && (
-                                <Alert type={AlertType.ERROR}><p>{this.state.error}</p></Alert>
-                            )}
                             <FormGroup>
                                 <FieldLabel htmlFor="username">
                                     Email or Username {errors.username && touched.username && (

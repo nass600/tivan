@@ -93,7 +93,9 @@ export const variables = {
         blue20: '#d8f5ff',
         blue60: '#007dc7',
         yellow20: '#f1e8d2',
-        yellow60: '#e0a700'
+        yellow60: '#e0a700',
+        green20: '#d3f8e6',
+        green60: '#1e942c'
     },
     palettes: {
         blue: ['#8893c7', '#f5cf73', '#5a67a7', '#d3aa47', '#3c4b90', '#ffe4a3', '#26357b', '#b58b26'],

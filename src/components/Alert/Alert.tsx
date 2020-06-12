@@ -2,9 +2,10 @@ import React from 'react'
 import { variables } from '@styles'
 import styled, { css, FlattenSimpleInterpolation } from 'styled-components'
 import { IconType } from 'react-icons'
-import { MdInfo, MdError, MdWarning } from 'react-icons/md'
+import { MdInfo, MdError, MdWarning, MdDone } from 'react-icons/md'
 
 export const enum AlertType {
+    SUCCESS = 'success',
     INFO = 'info',
     WARNING = 'warning',
     ERROR = 'error'
@@ -13,6 +14,10 @@ export const enum AlertType {
 const AlertContainer = styled.div<{type: AlertType}>`
     display: flex;
     border-radius: ${variables.borderRadius.s};
+
+    ${({ type }): FlattenSimpleInterpolation | undefined | false => type === AlertType.SUCCESS && css`
+        background-color: ${variables.colors.green20};
+    `}
 
     ${({ type }): FlattenSimpleInterpolation | undefined | false => type === AlertType.INFO && css`
         background-color: ${variables.colors.blue20};
@@ -37,6 +42,10 @@ const IconContainer = styled.div<{type: AlertType}>`
     svg {
         width: ${iconSize};
         height: ${iconSize};
+
+        ${({ type }): FlattenSimpleInterpolation | undefined | false => type === AlertType.SUCCESS && css`
+            fill: ${variables.colors.green60};
+        `}
 
         ${({ type }): FlattenSimpleInterpolation | undefined | false => type === AlertType.INFO && css`
             fill: ${variables.colors.blue60};
@@ -76,6 +85,8 @@ class Alert extends React.Component<AlertProps> {
 
     getIcon = (type: AlertType): IconType => {
         switch (type) {
+            case AlertType.SUCCESS:
+                return MdDone
             case AlertType.ERROR:
                 return MdError
             case AlertType.WARNING:

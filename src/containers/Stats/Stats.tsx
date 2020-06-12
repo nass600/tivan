@@ -24,7 +24,6 @@ import { StatsDataItem } from '@types'
 import { formatShort, formatLong } from '@utils/name-formatter'
 import styled, { css, FlattenSimpleInterpolation } from 'styled-components'
 import { variables } from '@styles'
-import { darken } from 'polished'
 import { LibraryState } from '@reducers/library'
 import { MdErrorOutline } from 'react-icons/md'
 import { isEmpty } from 'lodash'
@@ -61,7 +60,7 @@ const Legend = styled.div<{color?: string}>`
     height: ${variables.spacing.l};
     border-radius: 50%;
     ${({ color }): FlattenSimpleInterpolation | '' | undefined => color && css`
-        color: ${darken(0.5, color)};
+        color: ${variables.colors.gray100};
         background-color: ${color};
     `}
 `

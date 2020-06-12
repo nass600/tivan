@@ -4,14 +4,15 @@ import { AppState } from '@reducers'
 import { Page, Menu, Error, Sidebar, Button, Loader } from '@components'
 import { Stats, Normalization, Forecast } from '@containers'
 import { GlobalStyles } from '@styles'
-import { Tabs } from '@reducers/status'
+import { Tabs, ErrorState } from '@reducers/status'
 import { ThunkDispatch } from 'redux-thunk'
 import { AnyAction } from 'redux'
 import { parseLibraryAction, getLibrariesAction, setCurrentLibraryAction, setCurrentTabAction } from '@actions'
 import styled from 'styled-components'
 import { LibrariesState } from '@reducers/library'
-import { MdFingerprint } from 'react-icons/md'
+import { MdFingerprint, MdStorage } from 'react-icons/md'
 import { isEmpty } from 'lodash'
+import { AuthConnectionState } from '@reducers/auth'
 
 const ContentWrapper = styled.div`
     display: flex;
@@ -26,7 +27,8 @@ interface ContentStateProps {
     loadingLibrary: boolean;
     display: boolean;
     currentTab: Tabs;
-    signedIn: boolean;
+    connection: AuthConnectionState | null;
+    error: ErrorState | null;
 }
 
 interface ContentDispatchProps {
@@ -53,16 +55,19 @@ const getSiblings = (elem: Element): Element[] => {
 class Content extends React.Component<ContentProps, {}> {
     componentDidMount (): void {
         this.toggleOriginalPage(this.props.display)
-        if (this.props.display && this.props.signedIn) {
-            this.props.getLibraries().catch((e: Error) => e)
+        if (this.props.display && this.props.connection?.uri) {
+            this.props.getLibraries()
         }
     }
 
     componentDidUpdate (prevProps: ContentProps): void {
         this.toggleOriginalPage(this.props.display)
 
-        if ((!prevProps.display && this.props.display) || (!prevProps.signedIn && this.props.signedIn)) {
-            this.props.getLibraries().catch((e: Error) => e)
+        if (
+            (!prevProps.display && this.props.display) ||
+            (prevProps.connection?.uri !== this.props.connection?.uri)
+        ) {
+            this.props.getLibraries()
         }
     }
 
@@ -135,19 +140,59 @@ class Content extends React.Component<ContentProps, {}> {
         </Error>
     )
 
-    renderPage = (currentTab: Tabs): React.ReactNode => (
-        <>
-            {currentTab === Tabs.STATS && <Stats/>}
-            {currentTab === Tabs.NORMALIZATION && <Normalization/>}
-            {currentTab === Tabs.FORECAST && <Forecast/>}
-        </>
+    renderServerError = (): React.ReactNode => (
+        <Error title="Unable to access your server" icon={MdStorage}>
+            <p>
+                Something wrong has happened accessing your <strong>Plex Media Server</strong>.
+            </p>
+            <p>
+                Usually, the main reasons are:
+            </p>
+            <ul>
+                <li>
+                    The server or computer where you have your Plex Media Server
+                    is <strong>down or inaccessible</strong>.
+                </li>
+                <li>
+                    The connection to the server you choose in the <strong>settings page</strong> is not
+                    reachable from where you are located.
+                </li>
+            </ul>
+            <br/>
+            <Button as="a" target="_blank" rel="noopener noreferrer" href={chrome.extension.getURL('options.html')}>
+                CHANGE SETTINGS
+            </Button>
+        </Error>
     )
+
+    renderPage = (): React.ReactNode => {
+        const {
+            currentTab,
+            loadingLibrary,
+            libraries,
+            currentLibraryId
+        } = this.props
+
+        const hasData = !isEmpty(libraries[currentLibraryId || 0]?.stats)
+
+        if (loadingLibrary && !hasData) {
+            return <Loader/>
+        } else {
+            return (
+                <>
+                    {currentTab === Tabs.STATS && <Stats/>}
+                    {currentTab === Tabs.NORMALIZATION && <Normalization/>}
+                    {currentTab === Tabs.FORECAST && <Forecast/>}
+                </>
+            )
+        }
+    }
 
     render (): React.ReactNode {
         const {
             display,
             currentTab,
-            signedIn,
+            error,
             loadingLibrary,
             libraries,
             currentLibraryId
@@ -157,11 +202,9 @@ class Content extends React.Component<ContentProps, {}> {
             return null
         }
 
-        const hasData = !isEmpty(libraries[currentLibraryId || 0]?.stats)
-
         return (
             <>
-                {signedIn && (
+                {!error && (
                     <>
                         <Sidebar
                             heading="Libraries"
@@ -179,13 +222,13 @@ class Content extends React.Component<ContentProps, {}> {
                                 onSelectItem={this.onChangeSection}
                             />
                             <Page>
-                                {hasData && this.renderPage(currentTab)}
-                                {loadingLibrary && !hasData && <Loader/>}
+                                {this.renderPage()}
                             </Page>
                         </ContentWrapper>
                     </>
                 )}
-                {!signedIn && this.renderUnauthorized()}
+                {error && error.code === 401 && this.renderUnauthorized()}
+                {error && error.code === 500 && this.renderServerError()}
                 <GlobalStyles />
             </>
         )
@@ -199,7 +242,8 @@ const mapStateToProps = (state: AppState): ContentStateProps => {
         loadingLibrary: state.status.loading.library,
         display: state.status.display,
         currentTab: state.status.currentTab,
-        signedIn: !!state.auth.connection
+        connection: state.auth.connection,
+        error: state.status.error
     }
 }
 

@@ -2,14 +2,22 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { AppState } from '@reducers'
 import { AuthConnectionState } from '@reducers/auth'
-import { LoginForm, OptionsForm, Title, FormGroup, CancelLink, Modal } from '@components'
-import { authenticateAction, removeAvailableConnectionsAction, setConnectionAction } from '@actions'
+import { LoginForm, SettingsForm, Title, FormGroup, CancelLink, Modal, Alert, AlertType } from '@components'
+import {
+    authenticateAction,
+    removeAvailableConnectionsAction,
+    setConnectionAction,
+    cleanLibrariesAction,
+    setErrorAction
+} from '@actions'
 import { Normalize } from 'styled-normalize'
 import { AnyAction } from 'redux'
 import { ThunkDispatch } from 'redux-thunk'
 import { GlobalStyles, variables } from '@styles'
 import logo from '@assets/img/logo.png'
 import styled, { createGlobalStyle } from 'styled-components'
+import { ErrorState } from '@reducers/status'
+import { AxiosError } from 'axios'
 
 const OptionsGlobalStyles = createGlobalStyle`
     body {
@@ -44,6 +52,10 @@ const OptionsGlobalStyles = createGlobalStyle`
     p {
         margin-block-start: 0;
         margin-block-end: 0;
+    }
+
+    form {
+        margin-top: ${variables.spacing.l};
     }
 `
 
@@ -84,49 +96,90 @@ interface OptionsDispatchProps {
     authenticate: (username: string, password: string) => Promise<void>;
     setConnection: (connection: AuthConnectionState) => void;
     removeAvailableConnections: () => void;
+    cleanLibraries: () => void;
+    setError: (error: ErrorState | null) => void;
 }
 
 type OptionsProps = OptionsStateProps & OptionsDispatchProps
 
-class Options extends React.Component<OptionsProps, {}> {
-    onSubmit = (username: string, password: string): Promise<void> => {
-        return this.props.authenticate(username, password)
+const initialState = {
+    alert: null
+}
+
+type State = {
+    alert: {
+        type: AlertType;
+        message: Element | string;
+    } | null;
+};
+
+class Options extends React.Component<OptionsProps, State> {
+    state: State = initialState
+
+    onLogin = (username: string, password: string): void => {
+        this.props.authenticate(username, password).then((): void => {
+            this.setState({ alert: { type: AlertType.SUCCESS, message: 'You signed in successfully in Plex' } })
+            setTimeout((): void => this.setState({ alert: null }), 3000)
+        }).catch((e: AxiosError): void => {
+            let message = 'Something wrong happened'
+
+            if (e.response?.status === 401) {
+                message = e.response?.data.error
+            }
+
+            this.setState({ alert: { type: AlertType.ERROR, message } })
+            setTimeout((): void => this.setState({ alert: null }), 5000)
+        })
     }
 
-    onSelectConnection = (connection: AuthConnectionState): void => {
+    onSaveSettings = (connection: AuthConnectionState): void => {
         this.props.setConnection(connection)
+        this.props.setError(null)
+
+        if (this.props.connection?.name !== connection.name) {
+            this.props.cleanLibraries()
+        }
+
+        this.setState({ alert: { type: AlertType.SUCCESS, message: 'Settings saved' } })
+        setTimeout((): void => this.setState({ alert: null }), 3000)
     }
 
-    logout = (): void => {
+    onLogout = (): void => {
         this.props.removeAvailableConnections()
     }
 
     renderLogin (): React.ReactNode {
+        const { alert } = this.state
+
         return (
             <>
                 <OptionsTitle as="h1">Sign in to Plex</OptionsTitle>
-                <LoginForm onSubmit={this.onSubmit}/>
+                {alert && <Alert type={alert.type}>{alert.message}</Alert>}
+                <LoginForm onSubmit={this.onLogin}/>
             </>
         )
     }
 
-    renderLogout (): React.ReactNode {
+    renderSettings (): React.ReactNode {
         const { availableConnections, connection } = this.props
+        const { alert } = this.state
+
         return (
             <>
                 <OptionsTitle as="h1">Tivan Settings</OptionsTitle>
+                {alert && <Alert type={alert.type}>{alert.message}</Alert>}
                 {connection && (
-                    <OptionsForm
+                    <SettingsForm
                         selectedConnection={connection}
                         connections={availableConnections}
-                        onChange={this.onSelectConnection}
+                        onSubmit={this.onSaveSettings}
                     />
                 )}
                 <FormGroup>
                     <hr/>
                     <p>
-                        If you don&apos;t want to keep using this extension you
-                        can <CancelLink href="#" onClick={this.logout}>sign out of Plex</CancelLink>.
+                        If you don&apos;t want to keep using this browser extension you
+                        can <CancelLink href="#" onClick={this.onLogout}>sign out of Plex</CancelLink>.
                     </p>
                 </FormGroup>
             </>
@@ -146,7 +199,7 @@ class Options extends React.Component<OptionsProps, {}> {
                         <img src={logo} alt="Tivan"/>
                     </Avatar>
                     {!connection && this.renderLogin()}
-                    {connection && this.renderLogout()}
+                    {connection && this.renderSettings()}
                 </Modal>
             </>
         )
@@ -170,6 +223,12 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, AnyAction>): Options
     },
     removeAvailableConnections: (): void => {
         dispatch(removeAvailableConnectionsAction())
+    },
+    cleanLibraries: (): void => {
+        dispatch(cleanLibrariesAction())
+    },
+    setError: (error: ErrorState | null): void => {
+        dispatch(setErrorAction(error))
     }
 })
 

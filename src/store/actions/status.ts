@@ -1,5 +1,12 @@
-import { TOGGLE_DISPLAY, SET_CURRENT_TAB, SET_LOADING, SET_CURRENT_LIBRARY, parseLibraryAction } from '@actions'
-import { Tabs, LoadingState } from '@reducers/status'
+import {
+    TOGGLE_DISPLAY,
+    SET_CURRENT_TAB,
+    SET_LOADING,
+    SET_CURRENT_LIBRARY,
+    parseLibraryAction,
+    SET_ERROR
+} from '@actions'
+import { Tabs, LoadingState, ErrorState } from '@reducers/status'
 import { ThunkDispatch, ThunkAction } from 'redux-thunk'
 import { AnyAction } from 'redux'
 import { AppState } from '@reducers'
@@ -19,12 +26,22 @@ export interface SetLoadingAction {
     payload: LoadingState;
 }
 
+export interface SetErrorAction {
+    type: 'SET_ERROR';
+    payload: ErrorState | null;
+}
+
 export interface SetCurrentLibraryAction {
     type: 'SET_CURRENT_LIBRARY';
     payload: number;
 }
 
-export type StatusAction = ToggleDisplayAction | SetCurrentTabAction | SetLoadingAction | SetCurrentLibraryAction;
+export type StatusAction =
+    ToggleDisplayAction |
+    SetCurrentTabAction |
+    SetErrorAction |
+    SetLoadingAction |
+    SetCurrentLibraryAction;
 
 export const toggleDisplayAction = (display?: boolean): ToggleDisplayAction => (
     { type: TOGGLE_DISPLAY, payload: display }
@@ -36,6 +53,10 @@ export const setCurrentTabAction = (tab: Tabs): SetCurrentTabAction => (
 
 export const setLoadingAction = (data: LoadingState): SetLoadingAction => (
     { type: SET_LOADING, payload: data }
+)
+
+export const setErrorAction = (error: ErrorState | null): SetErrorAction => (
+    { type: SET_ERROR, payload: error }
 )
 
 export const setCurrentLibraryAction = (libraryId: number): ThunkAction<Promise<void>, {}, {}, AnyAction> =>

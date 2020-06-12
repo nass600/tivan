@@ -23,6 +23,7 @@ import {
     UPDATE_LIBRARY_INFO,
     ADD_STATS,
     ADD_NON_NORMALIZED_ITEMS,
+    CLEAN_LIBRARIES,
     SET_LIBRARIES,
     RESET_LIBRARY,
     RESET_STATS,
@@ -32,6 +33,7 @@ import {
 } from '@actions'
 import { MediaState, StatsState, LibrariesState, LibraryState } from '@reducers/library'
 import { getCurrentLibrary } from '@selectors'
+import { setErrorAction } from './status'
 
 export interface UpdatelibraryInfoAction {
     type: 'UPDATE_LIBRARY_INFO';
@@ -46,6 +48,11 @@ export interface AddNonNormalizedItemsAction {
 export interface AddStatsAction {
     type: 'ADD_STATS';
     payload: { library: number; stats: StatsState };
+}
+
+export interface CleanLibrariesAction {
+    type: 'CLEAN_LIBRARIES';
+    payload: null;
 }
 
 export interface SetLibrariesAction {
@@ -72,6 +79,7 @@ export type LibraryAction =
 UpdatelibraryInfoAction |
 AddStatsAction |
 AddNonNormalizedItemsAction |
+CleanLibrariesAction |
 SetLibrariesAction |
 ResetLibraryAction |
 ResetStatsAction |
@@ -90,6 +98,10 @@ export const addStatsAction = (library: number, stats: StatsState): AddStatsActi
 
 export const addNonNormalizedItemsAction = (library: number, items: MediaState[]): AddNonNormalizedItemsAction => (
     { type: ADD_NON_NORMALIZED_ITEMS, payload: { library, items } }
+)
+
+export const cleanLibrariesAction = (): CleanLibrariesAction => (
+    { type: CLEAN_LIBRARIES, payload: null }
 )
 
 export const setLibrariesAction = (libraries: LibrariesState): SetLibrariesAction => (
@@ -241,7 +253,8 @@ export const parseLibraryAction = (libraryId: number): ThunkAction<Promise<void>
         const state = getState()
 
         if (!state.auth.connection) {
-            return Promise.reject(new Error('No token'))
+            dispatch(setErrorAction({ message: 'Missing token while requesting "parseLibrary"', code: 401 }))
+            return Promise.resolve()
         }
 
         dispatch(setLoadingAction({ library: true }))
@@ -252,6 +265,7 @@ export const parseLibraryAction = (libraryId: number): ThunkAction<Promise<void>
         plex.pms.sections.allSectionItems(libraryId).then(async (data: AllSectionItemsResponse) => {
             const ids = data.MediaContainer.Metadata.map(item => item.ratingKey)
 
+            dispatch(setErrorAction(null))
             dispatch(resetLibraryAction(libraryId))
             dispatch(updateLibraryInfoAction(libraryId, {
                 totalItems: data.MediaContainer.size
@@ -271,9 +285,13 @@ export const parseLibraryAction = (libraryId: number): ThunkAction<Promise<void>
 
                     dispatch(addNonNormalizedItemsAction(libraryId, extractNonNormalized(items)))
                     dispatch(addStatsAction(libraryId, extractStats(items)))
+                }).catch((e: Error): void => {
+                    throw e
                 })
             }
-
+        }).catch((): void => {
+            dispatch(setErrorAction({ message: 'Something wrong happened', code: 500 }))
+        }).finally((): void => {
             dispatch(setLoadingAction({ library: false }))
         })
     }
@@ -285,7 +303,8 @@ export const getLibrariesAction = (): ThunkAction<Promise<void>, {}, {}, AnyActi
         const state = getState()
 
         if (!state.auth.connection) {
-            return Promise.reject(new Error('No token'))
+            dispatch(setErrorAction({ message: 'Missing token while requesting "getLibraries"', code: 401 }))
+            return Promise.resolve()
         }
 
         plex.setBaseUrl(state.auth.connection.uri)
@@ -305,6 +324,7 @@ export const getLibrariesAction = (): ThunkAction<Promise<void>, {}, {}, AnyActi
                 return acc
             }, {})
 
+            dispatch(setErrorAction(null))
             dispatch(setLibrariesAction(libraries))
 
             const items = Object.keys(libraries)
@@ -315,5 +335,7 @@ export const getLibrariesAction = (): ThunkAction<Promise<void>, {}, {}, AnyActi
             ) {
                 dispatch(setCurrentLibraryAction(parseInt(items[0])))
             }
+        }).catch((): void => {
+            dispatch(setErrorAction({ message: 'Something wrong happened', code: 500 }))
         })
     }
