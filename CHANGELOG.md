@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/nass600/tivan/compare/1.5.0...1.6.0) (2020-06-12)
+
+
+### Features
+
+* improved copy and ui feedback in options page ([69e66b1](https://github.com/nass600/tivan/commit/69e66b1bc03b825f89b54521af77afa538e92b6a))
+
 # [1.5.0](https://github.com/nass600/tivan/compare/1.4.0...1.5.0) (2020-06-10)
 
 ### Features
