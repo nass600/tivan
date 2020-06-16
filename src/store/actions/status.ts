@@ -4,7 +4,8 @@ import {
     SET_LOADING,
     SET_CURRENT_LIBRARY,
     parseLibraryAction,
-    SET_ERROR
+    SET_ERROR,
+    DISABLE_TOUR
 } from '@actions'
 import { Tabs, LoadingState, ErrorState } from '@reducers/status'
 import { ThunkDispatch, ThunkAction } from 'redux-thunk'
@@ -31,6 +32,11 @@ export interface SetErrorAction {
     payload: ErrorState | null;
 }
 
+export interface DisableTourAction {
+    type: 'DISABLE_TOUR';
+    payload: null;
+}
+
 export interface SetCurrentLibraryAction {
     type: 'SET_CURRENT_LIBRARY';
     payload: number;
@@ -41,6 +47,7 @@ export type StatusAction =
     SetCurrentTabAction |
     SetErrorAction |
     SetLoadingAction |
+    DisableTourAction |
     SetCurrentLibraryAction;
 
 export const toggleDisplayAction = (display?: boolean): ToggleDisplayAction => (
@@ -57,6 +64,10 @@ export const setLoadingAction = (data: LoadingState): SetLoadingAction => (
 
 export const setErrorAction = (error: ErrorState | null): SetErrorAction => (
     { type: SET_ERROR, payload: error }
+)
+
+export const disableTourAction = (): DisableTourAction => (
+    { type: DISABLE_TOUR, payload: null }
 )
 
 export const setCurrentLibraryAction = (libraryId: number): ThunkAction<Promise<void>, {}, {}, AnyAction> =>

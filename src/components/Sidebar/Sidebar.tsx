@@ -150,13 +150,17 @@ class Sidebar extends Component<SidebarProps> {
                                 >
                                     {items[parseInt(id)].title}
                                     <SidebarAction onClick={onTriggerAction} data-id={id} loading={loading ? 1 : 0}>
-                                        <TooltipContainer aria-label={actionLabel} data-tip={actionLabel}>
+                                        <TooltipContainer
+                                            aria-label={actionLabel}
+                                            data-tip={actionLabel}
+                                            data-for="sidebar-action"
+                                        >
                                             <IconContext.Provider value={{ style: { width: '2rem', height: '2rem' } }}>
                                                 <MdRefresh/>
                                             </IconContext.Provider>
                                         </TooltipContainer>
                                     </SidebarAction>
-                                    <Tooltip place="bottom" type="dark" effect="solid"/>
+                                    <Tooltip id="sidebar-action" place="bottom" type="dark" effect="solid"/>
                                 </SidebarItem>
                             ))}
                         </SidebarItems>
