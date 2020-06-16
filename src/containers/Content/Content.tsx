@@ -10,7 +10,7 @@ import { AnyAction } from 'redux'
 import { parseLibraryAction, getLibrariesAction, setCurrentLibraryAction, setCurrentTabAction } from '@actions'
 import styled from 'styled-components'
 import { LibrariesState } from '@reducers/library'
-import { MdFingerprint, MdStorage } from 'react-icons/md'
+import { MdFingerprint, MdReportProblem } from 'react-icons/md'
 import { isEmpty } from 'lodash'
 import { AuthConnectionState } from '@reducers/auth'
 
@@ -141,12 +141,12 @@ class Content extends React.Component<ContentProps, {}> {
     )
 
     renderServerError = (): React.ReactNode => (
-        <Error title="Unable to access your server" icon={MdStorage}>
+        <Error title="Something went wrong" icon={MdReportProblem}>
             <p>
-                Something wrong has happened accessing your <strong>Plex Media Server</strong>.
+                There was an error accessing your <strong>Plex Media Server</strong>.
             </p>
             <p>
-                Usually, the main reasons are:
+                Please try again in a few minutes.Usually, the main reasons are:
             </p>
             <ul>
                 <li>
