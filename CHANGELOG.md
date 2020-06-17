@@ -1,9 +1,8 @@
 # [1.7.0](https://github.com/nass600/tivan/compare/1.6.0...1.7.0) (2020-06-16)
 
-
 ### Features
 
-* added first-time tour ([#9](https://github.com/nass600/tivan/issues/9)) ([19b2787](https://github.com/nass600/tivan/commit/19b2787077f8951fcc7db82feb09588a6a0441d9))
+-   added first-time tour ([#9](https://github.com/nass600/tivan/issues/9)) ([19b2787](https://github.com/nass600/tivan/commit/19b2787077f8951fcc7db82feb09588a6a0441d9))
 
 # [1.6.0](https://github.com/nass600/tivan/compare/1.5.0...1.6.0) (2020-06-12)
 

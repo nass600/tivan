@@ -14,7 +14,7 @@ import { Normalize } from 'styled-normalize'
 import { AnyAction } from 'redux'
 import { ThunkDispatch } from 'redux-thunk'
 import { GlobalStyles, variables } from '@styles'
-import logo from '@assets/img/logo.png'
+import Logo from '@assets/img/logo.svg'
 import styled, { createGlobalStyle } from 'styled-components'
 import { ErrorState } from '@reducers/status'
 import { AxiosError } from 'axios'
@@ -196,7 +196,7 @@ class Options extends React.Component<OptionsProps, State> {
                 <OptionsGlobalStyles/>
                 <Modal>
                     <Avatar>
-                        <img src={logo} alt="Tivan"/>
+                        <Logo/>
                     </Avatar>
                     {!connection && this.renderLogin()}
                     {connection && this.renderSettings()}

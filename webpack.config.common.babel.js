@@ -50,7 +50,7 @@ export default {
             },
             {
                 test: /\.svg$/,
-                loader: 'file-loader'
+                use: ['@svgr/webpack']
             }
         ]
     },

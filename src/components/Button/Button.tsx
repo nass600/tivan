@@ -22,6 +22,10 @@ export const Button = styled.button<{block?: boolean}>`
         color: ${variables.colors.white};
         background-color: ${variables.colors.orange40};
     }
+
+    span {
+        margin-left: ${variables.spacing.m};
+    }
 `
 
 export const CancelButton = styled(Button)`
