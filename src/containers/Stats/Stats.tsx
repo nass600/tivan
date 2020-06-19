@@ -7,8 +7,8 @@ import {
     Section,
     Column,
     Row,
-    Title,
-    SectionTitle,
+    Heading2,
+    Heading4,
     TableItem,
     Error,
     Badge
@@ -27,6 +27,12 @@ import { variables } from '@styles'
 import { LibraryState } from '@reducers/library'
 import { MdErrorOutline } from 'react-icons/md'
 import { isEmpty } from 'lodash'
+
+const Title = styled(Heading2)`
+    ${Badge} {
+        margin-left: ${variables.spacing.l};
+    }
+`
 
 interface ContentStateProps {
     connection?: string;
@@ -118,12 +124,12 @@ class Stats extends React.Component<ContentStateProps, {}> {
                 {!isEmpty(currentLibrary?.stats) && (
                     <>
                         <Title>
-                            <span>{connection} - Stats</span>
+                            <span>{connection} &mdash; Stats</span>
                             <Badge>{currentLibrary?.totalItems}</Badge>
                         </Title>
                         {videoResolutionStats && videoResolutionStats.length > 0 && (
                             <Section>
-                                <SectionTitle>Video Resolution</SectionTitle>
+                                <Heading4>Video Resolution</Heading4>
                                 <Row>
                                     <Column>
                                         <PieChart data={videoResolutionStats} nameFormatter={formatShort}/>
@@ -136,7 +142,7 @@ class Stats extends React.Component<ContentStateProps, {}> {
                         )}
                         {videoCodecStats && videoCodecStats.length > 0 && (
                             <Section>
-                                <SectionTitle>Video Codec</SectionTitle>
+                                <Heading4>Video Codec</Heading4>
                                 <Row>
                                     <Column>
                                         <PieChart data={videoCodecStats} nameFormatter={formatShort}/>
@@ -149,7 +155,7 @@ class Stats extends React.Component<ContentStateProps, {}> {
                         )}
                         {audioCodecStats && audioCodecStats.length > 0 && (
                             <Section>
-                                <SectionTitle>Audio Codec</SectionTitle>
+                                <Heading4>Audio Codec</Heading4>
                                 <Row>
                                     <Column>
                                         <PieChart data={audioCodecStats} nameFormatter={formatShort}/>
@@ -162,7 +168,7 @@ class Stats extends React.Component<ContentStateProps, {}> {
                         )}
                         {subtitleCodecStats && subtitleCodecStats.length > 0 && (
                             <Section>
-                                <SectionTitle>Subtitle Codec</SectionTitle>
+                                <Heading4>Subtitle Codec</Heading4>
                                 <Row>
                                     <Column>
                                         <PieChart data={subtitleCodecStats} nameFormatter={formatShort}/>

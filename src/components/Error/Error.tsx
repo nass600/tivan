@@ -1,5 +1,5 @@
 import React from 'react'
-import { Title } from '@components'
+import { Heading3 } from '@components'
 import { IconContext, IconType } from 'react-icons'
 import styled from 'styled-components'
 import { variables } from '@styles'
@@ -21,11 +21,8 @@ const ErrorIcon = styled.div`
     border-radius: 50%;
 `
 
-const ErrorTitle = styled(Title)`
-    ${variables.font.h3}
+const ErrorTitle = styled(Heading3)`
     justify-content: center;
-    margin-bottom: ${variables.spacing.xl};
-    color: ${variables.colors.white};
 `
 
 const ErrorMessage = styled.div`

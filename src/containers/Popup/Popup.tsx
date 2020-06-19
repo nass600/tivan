@@ -1,34 +1,11 @@
 import React from 'react'
-import styled, { createGlobalStyle } from 'styled-components'
-import { variables } from '@styles'
+import styled from 'styled-components'
+import { GlobalStyles, variables } from '@styles'
 import { MdSettings } from 'react-icons/md'
-import { Button, Title, SectionTitle } from '@components'
+import { Button, Heading2, Heading4 } from '@components'
 import config from '../../../package.json'
 import Logo from '@assets/img/logo.svg'
 import PlexLogo from '@assets/img/plex-logo.svg'
-
-const GlobalStyles = createGlobalStyle`
-    html {
-        font-size: 10px;
-    }
-
-    & * {
-        box-sizing: border-box;
-    }
-
-    body {
-        margin: 0;
-        color: ${variables.colors.white};
-        font-size: 14px;
-        ${variables.fontFamily.regular}
-        line-height: 1.5;
-        background-color: ${variables.colors.gray60};
-    }
-
-    a {
-        text-decoration: none;
-    }
-`
 
 const PopupContainer = styled.div`
     display: flex;
@@ -66,11 +43,11 @@ const PopupBody = styled.div`
     padding: ${variables.spacing.l};
 `
 
-const PopupTitle = styled(Title)`
+const PopupTitle = styled(Heading2)`
     margin-top: 0;
 `
 
-const PopupSubtitle = styled(SectionTitle)`
+const PopupSubtitle = styled(Heading4)`
     color: ${variables.colors.whiteA45};
     text-transform: none;
 `

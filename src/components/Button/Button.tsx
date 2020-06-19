@@ -4,6 +4,7 @@ import { variables } from '@styles'
 export const Button = styled.button<{block?: boolean}>`
     ${variables.font.h4}
     display: inline-flex;
+    align-items: center;
     padding: ${variables.spacing.m} ${variables.spacing.l};
     color: ${variables.colors.white};
     background-color: ${variables.colors.orange60};

@@ -20,7 +20,7 @@ const SidebarWrapper = styled.div`
 `
 
 const SidebarHeading = styled.div`
-    ${variables.fontFamily.bold}
+    ${variables.font.h5}
     align-content: center;
     min-width: 0;
     max-width: 100%;
@@ -28,7 +28,6 @@ const SidebarHeading = styled.div`
     padding-left: ${variables.spacing.l};
     overflow: hidden;
     color: ${variables.colors.whiteA30};
-    font-size: 12px;
     line-height: 50px;
     white-space: nowrap;
     text-transform: uppercase;

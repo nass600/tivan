@@ -6,13 +6,12 @@ import store from '@store/createStore'
 import { variables } from '@styles'
 import { Content } from '@containers'
 import { Tooltip } from '@components'
-import { IconContext } from 'react-icons'
 import { AppState } from '@reducers'
 import styled, { createGlobalStyle, FlattenSimpleInterpolation, css } from 'styled-components'
 import Joyride, { CallBackProps, STATUS } from 'react-joyride'
 import Logo from '@assets/img/logo.svg'
 
-const NavbarGlobalStyles = createGlobalStyle`
+const GlobalStyles = createGlobalStyle`
     .__floater__body {
         ${variables.font.base}
         font-size: 14px;
@@ -37,6 +36,7 @@ const NavbarGlobalStyles = createGlobalStyle`
         button[data-action="primary"] {
             ${variables.font.h4}
             padding: ${variables.spacing.m} ${variables.spacing.l} !important;
+            font-size: ${variables.fontSize.h4} !important;
             text-transform: uppercase;
             border-radius: ${variables.borderRadius.s} !important;
             outline: none;
@@ -70,6 +70,8 @@ interface NavbarButtonProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
     selected: number;
 }
 
+const iconSize = '20px'
+
 const NavbarButton = styled.a<NavbarButtonProps>`
     position: relative;
     display: inline-flex;
@@ -78,7 +80,6 @@ const NavbarButton = styled.a<NavbarButtonProps>`
     margin: 0;
     padding: 0 15px;
     color: ${variables.colors.gray20};
-    font-size: 20px;
     text-align: inherit;
     text-decoration: none;
     background: none;
@@ -94,8 +95,8 @@ const NavbarButton = styled.a<NavbarButtonProps>`
     }
 
     svg {
-        width: 1em;
-        height: 1em;
+        width: ${iconSize};
+        height: ${iconSize};
 
         .logo_svg__st3 {
             fill: ${variables.colors.whiteA75};
@@ -176,7 +177,6 @@ class NavbarItem extends Component<NavbarItemProps> {
 
         render(
             <Provider store={store}>
-                <IconContext.Provider value={{ style: { verticalAlign: 'middle' } }}/>
                 <Content />
             </Provider>,
             document.getElementById('tivan')
@@ -205,7 +205,7 @@ class NavbarItem extends Component<NavbarItemProps> {
 
         return (
             <>
-                <NavbarGlobalStyles/>
+                <GlobalStyles/>
                 {displayTour && <Joyride
                     steps={steps}
                     spotlightPadding={10}

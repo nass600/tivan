@@ -2,10 +2,18 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { AppState } from '@reducers'
 import { LibraryState } from '@reducers/library'
-import { Title, Section, SectionTitle, Row, Column, Table, PieChart, MediaList, Error, Badge } from '@components'
+import { Heading2, Section, Heading4, Row, Column, Table, PieChart, MediaList, Error, Badge } from '@components'
 import { StatsDataItem } from '@types'
 import { getNormalizationChartData, getCurrentLibrary } from '@selectors'
 import { MdErrorOutline } from 'react-icons/md'
+import styled from 'styled-components'
+import { variables } from '@styles'
+
+const Title = styled(Heading2)`
+    ${Badge} {
+        margin-left: ${variables.spacing.l};
+    }
+`
 
 interface NormalizationStateProps {
     connection?: string;
@@ -55,7 +63,7 @@ class Normalization extends React.Component<NormalizationStateProps, {}> {
                 {currentLibrary && currentLibrary.normalization.length > 0 && (
                     <>
                         <Title>
-                            <span>{connection} - Normalization</span>
+                            <span>{connection} &mdash; Normalization</span>
                             <Badge>{currentLibrary?.totalItems}</Badge>
                         </Title>
                         <Section>
@@ -89,7 +97,7 @@ class Normalization extends React.Component<NormalizationStateProps, {}> {
                             </Row>
                         </Section>
                         <Section>
-                            <SectionTitle>Status</SectionTitle>
+                            <Heading4>Status</Heading4>
                             <Row>
                                 <Column>
                                     <p>
@@ -104,7 +112,7 @@ class Normalization extends React.Component<NormalizationStateProps, {}> {
                             </Row>
                         </Section>
                         <Section>
-                            <SectionTitle>Non-normalized list</SectionTitle>
+                            <Heading4>Non-normalized list</Heading4>
                             <Row>
                                 <Column>
                                     {currentLibrary.normalization.length > 0 && (

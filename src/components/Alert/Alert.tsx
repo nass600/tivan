@@ -32,12 +32,12 @@ const AlertContainer = styled.div<{type: AlertType}>`
     `}
 `
 
-const iconSize = '1.6rem'
+const iconSize = '2rem'
 
 const IconContainer = styled.div<{type: AlertType}>`
     display: flex;
     align-items: center;
-    padding: ${variables.spacing.s} ${variables.spacing.m};
+    padding: ${variables.spacing.m};
 
     svg {
         width: ${iconSize};
@@ -64,7 +64,7 @@ const IconContainer = styled.div<{type: AlertType}>`
 const AlertMessage = styled.div`
     display: flex;
     align-items: center;
-    padding: ${variables.spacing.s};
+    padding: ${variables.spacing.m};
     padding-left: 0;
 
     p {
