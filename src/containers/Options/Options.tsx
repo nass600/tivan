@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { AppState } from '@reducers'
 import { AuthConnectionState } from '@reducers/auth'
-import { LoginForm, SettingsForm, Title, FormGroup, CancelLink, Modal, Alert, AlertType } from '@components'
+import { LoginForm, SettingsForm, Heading1, FormGroup, CancelLink, Modal, Alert, AlertType } from '@components'
 import {
     authenticateAction,
     removeAvailableConnectionsAction,
@@ -14,21 +14,12 @@ import { Normalize } from 'styled-normalize'
 import { AnyAction } from 'redux'
 import { ThunkDispatch } from 'redux-thunk'
 import { GlobalStyles, variables } from '@styles'
-import logo from '@assets/img/logo.png'
+import Logo from '@assets/img/logo.svg'
 import styled, { createGlobalStyle } from 'styled-components'
 import { ErrorState } from '@reducers/status'
 import { AxiosError } from 'axios'
 
 const OptionsGlobalStyles = createGlobalStyle`
-    body {
-        margin: 0;
-        color: ${variables.colors.white};
-        font-size: 14px;
-        ${variables.fontFamily.regular}
-        line-height: 1.5;
-        background-color: ${variables.colors.gray60};
-    }
-
     #tivan {
         display: flex;
         align-items: center;
@@ -36,22 +27,8 @@ const OptionsGlobalStyles = createGlobalStyle`
         height: 100%;
     }
 
-    hr {
-        display: flex;
-        width: 100%;
-        border: 0;
-        border-top: 1px solid ${variables.colors.gray20};
-        margin-block-start: ${variables.spacing.m};
-        margin-block-end: ${variables.spacing.m};
-    }
-
     button {
-        font-size: 1.2rem !important;
-    }
-
-    p {
-        margin-block-start: 0;
-        margin-block-end: 0;
+        min-height: 50px;
     }
 
     form {
@@ -59,11 +36,8 @@ const OptionsGlobalStyles = createGlobalStyle`
     }
 `
 
-const OptionsTitle = styled(Title)`
-    ${variables.font.h3}
+const OptionsTitle = styled(Heading1)`
     justify-content: center;
-    margin-top: ${variables.spacing.m};
-    padding-bottom: ${variables.spacing.m};
     color: ${variables.colors.gray80};
 `
 
@@ -77,7 +51,7 @@ const Avatar = styled.div`
     height: ${avatarSize}px;
     margin-top: -${avatarSize * 2 / 3}px;
     margin-left: -${avatarSize / 2}px;
-    padding: 1.5rem;
+    padding: ${variables.spacing.xl};
     background-color: ${variables.colors.gray80};
     border-radius: 50%;
 
@@ -196,7 +170,7 @@ class Options extends React.Component<OptionsProps, State> {
                 <OptionsGlobalStyles/>
                 <Modal>
                     <Avatar>
-                        <img src={logo} alt="Tivan"/>
+                        <Logo/>
                     </Avatar>
                     {!connection && this.renderLogin()}
                     {connection && this.renderSettings()}

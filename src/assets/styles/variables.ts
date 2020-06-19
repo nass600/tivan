@@ -1,7 +1,6 @@
 import { css } from 'styled-components'
 
 const spacerBase = 1
-const fontSizeBase = 1
 
 // Font Name
 const fontName = {
@@ -12,40 +11,45 @@ const fontName = {
 
 // Font Size
 const fontSize = {
-    s: `${fontSizeBase * 0.8}rem`, // 8px
-    p: `${fontSizeBase * 1.3}rem`, // 13px
-    h4: `${fontSizeBase * 1.5}rem`, // 15px
-    h3: `${fontSizeBase * 2}rem`, // 20px
-    h2: `${fontSizeBase * 2.4}rem`, // 24px
-    h1: `${fontSizeBase * 2.4}rem` // 24px
+    root: '10px',
+    s: '0.8rem', // 8px
+    p: '1.4rem', // 14px
+    h5: '1.2rem', // 12px
+    h4: '1.5rem', // 15px
+    h3: '2rem', // 20px
+    h2: '2.4rem', // 24px
+    h1: '3.2rem' // 32px
 }
 
 // Font Family
 const fontFamily = {
     regular: css`font-family: ${fontName.regular}, Helvetica, sans-serif;`,
     semiBold: css`font-family: ${fontName.semiBold}, Helvetica, sans-serif;`,
-    bold: css`font-family: ${fontName.bold}, Helvetica, sans-serif;`
+    bold: css`font-weight: bold; font-family: ${fontName.bold}, Helvetica, sans-serif;`
 }
 
-const fontBase = css`
-    ${fontFamily.regular}
-    font-size: ${fontSize.p};
-`
+// Font
 const fontSmall = css`
     ${fontFamily.regular}
     font-size: ${fontSize.s};
 `
 
-const fontH1 = css`
-    ${fontFamily.bold}
-    font-size: ${fontSize.h1};
-    line-height: 1.2em;
+const fontBase = css`
+    ${fontFamily.regular}
+    font-size: ${fontSize.p};
+    line-height: 1.71428571;
 `
 
-const fontH2 = css`
+const fontH5 = css`
     ${fontFamily.bold}
-    font-size: ${fontSize.h2};
+    font-size: ${fontSize.h5};
     line-height: 1em;
+`
+
+const fontH4 = css`
+    ${fontFamily.bold}
+    font-size: ${fontSize.h4};
+    line-height: 1.6;
 `
 
 const fontH3 = css`
@@ -54,10 +58,16 @@ const fontH3 = css`
     line-height: 1em;
 `
 
-const fontH4 = css`
+const fontH2 = css`
     ${fontFamily.bold}
-    font-size: ${fontSize.h4};
+    font-size: ${fontSize.h2};
     line-height: 1em;
+`
+
+const fontH1 = css`
+    ${fontFamily.bold}
+    font-size: ${fontSize.h1};
+    line-height: 1.2;
 `
 
 export const variables = {
@@ -110,11 +120,13 @@ export const variables = {
     font: {
         small: fontSmall,
         base: fontBase,
-        h1: fontH1,
-        h2: fontH2,
+        h5: fontH5,
+        h4: fontH4,
         h3: fontH3,
-        h4: fontH4
+        h2: fontH2,
+        h1: fontH1
     },
     fontName,
-    fontFamily
+    fontFamily,
+    fontSize
 }

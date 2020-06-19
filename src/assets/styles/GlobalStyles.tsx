@@ -20,7 +20,7 @@ export const GlobalStyles = createGlobalStyle`
     }
 
     @font-face {
-        font-family: ${variables.font.base};
+        font-family: ${variables.fontName.regular};
         font-style: normal;
         src: url(${OpenSansRegular}) format('ttf');
     }
@@ -29,9 +29,19 @@ export const GlobalStyles = createGlobalStyle`
         box-sizing: border-box;
     }
 
+    html {
+        font-size: ${variables.fontSize.root};
+    }
+
     html,
     body {
         height: 100%;
+    }
+
+    body {
+        ${variables.font.base}
+        margin: 0;
+        background-color: ${variables.colors.gray60};
     }
 
     #tivan {
@@ -44,10 +54,27 @@ export const GlobalStyles = createGlobalStyle`
 
     #tivan-button {
         height: 100%;
+
+        .type-dark.place-bottom {
+            margin-top: -0.5rem;
+        }
     }
 
     strong {
         ${variables.fontFamily.bold}
         color: ${variables.colors.white};
+    }
+
+    a {
+        text-decoration: none;
+    }
+
+    hr {
+        display: flex;
+        width: 100%;
+        border: 0;
+        border-top: 1px solid ${variables.colors.gray20};
+        margin-block-start: ${variables.spacing.m};
+        margin-block-end: ${variables.spacing.m};
     }
 `
