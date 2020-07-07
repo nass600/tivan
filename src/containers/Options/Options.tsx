@@ -5,7 +5,7 @@ import { AuthConnectionState } from '@reducers/auth'
 import { LoginForm, SettingsForm, Heading1, FormGroup, CancelLink, Modal, Alert, AlertType } from '@components'
 import {
     authenticateAction,
-    removeAvailableConnectionsAction,
+    logoutAction,
     setConnectionAction,
     cleanLibrariesAction,
     setErrorAction
@@ -68,8 +68,8 @@ interface OptionsStateProps {
 
 interface OptionsDispatchProps {
     authenticate: (username: string, password: string) => Promise<void>;
+    logout: () => Promise<void>;
     setConnection: (connection: AuthConnectionState) => void;
-    removeAvailableConnections: () => void;
     cleanLibraries: () => void;
     setError: (error: ErrorState | null) => void;
 }
@@ -119,7 +119,10 @@ class Options extends React.Component<OptionsProps, State> {
     }
 
     onLogout = (): void => {
-        this.props.removeAvailableConnections()
+        this.props.logout().then((): void => {
+            this.setState({ alert: { type: AlertType.SUCCESS, message: 'You signed out successfully of Plex' } })
+            setTimeout((): void => this.setState({ alert: null }), 3000)
+        })
     }
 
     renderLogin (): React.ReactNode {
@@ -192,11 +195,11 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, AnyAction>): Options
     authenticate: async (username: string, password: string): Promise<void> => (
         await dispatch(authenticateAction(username, password))
     ),
+    logout: async (): Promise<void> => (
+        await dispatch(logoutAction())
+    ),
     setConnection: (connection: AuthConnectionState): void => {
         dispatch(setConnectionAction(connection))
-    },
-    removeAvailableConnections: (): void => {
-        dispatch(removeAvailableConnectionsAction())
     },
     cleanLibraries: (): void => {
         dispatch(cleanLibrariesAction())

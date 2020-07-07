@@ -34,6 +34,8 @@ import {
 import { MediaState, StatsState, LibrariesState, LibraryState } from '@reducers/library'
 import { getCurrentLibrary } from '@selectors'
 import { setErrorAction } from './status'
+import { AxiosError } from 'axios'
+import { removeAvailableConnectionsAction } from './auth'
 
 export interface UpdatelibraryInfoAction {
     type: 'UPDATE_LIBRARY_INFO';
@@ -289,8 +291,15 @@ export const parseLibraryAction = (libraryId: number): ThunkAction<Promise<void>
                     throw e
                 })
             }
-        }).catch((): void => {
-            dispatch(setErrorAction({ message: 'Something wrong happened', code: 500 }))
+        }).catch((error: AxiosError): void => {
+            if (error.response?.status === 401) {
+                dispatch(removeAvailableConnectionsAction())
+                dispatch(setErrorAction({ message: error.response.statusText, code: error.response.status }))
+            } else if (error.response) {
+                dispatch(setErrorAction({ message: error.response.statusText, code: error.response.status }))
+            } else {
+                dispatch(setErrorAction({ message: 'Something wrong happened', code: 500 }))
+            }
         }).finally((): void => {
             dispatch(setLoadingAction({ library: false }))
         })
@@ -335,7 +344,14 @@ export const getLibrariesAction = (): ThunkAction<Promise<void>, {}, {}, AnyActi
             ) {
                 dispatch(setCurrentLibraryAction(parseInt(items[0])))
             }
-        }).catch((): void => {
-            dispatch(setErrorAction({ message: 'Something wrong happened', code: 500 }))
+        }).catch((error: AxiosError): void => {
+            if (error.response?.status === 401) {
+                dispatch(removeAvailableConnectionsAction())
+                dispatch(setErrorAction({ message: error.response.statusText, code: error.response.status }))
+            } else if (error.response) {
+                dispatch(setErrorAction({ message: error.response.statusText, code: error.response.status }))
+            } else {
+                dispatch(setErrorAction({ message: 'Something wrong happened', code: 500 }))
+            }
         })
     }

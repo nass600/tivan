@@ -1,9 +1,8 @@
 # [1.8.0](https://github.com/nass600/tivan/compare/1.7.0...1.8.0) (2020-06-19)
 
-
 ### Features
 
-* added popup with extension info and links ([0205f6b](https://github.com/nass600/tivan/commit/0205f6b2e960dea09a2e3c7d82a9533b7d9b5791))
+-   added popup with extension info and links ([0205f6b](https://github.com/nass600/tivan/commit/0205f6b2e960dea09a2e3c7d82a9533b7d9b5791))
 
 # [1.7.0](https://github.com/nass600/tivan/compare/1.6.0...1.7.0) (2020-06-16)
 

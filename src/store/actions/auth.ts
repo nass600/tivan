@@ -55,10 +55,7 @@ const buildConnections = (resources: Resource[]): AuthConnectionState[] => {
     return connections
 }
 
-export const authenticateAction = (
-    username: string,
-    password: string
-): ThunkAction<Promise<void>, {}, {}, AnyAction> =>
+export const authenticateAction = (username: string, password: string): ThunkAction<Promise<void>, {}, {}, AnyAction> =>
     async (dispatch: ThunkDispatch<{}, {}, AnyAction>, getState: () => AppState): Promise<void> => {
         const state = getState()
 
@@ -66,7 +63,7 @@ export const authenticateAction = (
             return Promise.resolve()
         }
 
-        return plex.tv.users.signIn(username, password).then(({ user }: { user: User }) => {
+        return plex.tv.users.signIn(username, password).then((user: User) => {
             if (!user.authToken) {
                 return Promise.reject(new Error('Login request didn\'t carry a valid token'))
             }
@@ -75,9 +72,21 @@ export const authenticateAction = (
 
             return plex.tv.resources.all()
         }).then((data: Resource[]) => {
-            dispatch({
-                type: SET_AVAILABLE_CONNECTIONS,
-                payload: buildConnections(data)
-            })
+            dispatch(setAvailableConnectionsAction(buildConnections(data)))
+        })
+    }
+
+export const logoutAction = (): ThunkAction<Promise<void>, {}, {}, AnyAction> =>
+    async (dispatch: ThunkDispatch<{}, {}, AnyAction>, getState: () => AppState): Promise<void> => {
+        const state = getState()
+
+        if (!state.auth.connection) {
+            return Promise.resolve()
+        }
+
+        plex.setAuthorization(state.auth.connection.token)
+
+        return plex.tv.users.signOut().then(() => {
+            dispatch(removeAvailableConnectionsAction())
         })
     }
