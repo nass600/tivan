@@ -1,3 +1,10 @@
+# [1.9.0](https://github.com/nass600/tivan/compare/1.8.0...1.9.0) (2020-07-07)
+
+
+### Features
+
+* added logout api request ([#11](https://github.com/nass600/tivan/issues/11)) ([9bba66f](https://github.com/nass600/tivan/commit/9bba66f3113e36062078bfb45cc98712aafea1e2))
+
 # [1.8.0](https://github.com/nass600/tivan/compare/1.7.0...1.8.0) (2020-06-19)
 
 ### Features
