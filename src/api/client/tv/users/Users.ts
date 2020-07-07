@@ -26,10 +26,6 @@ export interface User {
     rememberMe: boolean;
 }
 
-export interface LoginResponse {
-    user: User;
-}
-
 export class Users {
     private apiClient: ApiClient
 
@@ -37,16 +33,20 @@ export class Users {
         this.apiClient = client
     }
 
-    signIn (username: string, password: string): Promise<LoginResponse> {
+    signIn (username: string, password: string): Promise<User> {
         const hash = Buffer.from(`${username}:${password}`).toString('base64')
 
         return this.apiClient.post(
-            'users/sign_in.json',
-            { username, password },
+            'api/v2/users/signin',
+            { login: username, password },
             undefined,
             {
                 authorization: `Basic ${hash}`
             }
         )
+    }
+
+    signOut (): Promise<void> {
+        return this.apiClient.delete('api/v2/users/signout')
     }
 }
