@@ -75,7 +75,7 @@ class Popup extends React.Component<{}, {}> {
                                 title="Open Plex Media Server"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                href="app.plex.tv/desktop"
+                                href="http://app.plex.tv/desktop"
                             >
                                 <PlexIcon/>
                             </Button>
