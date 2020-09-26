@@ -1,3 +1,10 @@
+## [1.9.1](https://github.com/nass600/tivan/compare/1.9.0...1.9.1) (2020-09-26)
+
+
+### Bug Fixes
+
+* fixed pms malformed url ([#15](https://github.com/nass600/tivan/issues/15)) ([a057ab5](https://github.com/nass600/tivan/commit/a057ab52914a2db771895ea7da33fad648d03ec5))
+
 # [1.9.0](https://github.com/nass600/tivan/compare/1.8.0...1.9.0) (2020-07-07)
 
 
