@@ -34,6 +34,24 @@ const Title = styled(Heading2)`
     }
 `
 
+const StyledRow = styled(Row)`
+    @media ${variables.device.mobile} {
+        flex-direction: column;
+
+        ${Column} + ${Column} {
+            margin-top: ${variables.spacing.xl};
+        }
+    }
+
+    @media ${variables.device.desktop} {
+        flex-direction: row;
+
+        ${Column} + ${Column} {
+            margin-top: 0;
+        }
+    }
+`
+
 interface ContentStateProps {
     connection?: string;
     videoResolutionStats: StatsDataItem[];
@@ -130,53 +148,53 @@ class Stats extends React.Component<ContentStateProps, {}> {
                         {videoResolutionStats && videoResolutionStats.length > 0 && (
                             <Section>
                                 <Heading4>Video Resolution</Heading4>
-                                <Row>
+                                <StyledRow>
                                     <Column>
                                         <PieChart data={videoResolutionStats} nameFormatter={formatShort}/>
                                     </Column>
                                     <Column>
                                         <Table data={videoResolutionTable} styles={tableStyles}/>
                                     </Column>
-                                </Row>
+                                </StyledRow>
                             </Section>
                         )}
                         {videoCodecStats && videoCodecStats.length > 0 && (
                             <Section>
                                 <Heading4>Video Codec</Heading4>
-                                <Row>
+                                <StyledRow>
                                     <Column>
                                         <PieChart data={videoCodecStats} nameFormatter={formatShort}/>
                                     </Column>
                                     <Column>
                                         <Table data={videoCodecTable} styles={tableStyles}/>
                                     </Column>
-                                </Row>
+                                </StyledRow>
                             </Section>
                         )}
                         {audioCodecStats && audioCodecStats.length > 0 && (
                             <Section>
                                 <Heading4>Audio Codec</Heading4>
-                                <Row>
+                                <StyledRow>
                                     <Column>
                                         <PieChart data={audioCodecStats} nameFormatter={formatShort}/>
                                     </Column>
                                     <Column>
                                         <Table data={audioCodecTable} styles={tableStyles}/>
                                     </Column>
-                                </Row>
+                                </StyledRow>
                             </Section>
                         )}
                         {subtitleCodecStats && subtitleCodecStats.length > 0 && (
                             <Section>
                                 <Heading4>Subtitle Codec</Heading4>
-                                <Row>
+                                <StyledRow>
                                     <Column>
                                         <PieChart data={subtitleCodecStats} nameFormatter={formatShort}/>
                                     </Column>
                                     <Column>
                                         <Table data={subtitleCodecTable} styles={tableStyles}/>
                                     </Column>
-                                </Row>
+                                </StyledRow>
                             </Section>
                         )}
                     </>

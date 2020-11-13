@@ -79,6 +79,11 @@ export const variables = {
         xxl: `${spacerBase * 4}rem`,
         gutter: `${spacerBase * 3}rem`
     },
+    device: {
+        mobile: '(min-width: 320px)',
+        tablet: '(min-width: 768px)',
+        desktop: '(min-width: 1024px)'
+    },
     colors: {
         white: '#fff',
         whiteA08: 'hsla(0, 0%, 100%, 0.08)',

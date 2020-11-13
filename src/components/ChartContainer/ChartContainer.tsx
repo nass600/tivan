@@ -3,6 +3,7 @@ import { variables } from '@styles'
 import { ResponsiveContainer } from 'recharts'
 
 const ChartContainer = styled(ResponsiveContainer)`
+    min-width: 0;
     color: ${variables.colors.gray20};
     background-color: ${variables.colors.blackA15};
 

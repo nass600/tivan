@@ -178,6 +178,11 @@ const mapMedia = (item: MetadataInfo): MediaState => {
     return data
 }
 
+/**
+ * Calculates if the given item is normalized.
+ *
+ * @param {MediaState} item
+ */
 const isNormalized = (item: MediaState): boolean => {
     if (![VideoResolution.FHD_1080, VideoResolution.UHD_4K].includes(item.videoResolution)) {
         item.errors.push(`Video resolution is ${formatShort(item.videoResolution)}`)
@@ -216,6 +221,11 @@ const extractNonNormalized = (items: MediaState[]): MediaState[] => {
     return items.filter((item: MediaState) => !isNormalized(item))
 }
 
+/**
+ * Calulates the stats out of the given ollection of items.
+ *
+ * @param {MediaState[]} items
+ */
 const extractStats = (items: MediaState[]): StatsState => {
     const data: StatsState = {
         videoCodec: { total: 0, items: {} },
@@ -250,6 +260,13 @@ const extractStats = (items: MediaState[]): StatsState => {
     return data
 }
 
+/**
+ * Fetches the details of all the items included in the given library if a connection exists.
+ * Given the number of items might be high the list is chunked so it is more performant.
+ * All the stats and normalization will be executed per chunk.
+ *
+ * @param {number} libraryId - PMS Library identifier
+ */
 export const parseLibraryAction = (libraryId: number): ThunkAction<Promise<void>, {}, {}, AnyAction> =>
     async (dispatch: ThunkDispatch<{}, {}, AnyAction>, getState: () => AppState): Promise<void> => {
         const state = getState()
@@ -307,6 +324,10 @@ export const parseLibraryAction = (libraryId: number): ThunkAction<Promise<void>
 
 const ALLOWED_LIBRARY_TYPES = [SectionType.MOVIE]
 
+/**
+ * Fetches libraries (sections) from Plex Media Server if a connection exists.
+ * If no current library will trigger an action to set the first library as the current one.
+ */
 export const getLibrariesAction = (): ThunkAction<Promise<void>, {}, {}, AnyAction> =>
     async (dispatch: ThunkDispatch<{}, {}, AnyAction>, getState: () => AppState): Promise<void> => {
         const state = getState()
@@ -318,6 +339,7 @@ export const getLibrariesAction = (): ThunkAction<Promise<void>, {}, {}, AnyActi
 
         plex.setBaseUrl(state.auth.connection.uri)
         plex.setAuthorization(state.auth.connection.token)
+        dispatch(setLoadingAction({ library: false }))
 
         plex.pms.sections.all().then(async (data: AllSectionsResponse) => {
             const libraries = data.MediaContainer.Directory.reduce((acc: LibrariesState, directory: Directory) => {
